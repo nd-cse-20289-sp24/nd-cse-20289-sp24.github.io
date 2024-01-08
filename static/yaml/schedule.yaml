@@ -1,0 +1,219 @@
+- name:     Introduction
+  days:
+      - date:           Wed 01/17
+        topics:         Syllabus, Unix Shell
+
+      - date:           Fri 01/19
+        topics:         Git
+        assignment:     Reading 00
+
+- name:     "Unit 01: Bourne Shell"
+
+- name:     "Using the Shell"
+  days:
+      - date:           Mon 01/22
+        topics:         Files
+        assignment:     Reading 01
+
+      - date:           Wed 01/24
+        topics:         Processes, I/O Redirection
+
+      - date:           Fri 01/26
+        topics:         Networking
+
+      - date:           Sat 01/27
+        topics:         Command Line Adventure
+        assignment:     Homework 01
+
+- name:     "Shell Scripting"
+  days:
+      - date:           Mon 01/29
+        topics:         Variables, Command Substitution, Matching
+        assignment:     Reading 02
+
+      - date:           Wed 01/31
+        topics:         Control Flow, Command Line Arguments
+
+      - date:           Fri 02/02
+        topics:         Pipelines
+
+      - date:           Sat 02/03
+        topics:         Meeting the Oracle
+        assignment:     Homework 02
+
+- name:     "Text Filtering"
+  days:
+      - date:           Mon 02/05
+        topics:         Regular Expressions
+        assignment:     Reading 03
+
+      - date:           Wed 02/07
+        topics:         Filters
+
+      - date:           Fri 02/09
+        topics:         Filters
+
+      - date:           Sat 02/10
+        topics:         Weathering with Zipcodes
+        assignment:     Homework 03
+
+- name:     "Exam 01"
+  days:
+      - date:           Mon 02/12
+        assignment:     Reading 04
+
+      - date:           Wed 02/14
+        items:
+          - name:       Exam 01
+
+      - date:           Fri 02/16
+        topics:         Python Scripting
+
+- name:     "Unit 02: Python"
+
+- name:     "Python Scripting"
+  days:
+      - date:           Mon 02/19
+        topics:         Functions, Doctests, Lists
+        assignment:     Reading 05
+
+      - date:           Wed 02/21
+        topics:         Strings, Dictionaries
+
+      - date:           Fri 02/23
+        topics:         I/O, Processes, Requests, Regular Expressions
+
+      - date:           Sat 02/24
+        topics:         RPN, Unique
+        assignment:     Homework 04
+
+- name:     "Data Processing"
+  days:
+      - date:           Mon 02/26
+        topics:         CSV
+        assignment:     Reading 06
+
+      - date:           Wed 02/28
+        topics:         JSON
+
+      - date:           Fri 03/01
+        topics:         Functional Programming
+
+      - date:           Sat 03/02
+        topics:         Reddit and CSE Demographics
+        assignment:     Homework 05
+
+- name:     "Functional Programming"
+  days:
+      - date:           Mon 03/04
+        topics:         Iterators, Generators
+        assignment:     Reading 07
+
+      - date:           Wed 03/06
+        topics:         Parallel Computing
+
+      - date:           Fri 03/08
+        topics:         Server-Side Programming
+
+      - date:           Sat 03/09
+        topics:         Hulk Smash
+        assignment:     Homework 06
+
+- name:     "Spring Break"
+
+- name:     "Exam 02"
+  days:
+      - date:           Mon 03/18
+        assignment:     Reading 08
+
+      - date:           Wed 03/20
+        items:
+          - name:       Exam 02
+
+      - date:           Fri 03/22
+        topics:         Compiling and Building
+
+- name:     "Unit 03: C"
+
+- name:     "Pointers, Arrays, Strings"
+  days:
+      - date:           Mon 03/25
+        topics:         Libraries, Pointers, Arrays
+        assignment:     Reading 09
+
+      - date:           Wed 03/27
+        topics:         Strings, Debugging (GDB, Valgrind)
+
+      - date:           Fri 03/29
+        topics:         Easter
+
+- name:     "Memory Management"
+  days:
+      - date:           Mon 04/01
+        topics:         Easter
+
+      - date:           Wed 04/03
+        topics:         Memory Allocation
+        assignment:     Reading 10
+
+      - date:           Fri 04/05
+        topics:         Structs, Unions
+
+      - date:           Sat 04/06
+        topics:         C-String Library
+        assignment:     Homework 07
+
+- name:     "I/O and Files"
+  days:
+      - date:           Mon 04/08
+        topics:         Linked Data Structures
+        assignment:     Reading 11
+
+      - date:           Wed 04/10
+        topics:         I/O
+
+      - date:           Fri 04/12
+        topics:         Files, Directories
+
+      - date:           Sat 04/13
+        topics:         Detecting Duplicates
+        assignment:     Homework 08
+
+- name:     "Sockets"
+  days:
+      - date:           Mon 04/15
+        topics:         TCP/IP, URLs, Sockets
+        assignment:     Reading 12
+
+      - date:           Wed 04/17
+        topics:         HTTP Client
+
+      - date:           Fri 04/19
+        topics:         HTTP Server
+
+- name:     "Processes"
+  days:
+      - date:           Mon 04/22
+        topics:         Processes
+        assignment:     Reading 13
+
+      - date:           Wed 04/24
+        topics:         Signals
+
+      - date:           Fri 04/26
+        topics:         VPS / Concurrent HTTP Server
+
+      - date:           Sat 04/27
+        topics:         "Thor's Hammer"
+        assignment:     Homework 09
+
+- name:     "Exam 03"
+  days:
+      - date:           Mon 04/29
+
+      - date:           Wed 05/01
+        topics:         TBD
+
+      - date:           Mon 05/06
+        items:
+          - name:       Exam 03
