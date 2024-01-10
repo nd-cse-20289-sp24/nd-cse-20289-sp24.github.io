@@ -69,6 +69,8 @@
   days:
       - date:           Mon 02/12
         assignment:     Reading 04
+        items:
+          - name:       Checklist 02
 
       - date:           Wed 02/14
         items:
@@ -133,6 +135,8 @@
   days:
       - date:           Mon 03/18
         assignment:     Reading 08
+        items:
+          - name:       Checklist 01
 
       - date:           Wed 03/20
         items:
@@ -218,6 +222,8 @@
 - name:     "Exam 03"
   days:
       - date:           Mon 04/29
+        items:
+          - name:       Checklist 03
 
       - date:           Wed 05/01
         topics:         TBD
