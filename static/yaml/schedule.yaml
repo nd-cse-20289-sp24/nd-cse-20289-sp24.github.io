@@ -11,6 +11,9 @@
       - date:           Fri 01/19
         topics:         Git
         assignment:     Reading 00
+        items:
+          - name:       Slides 02
+            link:       https://docs.google.com/presentation/d/1JGdSnOZczx_VvxiwCIDMgFBd-eFuVpWn54RXdMACGn4/edit?usp=sharing
 
 - name:     "Unit 01: Bourne Shell"
 
