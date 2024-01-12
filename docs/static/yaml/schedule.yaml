@@ -22,12 +22,23 @@
       - date:           Mon 01/22
         topics:         Files
         assignment:     Reading 01
+        items:
+          - name:       Slides 03
+            link:       https://docs.google.com/presentation/d/1sozS0obdqeR5OK0PfJfSjazdrdB7THVw69pdMLDDM7w/edit?usp=sharing
 
       - date:           Wed 01/24
         topics:         Processes, I/O Redirection
+        items:
+          - name:       Slides 04
+            link:       https://docs.google.com/presentation/d/1zwzzo89NkO1-FZHaTSWiYPImytJ4HGNsSdWm78hUqO0/edit?usp=sharing
+          - name:       Slides 05
+            link:       https://docs.google.com/presentation/d/1zwzzo89NkO1-FZHaTSWiYPImytJ4HGNsSdWm78hUqO0/edit?usp=sharing
 
       - date:           Fri 01/26
         topics:         Networking
+        items:
+          - name:       Slides 06
+            link:       https://docs.google.com/presentation/d/18fwfy2RWe8M3_f5tx51zBBmifmtoPENcEmtW6mV68eY/edit?usp=sharing
 
       - date:           Sat 01/27
         topics:         Command Line Adventure
