@@ -1,0 +1,58 @@
+{
+    "q01": {
+        "type": "blank",
+        "question": "\n<p>What is the <b>domain name</b> of the <b>IP address</b>:\n  <tt>10.37.27.7</tt>? ____ </p>\n"
+    },
+    "q02": {
+        "type": "blank",
+        "question": "\n<p>How many hops does it take to go from a student machine to each of the\nfollowing machines?</p>\n\n<ul>\n  <li><tt>remote301.helios.nd.edu</tt>: ____</li>\n  <li><tt>kernel.org</tt>: ____</li>\n</ul>\n"
+    },
+    "q03": {
+        "type": "blank",
+        "question": "\n<p>What is the <tt>sha1sum</tt> of the following file: <tt>https://yld.me/raw/mwc</tt>? ____</p>\n"
+    },
+    "q04": {
+        "type": "blank",
+        "question": "\n<p>In <tt>measure-latency.sh</tt>, we referenced all the command-line\narguments with the variable: ____.</p>\n\n<p>In <tt>find-doorman.sh</tt>, we referenced the number of command-line\narguments with the variable: ____.</p>\n"
+    },
+    "q05": {
+        "type": "multiple",
+        "question": "\n<p>In <tt>crack.sh</tt>, how could we check if the <tt>LOCKBOX</tt> is\nexecutable?</p>\n",
+        "responses": {
+            "a": "<tt>[ -e $LOCKBOX ]</tt>",
+            "b": "<tt>[ -x $LOCKBOX ]</tt>",
+            "c": "<tt>test -e $LOCKBOX</tt>",
+            "d": "<tt>test -x $LOCKBOX</tt>"
+        }
+    },
+    "q06": {
+        "type": "single",
+        "question": "\n<p>In <tt>crack.sh</tt>, what is the purpose of the line\n<tt>LOCKBOX=$(readlink -f $1)</tt>?</p>\n",
+        "responses": {
+            "a": "This checks if the first argument is a file.",
+            "b": "This reads the contents of the first argument.",
+            "c": "This generates the full path of the first argument.",
+            "d": "This symlinks the first argument."
+        }
+    },
+    "q07": {
+        "type": "single",
+        "question": "\n<p>In <tt>crack.sh</tt>, instead of performing <b>command substitution</b>\nusing <tt>$()</tt>, how else could we have written <tt>LOCKBOX=$(readlink\n-f $1)</tt>?</p>\n",
+        "responses": {
+            "a": "<tt>LOCKBOX='readlink -f $1'</tt>",
+            "b": "<tt>LOCKBOX=`readlink -f $1`</tt>",
+            "c": "<tt>LOCKBOX=[readlink -f $1]</tt>",
+            "d": "<tt>LOCKBOX=${readlink -f $1}</tt>"
+        }
+    },
+    "q08": {
+        "type": "single",
+        "question": "\n<p>In <tt>crack.sh</tt>, write a single line of code for the inside of the\n<tt>for</tt> loop without using an <tt>if</tt> statement.  That is, instead\nof using an <tt>if</tt> statement to check the result of running the\n<tt>LOCKBOX</tt> with the <tt>password</tt> and then exiting with success,\nhow could we have accomplished the same thing with a single line of\ncode?</p>\n",
+        "responses": {
+            "a": "<tt>$LOCKBOX $password | exit 0</tt>",
+            "b": "<tt>$LOCKBOX $password & exit 0</tt>",
+            "c": "<tt>$LOCKBOX $password || exit 0</tt>",
+            "d": "<tt>$LOCKBOX $password && exit 0</tt>"
+        }
+    }
+}
