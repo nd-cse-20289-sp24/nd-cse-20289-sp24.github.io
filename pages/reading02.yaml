@@ -1,0 +1,188 @@
+title:      "Reading 02: Shell Scripting"
+icon:       fa-book
+navigation:
+  - name: "Home"
+    link: "index.html"
+    icon: "fa-linux"
+internal:
+external:
+body:       |
+
+  **Everyone**:
+
+  Next week, we will explore some basic [networking] utilities and then begin
+  learning about [shell scripting].  That is, we will go from interactively
+  controlling the [Unix shell] to utilizing the shell as a full-fledged
+  programming language with variables, conditional statements, loops and even
+  functions.
+
+  <div class="alert alert-info" markdown="1">
+  #### <i class="fa fa-search"></i> TL;DR
+
+  The focus of this reading is some basic [networking] tools and an
+  introduction to [shell scripting] in [bash].
+
+  </div>
+
+  <img src="static/img/tlcl.jpg" class="pull-right">
+
+  ## Readings
+
+  The readings for next week are:
+
+  1. [The Linux Command Line] (Tools):
+
+      - Chapter 16 - Networking
+      - <p>Chapter 17 - Searching For Files</p>
+
+  2. [The Linux Command Line] (Scripting):
+
+      - Chapter 24 - Writing Your First Script
+      - Chapter 25 - Starting A Project
+      - Chapter 26 - Top-Down Design
+      - Chapter 27 - Flow Control: Branching With If
+      - Chapter 29 - Flow Control: Loopning With While and Until
+      - Chapter 30 - Troubleshooting
+      - Chapter 31 - Flow Control: Branching With Case
+      - Chapter 32 - Positional Parameters
+      - <p>Chapter 33 - Flow Control: Looping With For</p>
+
+      For a **shorter** version of the scripting chapters, you can read
+      [Writing Shell Scripts] instead.  However, the chapters above are listed
+      to serve as a reference should you need them (they do a more thorough job
+      of explaining the material).
+
+  ### Optional Resources
+
+  The following are additional resources that you may find useful:
+
+  #### Shell Scripting
+
+  - [Shell Scripting Tutorial]
+  - [Shell programming with bash: by example, by counter-example](http://matt.might.net/articles/bash-by-example/)
+  - [Bash Guide](http://mywiki.wooledge.org/BashGuide)
+
+  #### Networking
+
+  - [Introduction to Linux - Chapter 10. Networking](http://www.tldp.org/LDP/intro-linux/html/chap_10.html)
+  - [Slackware Linux Essentials - Chapter 13 Basic Network Commands](http://www.slackbook.org/html/basic-network-commands.html)
+  - [21 Basic Linux Networking Commands You Should Know](https://itsfoss.com/basic-linux-networking-commands/)
+
+  <div class="alert alert-success" markdown="1">
+  #### <i class="fa fa-terminal"></i> Terminal Multiplexer
+
+  A tool that will be demonstrated in class, but not assessed in the reading
+    quiz or homework is [tmux], which is one of the **most game-changing**
+    programs you could ever learn:
+
+  - [A tmux Primer](https://danielmiessler.com/study/tmux/)
+  - [A Quick and Easy Guide to tmux](http://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/)
+  - [A Gentle Introduction to tmux](https://medium.com/hackernoon/a-gentle-introduction-to-tmux-8d784c404340)
+
+  Although not required, it is **highly recommended** that you learn how to use
+  [tmux].
+
+  </div>
+
+  ## Quiz
+
+  Once you have completed the readings, answer the following [Reading 02 Quiz]
+  questions:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+
+  <script>
+  loadQuiz('static/json/reading02.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  ### Testing
+
+  To verify the correctness of your `exists.sh` script, you should be able to
+  reproduce the following:
+
+      :::bash
+      $ ls -l                               # List files in reading02 directory
+      total 8.0K
+      -rw-r--r-- 1 pbui pbui  23 Jan 18 15:39 README.md
+      -rw-r--r-- 1 pbui pbui 144 Jan 28 13:37 answers.json
+      -rwxr-xr-x 1 pbui pbui 254 Jan 28 18:02 exists.sh
+
+      $ ./exists.sh * && echo Success       # Run script and check error code
+      answers.json exists!
+      exists.sh exists!
+      README.md exists!
+      Success
+
+      $ ./exists.sh * ASDF || echo Success  # Run script and check error code
+      answers.json exists!
+      exists.sh exists!
+      README.md exists!
+      ASDF does not exist!
+      Success
+
+  [Reading 02 Quiz]:    static/json/reading02.json
+
+  ## Submission
+
+  To submit your work, follow the same process outlined in [Reading 01]:
+
+      :::bash
+      $ git switch master                   # Make sure we are in master branch
+      $ git pull --rebase                   # Make sure we are up-to-date with GitHub
+
+      $ git checkout -b reading02           # Create reading02 branch and check it out
+
+      $ cd reading02                        # Go into reading02 folder
+      $ $EDITOR answers.json                # Edit your answers.json file
+
+      $ ../.scripts/check.py                # Check reading02 quiz
+      Checking reading02 quiz ...
+            Q1 1.00
+            Q2 0.50
+            Q3 0.40
+            Q4 0.30
+            Q5 1.80
+         Score 4.00 / 4.00
+        Status Success
+
+      $ git add answers.json                # Add answers.json to staging area
+      $ git commit -m "Reading 02: Done"    # Commit work
+
+      $ git push -u origin reading02        # Push branch to GitHub
+
+  <div class="alert alert-danger" markdown="1">
+  #### <i class="fa fa-github"></i> Pull Request
+  Remember to create a **Pull Request** and assign the appropriate TA from the
+  [Reading 02 TA List].
+
+  **DO NOT MERGE** your own **Pull Request**.  The TAs use open **Pull
+  Requests** to keep track of which assignments to grade.  Closing them
+  yourself will cause a delay in grading and confuse the TAs.
+  </div>
+
+  [Markdown]:       https://daringfireball.net/projects/markdown/
+  [git]:            https://git-scm.com/
+  [clone]:          https://git-scm.com/docs/git-clone
+  [commit]:         https://git-scm.com/docs/git-commit
+  [push]:           https://git-scm.com/docs/git-push
+  [GitHub]:         https://github.com
+  [Reading 01]:     reading01.html
+  [Reading 02 TA List]: reading02_tas.html
+
+  [The Linux Command Line]:     https://linuxcommand.org/tlcl.php
+  [Unix]:                       https://en.wikipedia.org/wiki/Unix
+  [Unix Shell]:                 https://en.wikipedia.org/wiki/Unix_shell
+  [Git]:                        https://git-scm.com/
+  [Bash]:                       https://www.gnu.org/software/bash/
+  [shell scripting]:            https://en.wikipedia.org/wiki/Shell_script
+  [Shell Scripting Tutorial]:   https://www.shellscript.sh/
+  [networking]:                 https://en.wikipedia.org/wiki/Computer_network
+  [tmux]:                       https://github.com/tmux/tmux/wiki
+  [Writing Shell Scripts]:      https://linuxcommand.org/lc3_writing_shell_scripts.php
+  [Shell Scripting Tutorial]:   https://www.shellscript.sh/
