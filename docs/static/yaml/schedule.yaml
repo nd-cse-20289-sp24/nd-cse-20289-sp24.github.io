@@ -49,9 +49,15 @@
       - date:           Mon 01/29
         topics:         Variables, Command Substitution, Matching
         assignment:     Reading 02
+        items:
+          - name:       Slides 07
+            link:       https://docs.google.com/presentation/d/1Zx91-JYu1EWAOS41cNzxIpvKUo2bskLiKvYAvYp7R-E/edit?usp=sharing
 
       - date:           Wed 01/31
         topics:         Control Flow, Command Line Arguments
+        items:
+          - name:       Slides 07
+            link:       https://docs.google.com/presentation/d/1Zx91-JYu1EWAOS41cNzxIpvKUo2bskLiKvYAvYp7R-E/edit?usp=sharing
 
       - date:           Fri 02/02
         topics:         Pipelines
