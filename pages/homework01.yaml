@@ -50,7 +50,7 @@ body:       |
   The main activity for this assignment is to follow the prompts of your
   **Adventure Guide**, which takes the form of a program located at:
 
-      https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/GUIDE
+      https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework01/GUIDE
 
   <div class="alert alert-success" markdown="1">
   #### <i class="fa fa-server"></i> Student Machines
@@ -69,7 +69,7 @@ body:       |
       $ cd path/to/assignments/homework01
 
       # Download Adventure GUIDE
-      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/GUIDE
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework01/GUIDE
 
       # Run Adventure GUIDE
       $ python3 GUIDE
@@ -84,7 +84,7 @@ body:       |
   next task.
 
   <div class="thumbnail text-center">
-    <script async id="asciicast-a2DWGpAUpn7NWRY84GdgB6Ky1" src="https://asciinema.org/a/a2DWGpAUpn7NWRY84GdgB6Ky1.js"></script>
+    <script async id="asciicast-feV36zHhFJs2ljO35VsmiH7xA" src="https://asciinema.org/a/feV36zHhFJs2ljO35VsmiH7xA.js"></script>
   </div>
 
   You are to follow the prompts specified by the `GUIDE` until you have
@@ -291,7 +291,7 @@ body:       |
   [stat]: http://man7.org/linux/man-pages/man1/stat.1.html
   [sort]: http://man7.org/linux/man-pages/man1/sort.1.html
   [tar]: http://man7.org/linux/man-pages/man1/tar.1.html
-  
+
   <div class="alert alert-warning" markdown="1">
   #### <i class="fa fa-bomb"></i> Kill The TROLLs
 
@@ -351,7 +351,7 @@ body:       |
   1. [How to Customize your Bash Prompt on a Linux VPS](https://www.digitalocean.com/community/tutorials/how-to-customize-your-bash-prompt-on-a-linux-vps)
 
   2. [Bash/Prompt customization](https://wiki.archlinux.org/index.php/Bash/Prompt_customization)
-  
+
   3. [How to Customize (and Colorize) Your Bash Prompt](https://www.howtogeek.com/307701/how-to-customize-and-colorize-your-bash-prompt/)
 
   4. [EZPrompt: Easy Bash PS1 Generator](http://ezprompt.net/)
