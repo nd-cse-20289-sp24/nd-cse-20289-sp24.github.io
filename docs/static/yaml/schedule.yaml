@@ -61,6 +61,9 @@
 
       - date:           Fri 02/02
         topics:         Pipelines
+        items:
+          - name:       Slides 08
+            link:       https://docs.google.com/presentation/d/1rvseGHrnuTKTzVtrd5rIvLR-WASG5FMxP3iETTmdCqA/edit?usp=sharing
 
       - date:           Sat 02/03
         topics:         Meeting the Oracle
@@ -71,12 +74,21 @@
       - date:           Mon 02/05
         topics:         Regular Expressions
         assignment:     Reading 03
+        items:
+          - name:       Slides 08
+            link:       https://docs.google.com/presentation/d/1rvseGHrnuTKTzVtrd5rIvLR-WASG5FMxP3iETTmdCqA/edit?usp=sharing
 
       - date:           Wed 02/07
         topics:         Filters
+        items:
+          - name:       Slides 08
+            link:       https://docs.google.com/presentation/d/1rvseGHrnuTKTzVtrd5rIvLR-WASG5FMxP3iETTmdCqA/edit?usp=sharing
 
       - date:           Fri 02/09
         topics:         Filters
+        items:
+          - name:       Slides 08
+            link:       https://docs.google.com/presentation/d/1rvseGHrnuTKTzVtrd5rIvLR-WASG5FMxP3iETTmdCqA/edit?usp=sharing
 
       - date:           Sat 02/10
         topics:         Weathering with Zipcodes
