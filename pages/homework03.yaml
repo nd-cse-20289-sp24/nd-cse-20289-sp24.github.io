@@ -1,0 +1,674 @@
+title:      "Homework 03: Weathering with Zipcodes"
+icon:       fa-code
+navigation:
+  - name: "Home"
+    link: "index.html"
+    icon: "fa-linux"
+internal:
+external:
+body:       |
+
+  The goal of this homework assignment is to allow you to practice using
+  [regular expressions] and [filters] in [shell scripts].  In this assignment,
+  you will build on your knowledge of the [bourne shell] language to write
+  scripts that slice and dice data.
+
+  For this assignment, record your scripts and any responses to the following
+  activities in the in the `homework03` folder of your **assignments** [GitHub]
+  repository and push your work by **noon Saturday, February 10**.
+
+  [regular expressions]:https://en.wikipedia.org/wiki/Regular_expression
+  [filters]:            https://en.wikipedia.org/wiki/Filter_(software)#Unix
+  [shell scripts]:      https://en.wikipedia.org/wiki/Shell_script
+  [bourne shell]:       https://en.wikipedia.org/wiki/Bourne_shell
+  [Unix shell]:         https://en.wikipedia.org/wiki/Unix_shell
+  [bourne again shell]: https://www.gnu.org/software/bash/
+
+  ## Activity 0: Preparation
+
+  Before starting this homework assignment, you should first perform a `git
+  pull` to retrieve any changes in your remote [GitHub] repository:
+
+      :::bash
+      $ cd path/to/repository                   # Go to assignments repository
+
+      $ git switch master                       # Make sure we are in master branch
+
+      $ git pull --rebase                       # Get any remote changes not present locally
+
+  Next, create a new branch for this assignment:
+
+      :::bash
+      $ git checkout -b homework03              # Create homework03 branch and check it out
+
+  Once this is done, download the `Makefile` and test scripts:
+
+      ::bash
+      # Go to homework03 folder
+      $ cd homework03
+
+      # Download the Makefile
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework03/Makefile
+
+      # Add and commit Makefile
+      $ git add Makefile
+      $ git commit -m "homework03: add Makefile"
+
+      # Download the test scripts
+      $ make test-scripts
+
+  <div class="alert alert-info" markdown="1">
+  **Note**, you do not need to add and commit the test scripts since the
+  `Makefile` will automatically download them again whenever you run `make`.
+  </div>
+
+  You are now ready to work on the activities below.
+
+  <div class="alert alert-warning" markdown="1">
+  #### <i class="fa fa-code"></i> Cause we never go out of style
+
+  Note, the provided test scripts are used to verify the correctness of your
+  code (ie. does it do the right thing).  Good code, however, requires more
+  than just correct behavior; it demands **consistent formatting** and
+  **concise** implementation.  Because of this, your scripts will also be
+  graded on **coding style**.  In general, we expect you to strive for **[clean code]** and
+  will look for the following: <br><br>
+
+  - **Consistency**
+      - Naming, whitespace, and indentation
+      - <p>No dead code</p>
+
+  - **Readability**
+      - Idiomatic usage of language syntax and features
+      - Code is mostly self-documenting (with comments when necessary)
+      - <p>Not too dense, not too sparse</p>
+
+  - **Organization**
+      - Reasonably sized functions
+      - <p>Reasonably structured and ordered</p>
+
+  For each of the activities below, `0.5` points are reserved for **coding style**.
+
+  </div>
+
+  [clean code]: https://dzone.com/articles/clean-code-explanation-benefits-amp-examples
+
+  ## Activity 1: Weather (4 Points)
+
+  Michael is not amused by all the cold snow on campus and longs for the warmth
+  and comfort of spring.  Obsessed with the weather, he compulsively checks
+  [weather.gov], which is a website by the [National Weather Service].  While
+  checking the weather for the fifth time on his phone during class, he
+  realized that he could actually apply some of the things he is learning in
+  class to his current obsession.
+
+  For example, he realized that he can fetch the weather information for any
+  [zip code], using the following [URL]:
+
+      :::bash
+      $ curl -sL https://forecast.weather.gov/zipcity.php?inputstring=$ZIPCODE
+
+  For instance, the weather information for Notre Dame, Indiana can be
+  retrieved using:
+
+      :::bash
+      $ curl -sL https://forecast.weather.gov/zipcity.php?inputstring=46556
+
+  Looking at the data retrieved from the website, he notices that the forecast
+  and temperature information is wrapped in [HTML] fields that contain the text
+  "myforecast":
+
+      :::html
+      ...
+      <p class="myforecast-current">Overcast</p>
+      <p class="myforecast-current-lrg">37&deg;F</p>
+      <p class="myforecast-current-sm">3&deg;C</p>
+      ...
+
+  Michael wants to make a script `weather.sh` that will fetch the weather
+  information for any specified [zip code] and extract the temperature and
+  forecast.  Unfortunately, despite taking AP Computer Science in high school,
+  he is still a bit confused about [pipelines] and [shell scripting].
+
+  You decide that you could use some practice wth [shell scripting] and
+  [regular expressions], so you help him complete the script.
+
+  [weather.gov]: https://www.weather.gov/
+  [National Weather Service]: https://www.weather.gov/
+
+  ### Task 1: `weather.sh`
+
+  The `weather.sh` script takes three possible flags:
+
+      :::text
+      $ ./weather.sh -h
+      Usage: weather.sh [zipcode]
+
+      -c    Use Celsius degrees instead of Fahrenheit for temperature
+      -f    Display forecast text after temperature
+
+      If zipcode is not provided, then it defaults to 46556.
+
+  The `-c` flag will have the script output the temperature as Celsius rather
+  than Fahrenheit (the default).
+
+  The `-f` flag will have the script output the forecast text after the
+  current temperature.
+
+  The `-h` flag will display the usage message and exit with success.
+
+  Here are some examples of `weather.sh` in action:
+
+      :::bash
+      # Show current temperature for Notre Dame, Indiana (46556)
+      $ ./weather.sh
+      Temperature: 0 degrees
+
+      # Show current temperature and forecast for Orange, California (92869)
+      $ ./weather.sh -f 92869
+      Temperature: 61 degrees
+      Forecast:    NA
+
+      # Show current temperature and forecast (celsius) for Eau Claire, Wisconsin (54701)
+      $ ./weather.sh -c -f 54701
+      Temperature: -19 degrees
+      Forecast:    A Few Clouds
+
+  #### Skeleton Code
+
+  Here is a skeleton you can use to start your `weather.sh` script:
+
+      :::bash
+      # Download weather.sh skeleton
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework03/weather.sh
+
+  It should look something like this:
+
+      :::bash
+      #!/bin/sh
+
+      # Globals
+
+      URL="https://forecast.weather.gov/zipcity.php"
+      ZIPCODE=46556
+      FORECAST=0
+      CELSIUS=0
+
+      # Functions
+
+      usage() {
+          cat 1>&2 <<EOF
+      Usage: $(basename $0) [zipcode]
+
+      -c    Use Celsius degrees instead of Fahrenheit for temperature
+      -f    Display forecast text after the temperature
+
+      If zipcode is not provided, then it defaults to $ZIPCODE.
+      EOF
+          exit $1
+      }
+
+      weather_information() {
+          # Fetch weather information from URL based on ZIPCODE
+      }
+
+      temperature() {
+          # Extract temperature information from weather source
+          weather_information | ...
+      }
+
+      forecast() {
+          # Extract forecast information from weather source
+          weather_information | ...
+      }
+
+      # Parse Command Line Options
+
+      while [ $# -gt 0 ]; do
+          case $1 in
+              -h) usage 0;;
+          esac
+          shift
+      done
+
+      # Display Information
+
+      echo "Temperature: $(temperature) degrees"
+
+  <div class="alert alert-success" markdown="1">
+  #### <i class="fa fa-lightbulb-o"></i> Hints
+
+  - The general flow of your script should be to parse arguments and then to
+    execute different [pipelines].
+
+  - You will need to expand the `case` statement to parse command line
+    arguments.
+
+  - You will probably want to use [curl] to fetch the appropriate weather
+    information in `weather_information`.
+
+  - You will probably want to use a **conditional statement** in `temperature`
+    to select which filtering [pipeline] to use to extract the appropriate
+    information.
+
+  - You will probably want to use [cut[, [grep], [sed], or [awk] to extract
+    information in `temperature` and `forecast`.
+
+  - You will need to trim leading and trailing whitespace for the forecast
+    (possibly using [sed]).
+
+  </div>
+
+  [URL]:    https://en.wikipedia.org/wiki/URL
+  [shell scripting]: https://en.wikipedia.org/wiki/Shell_script
+
+  ### Task 2: `test_weather.sh`
+
+  To aid you in testing the `weather.sh` script, we provided you with
+  `test_weather.sh`, which you can use as follows:
+
+      :::bash
+      $ ./test_weather.sh
+      Testing weather.sh ...
+         Usage                                    ... Success
+         Default                                  ... Success
+         46556                                    ... Success
+         46556 Celsius                            ... Success
+         46556 Forecast                           ... Success
+         46556 Celsius Forecast                   ... Success
+         54701                                    ... Success
+         54701 Celsius                            ... Success
+         54701 Forecast                           ... Success
+         54701 Celsius Forecast                   ... Success
+         92867                                    ... Success
+         92867 Celsius                            ... Success
+         92867 Forecast                           ... Success
+         92867 Celsius Forecast                   ... Success
+
+         Score 4.00 / 4.00
+        Status Success
+
+  <div class="alert alert-warning" markdown="1">
+  #### <i class="fa fa-clock-o"></i> We'll Do It Live
+
+  Because the data is being pulled from a remote website, the tests might take
+  a while (but no more than 30 seconds).
+
+  </div>
+
+  <div class="alert alert-danger" markdown="1">
+  #### <i class="fa fa-refresh"></i> Retry the Pipeline
+
+  Sometimes the **pipeline fails** not because your code is wrong, but because
+  of **hiccups with the server** (it is live data after all).  If you suspect
+  that your code is correct, you can always **retry** the pipeline to see if it
+  will succeed without changing your code.
+
+  If it doesn't work after **three** retries... then your code is probably
+  wrong.
+
+  </div>
+
+  ## Activity 2: Zipcode (4 Points)
+
+  Being able to lookup weather information based on [zip codes] is great... if
+  you know the [zip code] of the place you are interested in.  Like most
+  people, however, Samantha is not really familiar with [zip codes] around the
+  country.
+
+  Like the instructor, Samantha hails from Orange County[^1], which is situated
+  on the [Best Coast] and is the home of [Mickey Mouse], [John Wayne], [No
+  Doubt][^2], and [StarCraft][^3] (among other things).  Having never really
+  left **paradise** [^4], Samantha doesn't really know much about other places
+  in America.  This is problematic as she has made many friends from all over
+  the country, such as her roommate from Toledo, Ohio, or her other roommate
+  from Jacksonville, Florida [^5].  Since she needs to figure out the [zip
+  codes] to these unfamiliar places, she is creating a script called
+  `zipcode.sh`, which [scrapes] the [zip codes] from the website [Zip Codes To
+  Go](https://www.zipcodestogo.com/) and allows her to list all the [zip codes]
+  in a specific state or even a particular city.
+
+  For instance, using [curl], she can view all the raw [HTML] for Indiana by
+  doing the following:
+
+      :::bash
+      $ curl -s https://www.zipcodestogo.com/Indiana/
+
+  Because you are pretty good with [regular expressions] now, you decide to
+  help Samantha out with parsing this [HTML] and extracting the [zip codes].
+
+  ### Task 1: `zipcode.sh`
+
+  The `zipcode.sh` script takes three possible flags:
+
+      :::text
+      $ ./zipcode.sh -h
+      Usage: zipcode.sh
+
+        -c      CITY    Which city to search
+        -s      STATE   Which state to search (Indiana)
+
+      If no CITY is specified, then all the zip codes for the STATE are displayed.
+
+  The `-c` flag takes a `CITY` argument, which specifies the city to search for
+  within the `STATE`.  If no `CITY` is specified, then the script should return
+  all the [zip codes] in the `STATE`.
+
+  The `-s` flag takes a `STATE` argument, which specifies the `STATE` to search
+  through.  If no `STATE` is specified, then the script should assume the
+  `STATE` is "Indiana".
+
+  The `-h` flag will display the usage message and exit with success.
+
+  Here are some examples of `zipcode.sh` in action:
+
+      :::bash
+      # Show all Zip Codes from default state (Indiana)
+      $ ./zipcode.sh
+      46001
+      46011
+      46012
+      46013
+      ...
+      47994
+      47995
+
+      # Show all Zip Codes in South Bend, Indiana
+      $ ./zipcode.sh -s Indiana -c "South Bend"
+      46601
+      46613
+      46614
+      46615
+      46616
+      46617
+      46619
+      46626
+      46628
+      46635
+      46637
+      46699
+
+  <div class="alert alert-warning" markdown="1">
+  #### <i class="fa fa-code"></i> Unique Zip Codes
+
+  Make sure that the **zipcodes** printed by `zipcode.sh` are **sorted** and
+  **unique**.
+
+  </div>
+
+  #### Skeleton Code
+
+  Here is a skeleton you can use to start your `zipcode.sh` script:
+
+      :::bash
+      # Download zipcode.sh skeleton
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework03/zipcode.sh
+
+  It should look something like this:
+
+      :::bash
+      #!/bin/sh
+
+      # Globals
+
+      URL=https://www.zipcodestogo.com/
+      STATE="Indiana"
+
+      # Functions
+
+      usage() {
+          cat 1>&2 <<EOF
+      Usage: $(basename $0)
+
+      -c	CITY	Which city to search
+      -s	STATE	Which state to search ($STATE)
+
+      If no CITY is specified, then all the zip codes for the STATE are displayed.
+      EOF
+          exit $1
+      }
+
+      zipcode_information() {
+          # Fetch zipcode information from URL based on CITY and STATE
+      }
+
+      filter_zipcodes() {
+          # Extract zipcodes from zipcode source
+      }
+
+      # Parse Command Line Options
+
+      while [ $# -gt 0 ]; do
+          case $1 in
+            -h) usage 0;;
+             *) usage 1;;
+          esac
+          shift
+      done
+
+      # Filter Pipeline
+
+      zipcode_information | filter_zipcodes
+
+  <div class="alert alert-success" markdown="1">
+  #### <i class="fa fa-lightbulb-o"></i> Hints
+
+  - The general flow of your script should be to parse arguments and then to
+    execute the [pipeline] at the bottom of the script.
+
+  - You will need to expand the `case` statement to parse command line
+    arguments.
+
+  - You will probably want to use [curl] with a **conditional statement** in
+    the `zipcode_information` to fetch the appropriate zipcode information
+    based on the `URL`, `CITY` and `STATE`.
+
+  - You will probably want to use [cut], [grep], [sed], or [awk] to extract the
+    appropriate information in `filter_zipcodes`.
+
+  - You will probably want to use [sort] and [uniq] to make sure the final
+    results are **sorted** and **unique**.
+
+  </div>
+
+  [Mickey Mouse]:   http://www.disney.com/
+  [John Wayne]:     http://johnwayne.com/
+  [No Doubt]:       http://www.nodoubt.com/
+  [StarCraft]:      http://us.battle.net/sc2/en/
+  [Best Coast]:     https://en.wikipedia.org/wiki/West_Coast_of_the_United_States
+  [scrapes]:        https://en.wikipedia.org/wiki/Web_scraping
+  [zip code]:       https://en.wikipedia.org/wiki/ZIP_Code
+  [zip codes]:      https://en.wikipedia.org/wiki/ZIP_Code
+  [HTML]:           https://en.wikipedia.org/wiki/HTML
+  [CSV]:            https://en.wikipedia.org/wiki/Comma-separated_values
+  [functions]:      https://www.shellscript.sh/functions.html
+  [filters]:        https://en.wikipedia.org/wiki/Filter_(software)#Unix
+  [grep]:           http://man7.org/linux/man-pages/man1/grep.1.html
+  [pipeline]:       https://en.wikipedia.org/wiki/Pipeline_(Unix)
+  [pipelines]:      https://en.wikipedia.org/wiki/Pipeline_(Unix)
+  [curl]:           https://curl.haxx.se/docs/manpage.html
+  [awk]:            http://man7.org/linux/man-pages/man1/gawk.1.html
+  [sed]:            http://man7.org/linux/man-pages/man1/sed.1.html
+  [cut]:            http://man7.org/linux/man-pages/man1/cut.1.html
+  [sort]:           http://man7.org/linux/man-pages/man1/sort.1.html
+  [uniq]:           http://man7.org/linux/man-pages/man1/uniq.1.html
+
+  ### Task 2: `test_zipcode.sh`
+
+  To aid you in testing the `zipcode.sh` script, we provided you with
+  `test_zipcode.sh`, which you can use as follows:
+
+      :::bash
+      $ ./test_zipcode.sh
+      Testing zipcode.sh ...
+         Usage                                    ... Success
+         Default                                  ... Success
+         Indiana                                  ... Success
+         South Bend, Indiana                      ... Success
+         Indianapolis, Indiana                    ... Success
+         California                               ... Success
+         Orange, California                       ... Success
+         Los Angeles, California                  ... Success
+         New York                                 ... Success
+         Buffalo, New York                        ... Success
+         New York, New York                       ... Success
+
+         Score 4.00 / 4.00
+        Status Success
+
+  <div class="alert alert-warning" markdown="1">
+  #### <i class="fa fa-clock-o"></i> We'll Do It Live
+
+  Because the data is being pulled from a remote website, the tests might take
+  a while (but no more than 30 seconds).
+
+  </div>
+
+  [^1]: Don't you dare call it [the OC](https://www.youtube.com/watch?v=03QCbAZcMwg).
+  [^2]: [Don't speak](https://www.youtube.com/watch?v=TR3Vdo5etCQ), I know what you're thinking; I don't need your reasons; Don't tell me cause it hurts.
+  [^3]: [1-A](http://wiki.teamliquid.net/starcraft2/Definitions) to [victory](https://www.youtube.com/watch?v=cWz5uYWnI5k).  Zerg OP.
+  [^4]: Especially after last few weeks... Brrr.
+  [^5]: This for you WenTao and Pat.  210 Dillon Hall 4 Lyfe.
+
+  ## Activity 3: Quiz (2 Points)
+
+  Once you have completed all the activities above, you are to complete the
+  following **reflection quiz**:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+  <script>
+  loadQuiz('static/json/homework03.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `homework03/answers.json` file.  You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To test your quiz, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking homework03 quiz ...
+           Q01 0.25
+           Q02 0.25
+           Q03 0.25
+           Q04 1.25
+         Score 2.00 / 2.00
+        Status Success
+
+  ## Guru Point (1 Extra Credit Point)
+
+  Professor [Tim Weninger], [Notre Dame]'s resident [Reddit] expert, lamblasted
+  the instructor for failing to introduce students to cron in previous course
+  sections.  To rectify this, you are to create a [cronjob] that periodically
+  uses your `weather.sh` script to output the weather for a zip code of your
+  choice in a file in your `HOME` directory.  You will then need to modify
+  your `~/.bashrc` file to output the contents of the resulting weather file
+  every time you login.
+
+  To help you setup your [cronjob], here are some resources regarding:
+
+  - [Cron Job: A Comprehensive Guide for Beginners 2023](https://www.hostinger.com/tutorials/cron-job)
+
+  - [How To Schedule Routine Tasks With Cron and Anacron on a VPS](https://www.digitalocean.com/community/tutorials/how-to-schedule-routine-tasks-with-cron-and-anacron-on-a-vps)
+
+  - [How I use cron in Linux](https://opensource.com/article/17/11/how-use-cron-linux)
+
+  [Tim Weninger]:   https://www3.nd.edu/~tweninge/
+  [Reddit]:     https://www.reddit.com/
+  [cronjob]:    https://en.wikipedia.org/wiki/Cron
+  [Notre Dame]: https://www.nd.edu
+
+  <div class="alert alert-warning" markdown="1">
+  #### <i class="fa fa-clock-o"></i> CRON Frequency
+
+  For **testing** and **demonstration** purposes, it is acceptable to have the
+  [cronjob] run frequently (ie. **every minute**).  Once you have been given
+  credit, however, please **remove** the [cronjob] or **reduce the frequency**
+  to something reasonable (ie. **every 15 minutes**).
+
+  </div>
+
+  <div class="alert alert-info" markdown="1">
+  #### <i class="fa fa-check"></i> Verification
+
+  To get credit for this Guru Point, show your [cronjob] in action a TA to
+  verify (or attached a video / screenshot to your **Pull Request**). You have
+  up until a week **after** this assignment is due to verify your Guru Point.
+
+  </div>
+
+  <div class="alert alert-success" markdown="1">
+  #### <i class="fa fa-calendar"></i> Self-Service Extension
+
+  Remember that you can always **forgo** this Guru Point for **two extra days**
+  to do the homework.  That is, if you need an extension, you can simply skip
+  the Guru Point and you will automatically have until Tuesday to complete the
+  assignment for full credit.
+
+  Just leave a note on your **Pull Request** of your intentions.
+
+  </div>
+
+  ## Submission
+
+  To submit your assignment, please commit your work to the `homework03` folder
+  of your `homework03` branch in your **assignments** [GitHub] repository:
+
+      :::bash
+      #----------------------------------------------------------------------
+      # Make sure you have already completed Activity 0: Preparation
+      #----------------------------------------------------------------------
+      ...
+
+      $ $EDITOR weather.sh                                  # Edit script
+      $ git add weather.sh                                  # Mark changes for commit
+      $ git commit -m "homework03: Activity 1 completed"    # Record changes
+      ...
+
+      $ $EDITOR zipcode.sh                                  # Edit script
+      $ git add zipcode.sh                                  # Mark changes for commit
+      $ git commit -m "homework03: Activity 2 completed"    # Record changes
+      ...
+
+      $ $EDITOR answers.json                                # Edit quiz
+      $ git add answers.json                                # Mark changes for commit
+      $ git commit -m "homework03: Activity 3 completed"    # Record changes
+      ...
+
+      $ git push -u origin homework03                       # Push branch to GitHub
+
+  <div class="alert alert-danger" markdown="1">
+  #### <i class="fa fa-github"></i> Pull Request
+
+  Remember to create a **Pull Request** and assign the appropriate TA from the
+  [Reading 03 TA List].
+
+  **DO NOT MERGE** your own **Pull Request**.  The TAs use open **Pull
+  Requests** to keep track of which assignments to grade.  Closing them
+  yourself will cause a delay in grading and confuse the TAs.
+
+  </div>
+
+  [git]:    https://git-scm.com/
+  [clone]:  https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]:   https://git-scm.com/docs/git-push
+  [branching]:   https://git-scm.com/docs/git-branch
+  [code review]: https://en.wikipedia.org/wiki/Code_review
+  [GitHub]: https://github.com
+  [Linux]:  https://kernel.org
+  [branch]: https://git-scm.com/docs/git-branch
+  [add]:    https://git-scm.com/docs/git-add
+  [Reading 01]:         reading01.html
+  [Reading 03 TA List]: reading03_tas.html
+  [curl]:   http://man7.org/linux/man-pages/man1/curl.1.html
+  [wget]:   http://man7.org/linux/man-pages/man1/wget.1.html
+  [JSON]:   https://json.org/
+  [ESC]:    https://esc.nd.edu/
