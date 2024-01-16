@@ -1,0 +1,270 @@
+title:      "Reading 03: Text Filtering"
+icon:       fa-book
+navigation:
+  - name: "Home"
+    link: "index.html"
+    icon: "fa-linux"
+internal:
+external:
+body:       |
+
+  **Everyone**:
+
+  Next week, we will continue to explore [shell scripting].  This time,
+  however, we will unlock the true power of the [Unix philosophy] by studying
+  sophisticated [pipelines] for filtering text.  Additionally, we will also
+  learn to wield [regular expressions] to create nifty pattern matching tools.
+
+  <div class="alert alert-info" markdown="1">
+  #### <i class="fa fa-search"></i> TL;DR
+
+  The focus of this reading is to introduce [regular expressions] and revisit
+  [filters] and [pipelines].
+
+  </div>
+
+  <img src="static/img/tlcl.jpg" class="pull-right">
+
+  ## Readings
+
+  The readings for this week are:
+
+  1. [The Linux Command Line]:
+
+      - Chapter 19 - Regular Expressions
+      - Chapter 20 - Text Processing
+
+  2. [RegexOne]
+
+      *Work through the **Lessons** in the **Interactive Tutorial**. You can
+      use the [Regexpr] to visualize your regular expressions.*
+
+  ### Optional Resources
+
+  - [Interactive Regex Tester](https://regex101.com)
+
+  - [Regular Expressions - User Guide](http://zytrax.com/tech/web/regex.htm)
+
+  - [Digital Ocean](https://www.digitalocean.com/) Tutorials:
+
+      - [Using Grep & Regular Expressions to Search for Text Patterns in Linux](https://www.digitalocean.com/community/tutorials/using-grep-regular-expressions-to-search-for-text-patterns-in-linux)
+
+      - [The Basics of Using the Sed Stream Editor to Manipulate Text in Linux](https://www.digitalocean.com/community/tutorials/the-basics-of-using-the-sed-stream-editor-to-manipulate-text-in-linux)
+
+  - [Advanced Bash Scripting - Text Processing Commands](http://tldp.org/LDP/abs/html/textproc.html)
+
+  - [The Unix School - Awk & Sed](http://www.theunixschool.com/p/awk-sed.html)
+
+  - [Sed - An Introduction and Tutorial](http://www.grymoire.com/Unix/sed.html)
+
+  - [Grep - An introduction to grep and egrep](http://www.grymoire.com/Unix/Grep.html)
+
+  - [USEFUL ONE-LINE SCRIPTS FOR SED](http://sed.sourceforge.net/sed1line.txt)
+
+  [The Linux Command Line]:     http://linuxcommand.org/tlcl.php
+  [Unix]:                       https://en.wikipedia.org/wiki/Unix
+  [Unix Shell]:                 https://en.wikipedia.org/wiki/Unix_shell
+  [Git]:                        https://git-scm.com/
+  [Bash]:                       https://www.gnu.org/software/bash/
+  [shell scripting]:            https://en.wikipedia.org/wiki/Shell_script
+  [filters]:                    https://en.wikipedia.org/wiki/Filter_(software)#Unix
+  [pipelines]:                  https://en.wikipedia.org/wiki/Pipeline_(Unix)
+  [RegexOne]:                   https://regexone.com/
+  [regular expressions]:        https://en.wikipedia.org/wiki/Regular_expression
+  [Unix Philosophy]:            https://en.wikipedia.org/wiki/Unix_philosophy
+  [Regexpr]:                    https://regexper.com/
+
+  ## Quiz
+
+  This week, your reading quiz is split into two sections: the first part is
+  your normal [dredd] quiz, while the second part involves a series of
+  [pipelines].
+
+  ### Questions
+
+  Record the answers to the following [Reading 03 Quiz] questions in your
+  `reading03` branch:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+
+  <script>
+  loadQuiz('static/json/reading03.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  ### Filters
+
+  For the second part, you are to complete the following [pipelines]:
+
+  1. Convert all the input text to upper case:
+
+          :::bash
+          $ echo "Read the fine manual" | ...
+          READ THE FINE MANUAL
+
+  2. Find and replace all instances of `Arch` with `Pop`:
+
+          :::bash
+          $ echo "BTW, I use Arch" | ...
+          BTW, I use Pop
+
+  3. Remove any leading whitespace from a string of text:
+
+          :::bash
+          $ echo "     Yes, do as I say" | ...
+          Yes, do as I say
+
+  4. Parse the `/etc/passwd` file for the shell of the root user:
+
+          :::bash
+          $ curl -sL https://yld.me/raw/yWh | ...
+          /bin/sh
+
+      **Hint**: You may need to read up on the format of
+      [/etc/passwd](http://man7.org/linux/man-pages/man5/passwd.5.html)
+
+  5. Find all the records in `/etc/passwd` that have a number that begins with
+      a `4` and ends with a `7`:
+
+          :::bash
+          $ curl -sL https://yld.me/raw/yWh | ...
+          rtkit:x:499:497:RealtimeKit:/proc:/sbin/nologin
+          qpidd:x:497:495:Owner of Qpidd Daemons:/var/lib/qpidd:/sbin/nologin
+          uuidd:x:495:487:UUID generator helper daemon:/var/lib/libuuid:/sbin/nologin
+          mailnull:x:47:47::/var/spool/mqueue:/sbin/nologin
+  
+  6. Find and replace all instances of `/bin/sh`, `/bin/bash`, `/bin/csh`, and `/bin/tcsh`
+      to `/bin/zsh` in `/etc/passwd`:
+
+          :::bash
+          $ curl -sL https://yld.me/raw/yWh | ... | grep zsh
+          root:x:0:0:root:/root:/bin/zsh
+          mysql:x:27:27:MySQL Server:/var/lib/mysql:/bin/zsh
+          xguest:x:500:501:Guest:/home/xguest:/bin/zsh
+          condor:x:108172:40:Condor Batch System:/afs/nd.edu/user37/condor:/bin/zsh
+
+  #### Template
+
+  To record your [pipelines], you will need to write your answers to the
+  [filters.sh] script:
+
+      :::bash
+      # Download filters template
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading03/filters.sh
+
+  Each question has a corresponding function; for instance, the solution for
+  **Question 1** should be recorded in `q1_answer`:
+
+      :::bash
+      #!/bin/bash
+
+      q1_answer() {
+          # TODO: Complete pipeline
+          echo "Read the fine manual" | ...
+      }
+
+  To construct your [pipelines], you should try them **interactively** in your
+  shell.  Once you found a reasonable solution, you can record them in the
+  [filters.sh] script under the appropriate function.
+
+  #### Makefile
+
+  To test your [pipelines], you need to download the [Reading 03 Makefile],
+  which in turn will download the [test_filters.sh] test script and execute it:
+
+      :::bash
+      # Download Makefile
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading03/Makefile
+
+      # Download test scripts and run test
+      $ make
+      ...
+
+      # Check your filters
+      $ ./test_filters.sh
+      Checking reading03 filters.sh ...
+            Q1 Success
+            Q2 Success
+            Q3 Success
+            Q4 Success
+            Q5 Success
+            Q6 Success
+         Score 3.00 / 3.00
+        Status Success
+
+  [Reading 03 Quiz]:    static/json/reading03.json
+
+  ## Submission
+
+  To submit your work, follow the same process outlined in [Reading 01]:
+
+      :::bash
+      $ git switch master                   # Make sure we are in master branch
+      $ git pull --rebase                   # Make sure we are up-to-date with GitHub
+
+      $ git checkout -b reading03           # Create reading03 branch and check it out
+
+      $ cd reading03                        # Go into reading03 folder
+      $ $EDITOR answers.json                # Edit your answers.json file
+
+      $ ../.scripts/check.py                # Check reading03 quiz
+      Checking reading03 quiz ...
+            Q1 1.00
+         Score 1.00 / 1.00
+        Status Success
+
+      $ git add answers.json                # Add answers.json to staging area
+      $ git commit -m "Reading 03: Quiz"    # Commit work
+
+      $ $EDITOR filters.sh                  # Edit your filters.sh file
+
+      $ ./test_filters.sh                   # Check your filters
+      Checking reading03 filters.sh ...
+            Q1 Success
+            Q2 Success
+            Q3 Success
+            Q4 Success
+            Q5 Success
+            Q6 Success
+         Score 3.00 / 3.00
+        Status Success
+
+      $ git add Makefile                    # Add Makefile to staging area
+      $ git add filters.sh                  # Add filters.sh to staging area
+      $ git commit -m "Reading 03: Filters" # Commit work
+
+      $ git push -u origin reading03        # Push branch to GitHub
+
+  <div class="alert alert-danger" markdown="1">
+  #### <i class="fa fa-github"></i> Pull Request
+  Remember to create a **Pull Request** and assign the appropriate TA from the
+  [Reading 03 TA List].
+
+  **DO NOT MERGE** your own **Pull Request**.  The TAs use open **Pull
+  Requests** to keep track of which assignments to grade.  Closing them
+  yourself will cause a delay in grading and confuse the TAs.
+  </div>
+
+  [git]:            https://git-scm.com/
+  [clone]:          https://git-scm.com/docs/git-clone
+  [commit]:         https://git-scm.com/docs/git-commit
+  [push]:           https://git-scm.com/docs/git-push
+  [GitHub]:         https://github.com
+  [Reading 01]:     reading01.html
+  [Reading 03 TA List]: reading03_tas.html
+  [dredd]:          https://dredd.h4x0r.space
+
+  [The Linux Command Line]:     http://linuxcommand.org/tlcl.php
+  [Unix]:                       https://en.wikipedia.org/wiki/Unix
+  [Unix Shell]:                 https://en.wikipedia.org/wiki/Unix_shell
+  [Git]:                        https://git-scm.com/
+  [Bash]:                       https://www.gnu.org/software/bash/
+  [shell scripting]:            https://en.wikipedia.org/wiki/Shell_script
+  [filters.sh]:                 https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading03/filters.sh
+  [test_filters.sh]:            https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading03/test_filters.sh
+  [Reading 03 Makefile]:        https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading03/Makefile
