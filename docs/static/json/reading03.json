@@ -1,0 +1,18 @@
+{
+    "q1": {
+        "type": "order",
+        "question": "\n<p>\nOrder the following text <b>filtering</b> utilities to match the\ndescriptions below.\n</p>\n\n<p>\n<ol>\n\n<li>Display first few lines of stream.</li>\n<li>Display last few lines of stream.</li>\n<li>Compare the changes between two files.</li>\n<li>Translate characters in a stream.</li>\n<li>Extract delimited field from stream.</li>\n<li>Search stream for pattern.</li>\n<li>Edit and transform stream.</li>\n<li>Order or rank items in stream.</li>\n<li>Remove duplicates from stream.</li>\n<li>Scan and process stream programmatically.</li>\n\n</ol>\n</p>\n\n<p>\n<b>Note</b>: You may need to lookup additional resource for some of these commands.\n</p>\n",
+        "responses": {
+            "grep": "grep",
+            "sort": "sort",
+            "uniq": "uniq",
+            "awk": "awk",
+            "cut": "cut",
+            "diff": "diff",
+            "tr": "tr",
+            "head": "head",
+            "tail": "tail",
+            "sed": "sed"
+        }
+    }
+}
