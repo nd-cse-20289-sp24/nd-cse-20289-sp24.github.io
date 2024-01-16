@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Reading 03: Text Filtering</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="static/css/blugold.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<style>
+	body {
+	    padding: 10px;
+	}
+	</style>
+    </head>
+    <body>
+	<div class="container">
+
+	    <div class="row">
+		<div class="page-header">
+		    <ul class="nav nav-pills pull-right">
+			
+			<li><a href="index.html"><i class="fa fa-linux"></i> <span class="visible-md-inline visible-lg-inline">Home</span></a></li>
+			
+		    </ul>
+		    <h1><i class="fa fa-book"></i> Reading 03: Text Filtering</h1>
+		</div>
+	    </div>
+
+            
+<p><strong>Everyone</strong>:</p>
+<p>Next week, we will continue to explore <a href="https://en.wikipedia.org/wiki/Shell_script">shell scripting</a>.  This time,
+however, we will unlock the true power of the <a href="https://en.wikipedia.org/wiki/Unix_philosophy">Unix philosophy</a> by studying
+sophisticated <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">pipelines</a> for filtering text.  Additionally, we will also
+learn to wield <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> to create nifty pattern matching tools.</p>
+<div class="alert alert-info">
+<h4 id="tldr"><i class="fa fa-search"></i> TL;DR<a class="headerlink" href="#tldr" title="Permanent link">&para;</a></h4>
+<p>The focus of this reading is to introduce <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> and revisit
+<a href="https://en.wikipedia.org/wiki/Filter_(software)#Unix">filters</a> and <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">pipelines</a>.</p>
+</div>
+<p><img src="static/img/tlcl.jpg" class="pull-right"></p>
+<h2 id="readings">Readings<a class="headerlink" href="#readings" title="Permanent link">&para;</a></h2>
+<p>The readings for this week are:</p>
+<ol>
+<li>
+<p><a href="http://linuxcommand.org/tlcl.php">The Linux Command Line</a>:</p>
+<ul>
+<li>Chapter 19 - Regular Expressions</li>
+<li>Chapter 20 - Text Processing</li>
+</ul>
+</li>
+<li>
+<p><a href="https://regexone.com/">RegexOne</a></p>
+<p><em>Work through the </em><em>Lessons</em><em> in the </em><em>Interactive Tutorial</em><em>. You can
+use the <a href="https://regexper.com/">Regexpr</a> to visualize your regular expressions.</em></p>
+</li>
+</ol>
+<h3 id="optional-resources">Optional Resources<a class="headerlink" href="#optional-resources" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><a href="https://regex101.com">Interactive Regex Tester</a></p>
+</li>
+<li>
+<p><a href="http://zytrax.com/tech/web/regex.htm">Regular Expressions - User Guide</a></p>
+</li>
+<li>
+<p><a href="https://www.digitalocean.com/">Digital Ocean</a> Tutorials:</p>
+<ul>
+<li>
+<p><a href="https://www.digitalocean.com/community/tutorials/using-grep-regular-expressions-to-search-for-text-patterns-in-linux">Using Grep &amp; Regular Expressions to Search for Text Patterns in Linux</a></p>
+</li>
+<li>
+<p><a href="https://www.digitalocean.com/community/tutorials/the-basics-of-using-the-sed-stream-editor-to-manipulate-text-in-linux">The Basics of Using the Sed Stream Editor to Manipulate Text in Linux</a></p>
+</li>
+</ul>
+</li>
+<li>
+<p><a href="http://tldp.org/LDP/abs/html/textproc.html">Advanced Bash Scripting - Text Processing Commands</a></p>
+</li>
+<li>
+<p><a href="http://www.theunixschool.com/p/awk-sed.html">The Unix School - Awk &amp; Sed</a></p>
+</li>
+<li>
+<p><a href="http://www.grymoire.com/Unix/sed.html">Sed - An Introduction and Tutorial</a></p>
+</li>
+<li>
+<p><a href="http://www.grymoire.com/Unix/Grep.html">Grep - An introduction to grep and egrep</a></p>
+</li>
+<li>
+<p><a href="http://sed.sourceforge.net/sed1line.txt">USEFUL ONE-LINE SCRIPTS FOR SED</a></p>
+</li>
+</ul>
+<h2 id="quiz">Quiz<a class="headerlink" href="#quiz" title="Permanent link">&para;</a></h2>
+<p>This week, your reading quiz is split into two sections: the first part is
+your normal <a href="https://dredd.h4x0r.space">dredd</a> quiz, while the second part involves a series of
+<a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">pipelines</a>.</p>
+<h3 id="questions">Questions<a class="headerlink" href="#questions" title="Permanent link">&para;</a></h3>
+<p>Record the answers to the following <a href="static/json/reading03.json">Reading 03 Quiz</a> questions in your
+<code>reading03</code> branch:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+
+<script>
+loadQuiz('static/json/reading03.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<h3 id="filters">Filters<a class="headerlink" href="#filters" title="Permanent link">&para;</a></h3>
+<p>For the second part, you are to complete the following <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">pipelines</a>:</p>
+<ol>
+<li>
+<p>Convert all the input text to upper case:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ <span style="color: #008000">echo</span> <span style="color: #BA2121">&quot;Read the fine manual&quot;</span> | ...
+READ THE FINE MANUAL
+</code></pre></div>
+
+</li>
+<li>
+<p>Find and replace all instances of <code>Arch</code> with <code>Pop</code>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ <span style="color: #008000">echo</span> <span style="color: #BA2121">&quot;BTW, I use Arch&quot;</span> | ...
+BTW, I use Pop
+</code></pre></div>
+
+</li>
+<li>
+<p>Remove any leading whitespace from a string of text:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ <span style="color: #008000">echo</span> <span style="color: #BA2121">&quot;     Yes, do as I say&quot;</span> | ...
+Yes, <span style="color: #008000; font-weight: bold">do</span> as I say
+</code></pre></div>
+
+</li>
+<li>
+<p>Parse the <code>/etc/passwd</code> file for the shell of the root user:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ curl -sL https://yld.me/raw/yWh | ...
+/bin/sh
+</code></pre></div>
+
+<p><strong>Hint</strong>: You may need to read up on the format of
+<a href="http://man7.org/linux/man-pages/man5/passwd.5.html">/etc/passwd</a></p>
+</li>
+<li>
+<p>Find all the records in <code>/etc/passwd</code> that have a number that begins with
+    a <code>4</code> and ends with a <code>7</code>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ curl -sL https://yld.me/raw/yWh | ...
+rtkit:x:499:497:RealtimeKit:/proc:/sbin/nologin
+qpidd:x:497:495:Owner of Qpidd Daemons:/var/lib/qpidd:/sbin/nologin
+uuidd:x:495:487:UUID generator helper daemon:/var/lib/libuuid:/sbin/nologin
+mailnull:x:47:47::/var/spool/mqueue:/sbin/nologin
+</code></pre></div>
+
+</li>
+<li>
+<p>Find and replace all instances of <code>/bin/sh</code>, <code>/bin/bash</code>, <code>/bin/csh</code>, and <code>/bin/tcsh</code>
+    to <code>/bin/zsh</code> in <code>/etc/passwd</code>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ curl -sL https://yld.me/raw/yWh | ... | grep zsh
+root:x:0:0:root:/root:/bin/zsh
+mysql:x:27:27:MySQL Server:/var/lib/mysql:/bin/zsh
+xguest:x:500:501:Guest:/home/xguest:/bin/zsh
+condor:x:108172:40:Condor Batch System:/afs/nd.edu/user37/condor:/bin/zsh
+</code></pre></div>
+
+</li>
+</ol>
+<h4 id="template">Template<a class="headerlink" href="#template" title="Permanent link">&para;</a></h4>
+<p>To record your <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">pipelines</a>, you will need to write your answers to the
+<a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading03/filters.sh">filters.sh</a> script:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Download filters template</span>
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading03/filters.sh
+</code></pre></div>
+
+<p>Each question has a corresponding function; for instance, the solution for
+<strong>Question 1</strong> should be recorded in <code>q1_answer</code>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">#!/bin/bash</span>
+
+q1_answer<span style="color: #666666">()</span> <span style="color: #666666">{</span>
+    <span style="color: #3D7B7B; font-style: italic"># TODO: Complete pipeline</span>
+    <span style="color: #008000">echo</span> <span style="color: #BA2121">&quot;Read the fine manual&quot;</span> | ...
+<span style="color: #666666">}</span>
+</code></pre></div>
+
+<p>To construct your <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">pipelines</a>, you should try them <strong>interactively</strong> in your
+shell.  Once you found a reasonable solution, you can record them in the
+<a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading03/filters.sh">filters.sh</a> script under the appropriate function.</p>
+<h4 id="makefile">Makefile<a class="headerlink" href="#makefile" title="Permanent link">&para;</a></h4>
+<p>To test your <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">pipelines</a>, you need to download the <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading03/Makefile">Reading 03 Makefile</a>,
+which in turn will download the <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading03/test_filters.sh">test_filters.sh</a> test script and execute it:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Download Makefile</span>
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading03/Makefile
+
+<span style="color: #3D7B7B; font-style: italic"># Download test scripts and run test</span>
+$ make
+...
+
+<span style="color: #3D7B7B; font-style: italic"># Check your filters</span>
+$ ./test_filters.sh
+Checking reading03 filters.sh ...
+      Q1 Success
+      Q2 Success
+      Q3 Success
+      Q4 Success
+      Q5 Success
+      Q6 Success
+   Score <span style="color: #666666">3</span>.00 / <span style="color: #666666">3</span>.00
+  Status Success
+</code></pre></div>
+
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit your work, follow the same process outlined in <a href="reading01.html">Reading 01</a>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ git switch master                   <span style="color: #3D7B7B; font-style: italic"># Make sure we are in master branch</span>
+$ git pull --rebase                   <span style="color: #3D7B7B; font-style: italic"># Make sure we are up-to-date with GitHub</span>
+
+$ git checkout -b reading03           <span style="color: #3D7B7B; font-style: italic"># Create reading03 branch and check it out</span>
+
+$ <span style="color: #008000">cd</span> reading03                        <span style="color: #3D7B7B; font-style: italic"># Go into reading03 folder</span>
+$ <span style="color: #19177C">$EDITOR</span> answers.json                <span style="color: #3D7B7B; font-style: italic"># Edit your answers.json file</span>
+
+$ ../.scripts/check.py                <span style="color: #3D7B7B; font-style: italic"># Check reading03 quiz</span>
+Checking reading03 quiz ...
+      Q1 <span style="color: #666666">1</span>.00
+   Score <span style="color: #666666">1</span>.00 / <span style="color: #666666">1</span>.00
+  Status Success
+
+$ git add answers.json                <span style="color: #3D7B7B; font-style: italic"># Add answers.json to staging area</span>
+$ git commit -m <span style="color: #BA2121">&quot;Reading 03: Quiz&quot;</span>    <span style="color: #3D7B7B; font-style: italic"># Commit work</span>
+
+$ <span style="color: #19177C">$EDITOR</span> filters.sh                  <span style="color: #3D7B7B; font-style: italic"># Edit your filters.sh file</span>
+
+$ ./test_filters.sh                   <span style="color: #3D7B7B; font-style: italic"># Check your filters</span>
+Checking reading03 filters.sh ...
+      Q1 Success
+      Q2 Success
+      Q3 Success
+      Q4 Success
+      Q5 Success
+      Q6 Success
+   Score <span style="color: #666666">3</span>.00 / <span style="color: #666666">3</span>.00
+  Status Success
+
+$ git add Makefile                    <span style="color: #3D7B7B; font-style: italic"># Add Makefile to staging area</span>
+$ git add filters.sh                  <span style="color: #3D7B7B; font-style: italic"># Add filters.sh to staging area</span>
+$ git commit -m <span style="color: #BA2121">&quot;Reading 03: Filters&quot;</span> <span style="color: #3D7B7B; font-style: italic"># Commit work</span>
+
+$ git push -u origin reading03        <span style="color: #3D7B7B; font-style: italic"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert alert-danger">
+<h4 id="pull-request"><i class="fa fa-github"></i> Pull Request<a class="headerlink" href="#pull-request" title="Permanent link">&para;</a></h4>
+<p>Remember to create a <strong>Pull Request</strong> and assign the appropriate TA from the
+<a href="reading03_tas.html">Reading 03 TA List</a>.</p>
+<p><strong>DO NOT MERGE</strong> your own <strong>Pull Request</strong>.  The TAs use open <strong>Pull
+Requests</strong> to keep track of which assignments to grade.  Closing them
+yourself will cause a delay in grading and confuse the TAs.</p>
+</div>
+
+
+	    <div class="row">
+		<hr/>
+
+		<footer class="text-center">
+		    <p class="text-muted">
+		    <small>
+		    Built using
+		    <a href="https://getbootstrap.com/">Bootstrap</a>,
+		    <a href="https://fontawesome.com/">Font Awesome</a>, and
+		    <a href="http://www.python.org/">Python</a>.
+		    <br/>
+		    &copy; 2024 <a href="http://www.nd.edu">University of Notre Dame</a>
+		    </small>
+		    </p>
+		</footer>
+	    </div>
+
+	</div> <!-- /container -->
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	
+    </body>
+</html>
+
