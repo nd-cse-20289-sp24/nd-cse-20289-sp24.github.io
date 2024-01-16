@@ -71,7 +71,7 @@ body:       |
   The main activity for this assignment is to follow the prompts of `MORPHEUS`,
   who takes the form of a program located at:
 
-      https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/MORPHEUS
+      https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework02/MORPHEUS
 
   You can use either [curl] or [wget] to download this program to your
   `homework02` folder in your **assignments** repository and execute it as
@@ -82,7 +82,7 @@ body:       |
       $ cd path/to/assignments/homework02
 
       # Download Adventure MORPHEUS
-      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/MORPHEUS
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework02/MORPHEUS
 
       # Make MORPHEUS executable
       $ chmod +x MORPHEUS
