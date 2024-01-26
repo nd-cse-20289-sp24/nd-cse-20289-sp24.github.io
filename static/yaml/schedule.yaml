@@ -47,6 +47,8 @@
         items:
           - name:       Slides 06
             link:       https://docs.google.com/presentation/d/18fwfy2RWe8M3_f5tx51zBBmifmtoPENcEmtW6mV68eY/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=41cc0719-298c-437c-a12e-b103013d0fb0
 
       - date:           Sat 01/27
         topics:         Command Line Adventure
