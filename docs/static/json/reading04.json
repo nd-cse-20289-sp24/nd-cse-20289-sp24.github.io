@@ -1,0 +1,62 @@
+{
+    "q1": {
+        "type": "order",
+        "question": "\n<p>\nSuppose you are about to start a new homework assignment and you wish to\nsync your local repository with the changes in GitHub, create a new\nhomework branch, and check which branch you are currently on.\n</p>\n\n<p>\nOrganize the <tt>git</tt> commands below in the proper order to accomplish\nthe tasks above.\n</p>\n",
+        "responses": {
+            "branch": "git branch",
+            "checkout": "git checkout -b homework",
+            "switch": "git switch master",
+            "rebase": "git pull --rebase"
+        }
+    },
+    "q2": {
+        "type": "order",
+        "question": "\n<p>\nSuppose you create a new file in the homework branch and wish to record\nthis change, send it to GitHub, and then view the history of the\nrepository.\n</p>\n\n<p>\nOrganize the <tt>git</tt> commands below in the proper order to accomplish\nthe tasks above.\n</p>\n",
+        "responses": {
+            "push": "git push -u origin homework",
+            "add": "git add file",
+            "commit": "git commit -m \"Add file\"",
+            "log": "git log"
+        }
+    },
+    "q3": {
+        "type": "order",
+        "question": "\n<p>\nOrder the following commands to match the descriptions below.\n</p>\n\n<p>\n<ol>\n\n<li>View the inode information of a file.</li>\n<li>Create hard and soft links.</li>\n<li>Set permissions of a file.</li>\n<li>Recursively search directory for files by name and type.</li>\n\n</ol>\n</p>\n",
+        "responses": {
+            "chmod": "chmod",
+            "ln": "ln",
+            "find": "find",
+            "stat": "stat"
+        }
+    },
+    "q4": {
+        "type": "blank",
+        "question": "\n<p>Suppose you had a process named <tt>HOGLIN</tt> with a PID of\n<tt>4000</tt> that was running crazy and taking up all the CPU.  How would\nyou do the following:</p>\n\n<p>\n<ol>\n  <li>Send a keystroke that <b>interrupts</b> the process? ____ (1)</li>\n  <li>Send a keystroke that <b>suspends</b> the process? ____ (2)</li>\n  <li>Gracefully terminate the process using its PID? ____ (3)</li>\n  <li>Forcefully terminate the process using its name? ____ (4)</li>\n</ol>\n</p>\n"
+    },
+    "q5": {
+        "type": "multiple",
+        "question": "\n<p>What does the following pipeline do (select all that apply)?</p>\n\n<pre>\ndu -h /etc/* 2> /dev/null | sort -rh > results.txt\n</pre>\n",
+        "responses": {
+            "du_stdin": "Redirect the <tt>stdin</tt> of <tt>du</tt> into the <tt>stdout</tt> of <tt>sort</tt>",
+            "du_stdout": "Redirect the <tt>stdout</tt> of <tt>du</tt> into the <tt>stdin</tt> of <tt>sort</tt>",
+            "du_stderr": "Redirect the <tt>stderr</tt> of <tt>du</tt> into the <tt>stdin</tt> of <tt>sort</tt>",
+            "du_null": "Redirect the <tt>stderr</tt> of <tt>du</tt> into <tt>/dev/null</tt>",
+            "null_sort": "Redirect the contents of <tt>/dev/null</tt> into the <tt>stdin</tt> of <tt>sort</tt>",
+            "sort_stdin": "Redirect the <tt>stdin</tt> of <tt>sort</tt> into <tt>results.txt</tt>",
+            "sort_stdout": "Redirect the <tt>stdout</tt> of <tt>sort</tt> into <tt>results.txt</tt>",
+            "sort_stderr": "Redirect the <tt>stderr</tt> of <tt>sort</tt> into <tt>results.txt</tt>"
+        }
+    },
+    "q6": {
+        "type": "blank",
+        "question": "\n<p>You are worried about the upcoming exam, so you decide to try to hack\nthe instructor's computer.  You would start by using the ____ (1, just the\nname) program to scan his workstation (ie. <tt>xavier.h4x0r.space</tt>) for\nopen ports.</p>\n\n<p>Suppose the scan revealed an open port on <tt>9206</tt>.  You would make\na <b>HTTP</b> request to that location by running ____ (2, full\ncommand).</p>\n\n<p>You are on dodgy WIFI (ie. <tt>eduroam</tt>) and notice the connection\nis shaky.  You would run ____ (3, full command), to check the\n<b>latency</b> between your machine and the instructor's workstation.</p>\n"
+    },
+    "q7": {
+        "type": "blank",
+        "question": "\n<p>Given the following script, which checks each file passed via command\nline arguments and reports if the file is readable:<p>\n\n<pre>\nfor $file in '$@'; do                           # (1) ____\n    [-r \"$file\"] | echo file is readable!       # (2) ____\ndone\n</pre>\n\n<p>Re-write the script so that it behaves properly.</p>\n"
+    },
+    "q8": {
+        "type": "blank",
+        "question": "\n<p>Given the following script, which checks each file passed via command\nline arguments and reports if the file is readable:<p>\n\n<pre>\nis_readable() {\n    test -r \"$@\"                                # (1) ____\n}\n\nwhile (-z \"$#\"); do                             # (2) ____\n    is_readable(\"$@\") | echo $@ is readable!    # (3) ____\n                                                # (4) ____\ndone\n</pre>\n\n<p>Re-write the script so that it behaves properly.</p>\n"
+    }
+}
