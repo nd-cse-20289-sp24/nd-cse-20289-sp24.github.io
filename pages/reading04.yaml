@@ -1,0 +1,296 @@
+title:      "Reading 04: Exam 01"
+icon:       fa-book
+navigation:
+  - name: "Home"
+    link: "index.html"
+    icon: "fa-linux"
+internal:
+external:
+body:       |
+
+  **Everyone**:
+
+  Next week, we will review for the upcoming **Exam 01**, which will cover
+  everything from utilizing [git], using the [shell], scripting the [shell],
+  constructing [pipelines] with [filters], and wielding [regular expressions].
+
+  Because of the exam on **Wednesday, February 14**, there will be **no
+  homework** for the upcoming week.
+
+  <div class="alert alert-info" markdown="1">
+  #### <i class="fa fa-search"></i> TL;DR
+
+  The focus of this reading is to review for the upcoming **Exam 01**.
+
+  </div>
+
+  ## Readings
+
+  The readings for this week are:
+
+  1. [Checklist 01]:
+
+      This is a **non-exhaustive** though mostly complete overview of the
+      terms, concepts, and skills you should know for the upcoming exam.
+
+  ### Optional Resources
+
+  On Friday, we will begin our transition to [Python].  If you wish to get
+  ahead on snake wrangling, you may wish to begin reading the following:
+
+  1. [Scipy Lecture Notes: 1.2. The Python language](http://www.scipy-lectures.org/intro/language/python_language.html)
+
+      This provides a brief overview of the [Python] programming language.
+
+  If you wish for more in-depth material about [Python], you can also reference
+  the following resources:
+
+  1. [A Byte of Python](http://python.swaroopch.com/)
+
+  2. [Automate The Boring Stuff](https://automatetheboringstuff.com/)
+
+  [The Linux Command Line]:     http://linuxcommand.org/tlcl.php
+  [Unix]:                       https://en.wikipedia.org/wiki/Unix
+  [Shell]:                      https://en.wikipedia.org/wiki/Unix_shell
+  [Git]:                        https://git-scm.com/
+  [Bash]:                       https://www.gnu.org/software/bash/
+  [shell scripting]:            https://en.wikipedia.org/wiki/Shell_script
+  [filters]:                    https://en.wikipedia.org/wiki/Filter_(software)#Unix
+  [pipelines]:                  https://en.wikipedia.org/wiki/Pipeline_(Unix)
+  [regular expressions]:        https://en.wikipedia.org/wiki/Regular_expression
+  [Unix Philosophy]:            https://en.wikipedia.org/wiki/Unix_philosophy
+  [Python]:                     https://www.python.org/
+  [Checklist 01]:               checklist01.html
+
+  ## Quiz
+
+  This week, your reading quiz is split into two sections: the first part is
+  your normal [dredd] quiz, while the second part involves a series of
+  [pipelines].  The questions are based heavily on [Checklist 01].
+
+  ### Questions
+
+  Record the answers to the following [Reading 04 Quiz] questions in your
+  `reading04` branch:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+
+  <script>
+  loadQuiz('static/json/reading04.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  ### Filters
+
+  For the second part, given the following data about the [Teenage Mutant Ninja
+  Turtles]:
+
+      :::text
+      Leonardo:katana:blue
+      Donatello:bo:purple
+      Raphael:sai:red
+      Michelangelo:nunchucks:orange
+
+  You are to complete the following [pipelines]:
+
+  1. List only the names of the turtles in sorted order.
+
+          :::bash
+          $ curl -sL https://yld.me/raw/hoUY | ...
+          Donatello
+          Leonardo
+          Michelangelo
+          Raphael
+
+  2. List only the colors of the turtles in all capitals.
+
+          :::bash
+          $ curl -sL https://yld.me/raw/hoUY | ...
+          BLUE
+          PURPLE
+          RED
+          ORANGE
+
+  3. Replace all weapons with plowshares.
+
+          :::bash
+          $ curl -sL https://yld.me/raw/hoUY | ...
+          Leonardo:plowshare:blue
+          Donatello:plowshare:purple
+          Raphael:plowshare:red
+          Michelangelo:plowshare:orange
+
+  4. List only the turtles whose names end in `lo`.
+
+          :::bash
+          $ curl -sL https://yld.me/raw/hoUY | ...
+          Donatello
+          Michelangelo
+
+  5. List only the turtles with names that have two consecutive vowels.
+
+          :::bash
+          $ curl -sL https://yld.me/raw/hoUY | ...
+          Leonardo
+          Raphael
+
+  6. Count how many colors don't begin with a vowel.
+
+          :::bash
+          $ curl -sL https://yld.me/raw/hoUY | ...
+          3
+
+  7. List only the turtles names whose name ends with a vowel and whose weapon
+  ends with a vowel.
+
+          :::bash
+          $ curl -sL https://yld.me/raw/hoUY | ...
+          Leonardo
+          Donatello
+
+  8. List only the colors of the turtles whose name has two of the same
+  consecutive letter (i.e.  `aa`, `bb`, etc.)
+
+          :::bash
+          $ curl -sL https://yld.me/raw/hoUY | ...
+          purple
+
+  [Teenage Mutant Ninja Turtles]:  https://en.wikipedia.org/wiki/Teenage_Mutant_Ninja_Turtles
+
+  #### Template
+
+  To record your [pipelines], you will need to write your answers to the
+  [filters.sh] script:
+
+      :::bash
+      # Download filters template
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading04/filters.sh
+
+  Each question has a corresponding function; for instance, the solution for
+  **Question 1** should be recorded in `q1_answer`:
+
+      :::bash
+      #!/bin/bash
+
+      q1_answer() {
+          # TODO: List only the names of the turtles in sorted order.
+          curl -sL https://yld.me/raw/hoUY | ...
+      }
+
+  To construct your [pipelines], you should try them **interactively** in your
+  shell.  Once you found a reasonable solution, you can record them in the
+  [filters.sh] script under the appropriate function.
+
+  #### Makefile
+
+  To test your [pipelines], you need to download the [Reading 04 Makefile],
+  which in turn will download the [test_filters.sh] test script and execute it:
+
+      :::bash
+      # Download Makefile
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading04/Makefile
+
+      # Download test scripts and run test
+      $ make
+      ...
+
+      # Test your filters
+      $ ./test_filters.sh
+      Checking reading04 filters.sh ...
+           Q1 Success
+           Q2 Success
+           Q3 Success
+           Q4 Success
+           Q5 Success
+           Q6 Success
+           Q7 Success
+           Q8 Success
+        Score 1.00 / 1.00
+       Status Success
+
+  [Reading 04 Quiz]:    static/json/reading04.json
+
+  ## Submission
+
+  To submit you work, follow the same process outlined in [Reading 01]:
+
+      :::bash
+      $ git switch master                   # Make sure we are in master branch
+      $ git pull --rebase                   # Make sure we are up-to-date with GitHub
+
+      $ git checkout -b reading04           # Create reading04 branch and check it out
+
+      $ cd reading04                        # Go into reading04 folder
+      $ $EDITOR answers.json                # Edit your answers.json file
+
+      $ ../.scripts/check.py                # Check reading04 quiz
+      Checking reading04 quiz ...
+            Q1 0.40
+            Q2 0.40
+            Q3 0.40
+            Q4 0.40
+            Q5 0.30
+            Q6 0.30
+            Q7 0.40
+            Q8 0.40
+         Score 3.00 / 3.00
+        Status Success
+
+      $ git add answers.json                # Add answers.json to staging area
+      $ git commit -m "Reading 04: Quiz"    # Commit work
+
+      $ $EDITOR filters.sh                  # Edit your filters.sh file
+
+      $ ./test_filters.sh                   # Test your filters
+      Checking reading04 filters.sh ...
+           Q1 Success
+           Q2 Success
+           Q3 Success
+           Q4 Success
+           Q5 Success
+           Q6 Success
+           Q7 Success
+           Q8 Success
+        Score 1.00 / 1.00
+       Status Success
+
+      $ git add Makefile                    # Add Makefile to staging area
+      $ git add filters.sh                  # Add filters.sh to staging area
+      $ git commit -m "Reading 04: Filters" # Commit work
+
+      $ git push -u origin reading04        # Push branch to GitHub
+
+  <div class="alert alert-danger" markdown="1">
+  #### <i class="fa fa-github"></i> Pull Request
+  Remember to create a **Pull Request** and assign the appropriate TA from the
+  [Reading 04 TA List].
+
+  **DO NOT MERGE** your own **Pull Request**.  The TAs use open **Pull Requests**
+  to keep track of which assignments to grade.  Closing them yourself will
+  cause a delay in grading and confuse the TAs.
+  </div>
+
+  [git]:            https://git-scm.com/
+  [clone]:          https://git-scm.com/docs/git-clone
+  [commit]:         https://git-scm.com/docs/git-commit
+  [push]:           https://git-scm.com/docs/git-push
+  [GitHub]:         https://github.com
+  [Reading 01]:     reading01.html
+  [merge request]:  https://docs.github.com/ee/github-basics/add-merge-request.html
+  [Reading 04 TA List]: reading04_tas.html
+  [dredd]:          https://dredd.h4x0r.space
+
+  [The Linux Command Line]:     http://linuxcommand.org/tlcl.php
+  [Unix]:                       https://en.wikipedia.org/wiki/Unix
+  [Unix Shell]:                 https://en.wikipedia.org/wiki/Unix_shell
+  [Git]:                        https://git-scm.com/
+  [Bash]:                       https://www.gnu.org/software/bash/
+  [shell scripting]:            https://en.wikipedia.org/wiki/Shell_script
+  [filters.sh]:                 https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading04/filters.sh
+  [test_filters.sh]:            https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading04/test_filters.sh
+  [Reading 04 Makefile]:        https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading04/Makefile
