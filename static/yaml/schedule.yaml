@@ -111,7 +111,8 @@
       - date:           Mon 02/12
         assignment:     Reading 04
         items:
-          - name:       Checklist 02
+          - name:       Checklist 01
+            link:       checklist01.html
 
       - date:           Wed 02/14
         items:

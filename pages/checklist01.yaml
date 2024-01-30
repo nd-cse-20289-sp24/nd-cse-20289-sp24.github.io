@@ -1,0 +1,580 @@
+title:      Checklist 01
+icon:       fa-check-square-o
+navigation: []
+internal:   []
+external:   []
+body:       |
+
+    ## Overview
+
+    Here is a general outline of the **key** concepts and commands (arranged by
+    topic) that you should know for **Exam 01**.
+
+    The exam will have the following format:
+
+    1. **Commands**: Identify which commands perform certain tasks
+    (*multiple-choice*).
+
+    2. **Shell and Files**: Identify ways to perform certain tasks in the shell
+    (*multiple-choice*).
+
+    3. **Networking and Processes**: Identify ways to perform networking and
+    process management tasks (*multiple-choice*).
+
+    4. **Pipelines**: Describe **pipelines**, I/O redirection, and the **Unix
+    Philosophy** (*multiple-choice*, *fill-in-the-blank*).
+
+    5. **Shell Scripting**: Debug, fix, and evaluate a shell script
+      (*multiple-choice*, *fill-in-the-blank*).
+
+    6. **Filters**: Use Unix **filters** to answer some questions (*coding on
+    the computer*).
+
+    Parts **1** through **5** are to be done first on **paper**. Once that
+    portion is completed and submitted, you will do part **6** on your own
+    computer and submit code to your **assignments** repository.
+
+    <div class="alert alert-warning" markdown="1">
+    #### <i class="fa fa-warning"></i> Representative, but not Exhaustive
+
+    This check list is meant to be representative, rather than exhaustive (ie.
+    there may be questions that show up on the exam that are not shown below).
+
+    </div>
+
+    <hr>
+
+    ## Logistics
+
+    **Exam 01** will take place during our normal lecture session on
+    **Wednesday, February 14** from **12:50 PM - 1:40 PM** in **102 DeBartolo
+    Hall**.
+
+    As noted above, the first portion of the exam with be on **paper**, while
+    the remaining component with require **coding** and submitting work to your
+    **assignments** [GitHub] repository.
+
+    During the **paper** portion of the exam, students will only be allowed to
+    use **one cheatsheet**.  This **paper** component of the exam must be
+    submitted before students can access the **coding** section.
+
+    For the **coding** portion, students will use their own computer, and thus
+    are permitted access to any material in their textbooks, notes,
+    assignments, and the Internet.
+
+    <div class="alert alert-danger"  markdown="1">
+    #### <i class="fa fa-warning"></i> Honor Code Violations
+
+    Although students are allowed to use their computers and the Internet
+    during the **coding** portion of the exam, students **may not communicate
+    with others** or **solicit answers from others**.  **Nor may they use AI
+    tools** such as **ChatGPT** or **Co-Pilot**.  Students caught sharing
+    solutions or violating any portion of the honor code will **receive a zero
+    on the exam**.
+
+    </div>
+
+    [GitHub]: https://github.com
+
+    <hr>
+
+    ## Introduction
+
+    ### Concepts
+
+    * What is **Unix**?
+
+    * What is a **shell**?
+
+    * How would do you use **git** to:
+
+        - Create a copy a repository.
+
+        - Create a new branch.
+
+        - View the changes you've made.
+
+        - Save a change you've made.
+
+        - Share the changes you've made.
+
+        - Retrieve the changes from a remote location.
+
+    * What are **aliases**?
+
+        *You should know how to create one and how you would make them
+        persistent (ie. survive the current shell session).*
+
+    * What are **environment variables**?
+
+        *You should know how to set and modify them.  In particular, you should
+        be familiar with the `PATH` environment variable and know what it
+        controls.*
+
+    [Unix]: https://en.wikipedia.org/wiki/Unix
+
+    ### Commands
+
+    1. [git](http://man7.org/linux/man-pages/man1/git.1.html)
+
+        Version control system for managing our files.
+
+    <div class="alert alert-success" markdown="1">
+    #### <i class="fa fa-question"></i> Sample Questions
+
+    1. Which environmental variable does the shell search to locate an
+    executable?
+
+        - `APPS`
+        - `HOME`
+        - `PATH`
+        - <p>`PROGRAMS`</p>
+
+    2. How would you create a new `checklist01` branch off an up-to-date
+    `master` branch?
+
+    </div>
+
+    <hr>
+
+    ## Files
+
+    ### Concepts
+
+    * What is the general layout or hierarchy of a typical Unix
+    **filesystem**?
+
+        *You should be familiar with the most common directories found in a
+        typical [Unix] filesystem (e.g. `/bin`, `/etc`, `/lib`, `/usr`, `/tmp`,
+        `/var`, etc.).*
+
+    * What is the difference between an **absolute** and **relative** path?
+
+        *You should know how to reference a file using both methods.*
+
+    * How do Unix file **permissions** work?  How would you set them to
+    restrict access for certain operations and certain classes?
+
+        *You should be able to translate from **octal** to `rwx` triplets and
+        back.*
+
+    * What is the difference between a **hard link** and a **soft link**?
+
+        *You should know the command to create both.*
+
+    ### Commands
+
+    1. [ls](http://man7.org/linux/man-pages/man1/ls.1.html)
+
+        List the contents of a directory (long, human-readable, sorted)
+
+    2. [chmod](http://man7.org/linux/man-pages/man1/chmod.1.html)
+
+        Set permissions using **octal** and symbolic arguments.
+
+    3. [stat](http://man7.org/linux/man-pages/man1/stat.1.html)
+
+        View the inode information for a file.
+
+    4. [du](http://man7.org/linux/man-pages/man1/du.1.html)
+
+        View the total disk usage for a file or directory.
+
+    5. [ln](http://man7.org/linux/man-pages/man1/ln.1.html)
+
+        Create hard and soft links.
+
+    6. [find](http://man7.org/linux/man-pages/man1/find.1.html)
+
+        Search directory for files by name and type.
+
+    <div class="alert alert-success" markdown="1">
+    #### <i class="fa fa-question"></i> Sample Questions
+
+    1. Which of the following commands makes a file executable?
+
+        - `chmod +x file`
+        - `stat file`
+        - `make file`
+        - <p>`test -x file`</p>
+
+    2. Which of the following commands shows the meta-data of a file?
+
+        - `ls -l file`
+        - `stat file`
+        - `du file`
+        - <p>`find file`</p>
+
+    </div>
+
+    <hr>
+
+    ## Process
+
+    ### Concepts
+
+    * What is a **process**?  What attributes does it have?
+
+        *You should know at a high-level the typical attributes of a process
+        (ie. PID, UID, etc.).*
+
+    * What does it mean to **signal** a process?  What do different the
+    different signals do (`TERM`, `INT`, `KILL`)?
+
+        *You should know the difference between terminating a process gracefully
+        and terminating it forcefully.*
+
+    * How do we **suspend**, **foreground**, and **background** a process?
+
+        *You should know the appropriate keybindings and commands to perform
+        these actions.*
+
+    ### Commands
+
+    1. [ps](http://man7.org/linux/man-pages/man1/ps.1.html)
+
+        List the processes for the current user and for the whole system.
+
+    2. [top](http://man7.org/linux/man-pages/man1/top.1.html)
+
+        Interactively view and manage processes.
+
+    3. [kill](http://man7.org/linux/man-pages/man1/kill.1.html)
+
+        Signal a process by PID.
+
+    4. [time](http://man7.org/linux/man-pages/man1/time.1.html)
+
+        Measure how long it takes a process to execute.
+
+    5. [pkill](http://man7.org/linux/man-pages/man1/kill.1.html)
+
+        Signal a process by name.
+
+    <div class="alert alert-success" markdown="1">
+    #### <i class="fa fa-question"></i> Sample Questions
+
+    1. Which of the following commands forcefully terminates a process?
+
+        - `kill PID`
+        - `kill -9 PID`
+        - `sudo kill PID`
+        - <p>`kill -KILL PID`</p>
+
+    2. Suppose we were running `cat`.  How would we signal to the program that
+    we are done inputting text?
+
+        - `Control-Z`
+        - `Control-I`
+        - `Control-D`
+        - <p>`Control-C`</p>
+
+    </div>
+
+    <hr>
+
+    ## I/O Redirection
+
+    ### Concepts
+
+    * What three **files** does every process start with?
+
+    * How do you redirect the output of a command into a new file?
+
+    * How do you redirect the output of a command and append it to a file?
+
+    * How do you redirect the output of one command as the input to another?
+
+    * How do you direct the contents of a file into the input of command?
+
+    * What is `/dev/null`?  How would you use it to output `stderr` but ignore
+    `stdout` of a program?
+
+    * What is a **here document** and how would you use it?
+
+    ### Commands
+
+    1. [tee](http://man7.org/linux/man-pages/man1/tee.1.html)
+
+        Redirect `stdin` to both `stdout` and a file.
+
+    2. [write](http://man7.org/linux/man-pages/man1/write.1.html)
+
+        Write to another users terminal.
+
+    <div class="alert alert-success" markdown="1">
+    #### <i class="fa fa-question"></i> Sample Questions
+
+    1. Which of the following pipelines counts all the "Permission denied"
+    errors encountered when recursively searching file names under the "/etc"
+    directory?
+
+        - `find /etc > /dev/null | wc -l`
+        - `find /etc 2>&1 > /dev/null | wc -l`
+        - `find /etc 2> /dev/null | wc -l`
+        - <p>`find /etc > /dev/null 2>&1 | wc -l`</p>
+
+    2. Which of the following appends the standard output of a program to a
+    file?
+
+        - `program > output`
+        - `program 2> output`
+        - `program >> output`
+        - <p>`program &> output`</p>
+
+    </div>
+
+    <hr>
+
+    ## Networking
+
+    ### Concepts
+
+    * What is **bandwidth** and **latency**?
+
+        *You should know what each measures and what programs we would use to
+        perform these measurements.*
+
+    * What is an **IP address**?  How is a **domain name** related to it?
+
+        *You should know the commands to lookup this information.*
+
+    * What is a network **port**?
+
+        *You should know how to scan for ports and how to connect to a machine
+        at a specific a domain or address and port number.*
+
+    ### Commands
+
+    1. [ip](http://man7.org/linux/man-pages/man8/ip.8.html) / [ifconfig](http://man7.org/linux/man-pages/man8/ifconfig.8.html)
+
+        List the IP addresses of the current machine.
+
+    2. [nmap](http://man7.org/linux/man-pages/man1/nmap.1.html)
+
+        Scan remote machine for open ports.
+
+    3. [nc](http://linux.die.net/man/1/nc)
+
+        General purpose tools to communicate with TCP-based network services.
+
+    4. [curl](http://curl.haxx.se/docs/manpage.html)
+
+        Communicate using HTTP (ie. download files from the web).
+
+    5. [ping](http://man7.org/linux/man-pages/man8/ping.8.html)
+
+        Measure the latency from host to remote machine.
+
+    <div class="alert alert-success" markdown="1">
+    #### <i class="fa fa-question"></i> Sample Questions
+
+    1. Which of the following commands can be used to measure bandwidth?
+
+        - `wget URL`
+        - `ping URL`
+        - `nmap URL`
+        - <p>`curl URL`</p>
+
+    2. Which of the following statements are true (select all that apply)?
+
+        - Every domain name translates to at least one IP address.
+        - Every IP address is publically accessible.
+        - Every IP address maps to exactly one domain name.
+        - <p>Every device has an IP address of 127.0.0.1.</p>
+
+    </div>
+
+    <hr>
+
+    ## Shell Scripting
+
+    ### Concepts
+
+    1. What is a **shell script**?  What is a **she-bang** and why do we need
+    it (or what does it do)?
+
+        *You should understand how a **shell script** is interpreted and the
+        impact the **she-bang** has on this interpretation.  You should also
+        know how to execute a **shell script**.*
+
+    2. You should know the basics of the shell programming language:
+
+        1. **variables**
+
+        2. **command substitution**
+
+        3. **short circuit evaluation**
+
+        4. **if** statement
+
+        5. **case** statement
+
+        6. **for** loop
+
+        7. **while** loop
+
+        8. **function**
+
+    3. How do we **parse command line arguments** in a **shell script**?
+
+    ### Commands
+
+    1. [sh](https://www.freebsd.org/cgi/man.cgi?query=sh&sektion=&n=1)
+
+        Bourne shell interpreter.
+
+    2. [test](http://man7.org/linux/man-pages/man1/test.1.html)
+
+        Perform checks on file types and values.
+
+    3. [tar](http://man7.org/linux/man-pages/man1/tar.1.html)
+
+        Extract or compress tarballs.
+
+    4. [seq](http://man7.org/linux/man-pages/man1/seq.1.html)
+
+        Produce sequence of numbers.
+
+    <div class="alert alert-success" markdown="1">
+    #### <i class="fa fa-question"></i> Sample Questions
+
+    The following scripts contain errors. Identify and correct all the bugs.
+
+    <p></p>
+
+    1.  This script checks each file passed via command line arguments and
+    reports if the file is readable.
+
+            :::text
+            for $file in '$@'; do
+                [-r $file] | echo file is readable!
+            done
+
+    2.  This script checks each file passed via command line arguments and
+    reports if the file is readable.
+
+            :::text
+            is_readable() {
+                test -r $@
+            }
+
+            while (-n "$#"); do
+                is_readable("$@") | echo $@ is readable!
+
+            done
+    </div>
+
+    <hr>
+
+    ## Filters
+
+    ### Concepts
+
+    1. What are the **three tenets** of the **Unix Philosophy**?
+
+    2. What are **regular expressions**?
+
+        You will need to know the basic **metacharacters** such as
+
+        - `.`
+        - `*`
+        - `[]`
+        - `[^]`
+        - `^`
+        - `$`
+        - `()`
+        - `|`
+        - `\n`
+        - <p>`{m, n}`</p>
+
+        *You will also need to be familiar with the basic **character classes**
+        and their **character set** equivalents such as:*
+
+        - `[:alpha:] = [a-zA-Z]`
+        - `[:lower:] = [a-z]`
+        - `[:upper:] = [A-Z]`
+        - `[:space:] = [ \t\r\n\v\f]`
+        - <p>`[:digit:] = [0-9]`</p>
+
+    3. What are **filters**?
+
+        *You should be familiar with the general idea of a **filter** and know
+        how to use specific tools for certain tasks.*
+
+    ### Commands
+
+    1. [cut](http://man7.org/linux/man-pages/man1/cut.1.html)
+
+        Extract fields or characters.
+
+    2. [sort](http://man7.org/linux/man-pages/man1/sort.1.html)
+
+        Order text.
+
+    3. [uniq](http://man7.org/linux/man-pages/man1/uniq.1.html)
+
+        Remove duplicates.
+
+    4. [tr](http://man7.org/linux/man-pages/man1/tr.1.html)
+
+        Translate from one set of characters to another.
+
+    5. [grep](http://man7.org/linux/man-pages/man1/grep.1.html)
+
+        Search based on pattern.
+
+    6. [sed](http://man7.org/linux/man-pages/man1/sed.1.html)
+
+        Search and replace or extract text based on regular expressions.
+
+    7. [head](http://man7.org/linux/man-pages/man1/head.1.html)
+
+        Display first few lines of input.
+
+    8. [tail](http://man7.org/linux/man-pages/man1/tail.1.html)
+
+        Display last few lines of input.
+
+    <div class="alert alert-success" markdown="1">
+    #### <i class="fa fa-question"></i> Sample Questions
+
+    Given the file `tmnt.txt`, which contains:
+
+    <p></p>
+
+        :::text
+        Leonardo:blue:katana
+        Donatello:purple:bo
+        Raphael:red:sai
+        Michelangelo:orange:nunchucks
+
+    Given the `tmnt.txt` file above, write Unix pipelines that perform the
+    following tasks:
+
+    <p></p>
+
+    - List only the names of the turtles in sorted order.
+
+    - List only the colors of the turtles in sorted order.
+
+    - List only the weapons of the turtles in sorted order.
+
+    - List only the turtles whose names end in `lo`.
+
+    - List only the turtles with last names that contain two consecutive vowels.
+
+    - Count how many colors begin with a `b`.
+
+    - Count how many colors end with an `e`.
+
+    - List only the turtles names whose name ends with a vowel and whose weapon
+      ends with a vowel.
+
+    - List only the turtles names with two of the same consecutive letter (i.e.
+      `aa`, `bb`, etc.)
+
+    - List the colors that don't end with a vowel.
+
+    - List the weapons that contains a repeat letter anywhere in the string.
+    </div>
