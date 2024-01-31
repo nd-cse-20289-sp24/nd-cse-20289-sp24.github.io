@@ -169,7 +169,7 @@ body:       |
   <tr markdown="1">
     <td markdown="1"><tt>[find]</tt></td>
     <td>Recursively search file paths.</td>
-    <td><tt>find /etc -name '\*ssl\*'</tt></td>
+    <td><tt>find /etc -name '*ssl*'</tt></td>
   </tr>
   <tr markdown="1">
     <td markdown="1"><tt>[host]</tt></td>
