@@ -93,6 +93,8 @@
         items:
           - name:       Slides 08
             link:       https://docs.google.com/presentation/d/1rvseGHrnuTKTzVtrd5rIvLR-WASG5FMxP3iETTmdCqA/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=e18b3d91-d0cf-482e-a11d-b10d013e8c64
 
       - date:           Wed 02/07
         topics:         Filters
