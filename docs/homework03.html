@@ -438,6 +438,11 @@ zipcode_information | filter_zipcodes
   execute the <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">pipeline</a> at the bottom of the script.</p>
 </li>
 <li>
+<p>You will need to filter the <code>STATE</code> pages for the <strong>zipcodes</strong>
+  corresponding to the specified <code>CITY</code>.  <strong>Do not use the <code>CITY</code> specific
+  pages</strong>.</p>
+</li>
+<li>
 <p>You will need to expand the <code>case</code> statement to parse command line
   arguments.</p>
 </li>
@@ -453,6 +458,13 @@ zipcode_information | filter_zipcodes
 <li>
 <p>You will probably want to use <a href="http://man7.org/linux/man-pages/man1/sort.1.html">sort</a> and <a href="http://man7.org/linux/man-pages/man1/uniq.1.html">uniq</a> to make sure the final
   results are <strong>sorted</strong> and <strong>unique</strong>.</p>
+</li>
+<li>
+<p>For states with spaces, you will need to replace each space with <code>%20</code> (ie.
+<code>New York</code> becomes <code>New%20York</code>):</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #19177C">STATE</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;</span><span style="color: #008000; font-weight: bold">$(</span><span style="color: #008000">echo</span> <span style="color: #19177C">$2</span> | ...<span style="color: #008000; font-weight: bold">)</span><span style="color: #BA2121">&quot;</span>
+</code></pre></div>
+
 </li>
 </ul>
 </div>
