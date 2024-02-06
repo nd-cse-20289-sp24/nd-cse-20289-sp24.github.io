@@ -456,6 +456,10 @@ body:       |
   - The general flow of your script should be to parse arguments and then to
     execute the [pipeline] at the bottom of the script.
 
+  - You will need to filter the `STATE` pages for the **zipcodes**
+    corresponding to the specified `CITY`.  **Do not use the `CITY` specific
+    pages**.
+
   - You will need to expand the `case` statement to parse command line
     arguments.
 
@@ -468,6 +472,12 @@ body:       |
 
   - You will probably want to use [sort] and [uniq] to make sure the final
     results are **sorted** and **unique**.
+
+  - For states with spaces, you will need to replace each space with `%20` (ie.
+  `New York` becomes `New%20York`):
+
+          :::bash
+          STATE="$(echo $2 | ...)"
 
   </div>
 
