@@ -134,6 +134,9 @@
 
       - date:           Fri 02/16
         topics:         Python Scripting
+        items:
+          - name:       Slides 09
+            link:       https://docs.google.com/presentation/d/196SItb_47DeOGV-K_DjjeaCaESczr8i8Wq-XvUHewVw/edit?usp=sharing
 
 - name:     "Unit 02: Python"
 
