@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Reading 05: Python Scripting</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="static/css/blugold.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<style>
+	body {
+	    padding: 10px;
+	}
+	</style>
+    </head>
+    <body>
+	<div class="container">
+
+	    <div class="row">
+		<div class="page-header">
+		    <ul class="nav nav-pills pull-right">
+			
+			<li><a href="index.html"><i class="fa fa-linux"></i> <span class="visible-md-inline visible-lg-inline">Home</span></a></li>
+			
+		    </ul>
+		    <h1><i class="fa fa-book"></i> Reading 05: Python Scripting</h1>
+		</div>
+	    </div>
+
+            
+<p><strong>Everyone</strong>:</p>
+<p>Next week, we will transition from <a href="https://en.wikipedia.org/wiki/Shell_script">shell scripting</a> and <a href="https://en.wikipedia.org/wiki/Filter_(software)#Unix">filters</a> to
+creating more sophisticated scripts using the <a href="https://www.python.org/">Python</a> programming language.
+Using a more advanced scripting language such as <a href="https://www.python.org/">Python</a> will allow us to
+use sequence data structures such as <a href="https://docs.python.org/3/library/stdtypes.html#sequence-types-list-tuple-range">lists</a> and mapping data structures such
+as <a href="https://docs.python.org/3/library/stdtypes.html#mapping-types-dict">dictionaries</a>, and thus perform more sophisticated data manipulation
+efficiently and effectively.</p>
+<div class="alert alert-info">
+<h4 id="tldr"><i class="fa fa-search"></i> TL;DR<a class="headerlink" href="#tldr" title="Permanent link">&para;</a></h4>
+<p>The focus of this reading is to introduce scripting in <a href="https://www.python.org/">Python</a>.</p>
+</div>
+<p><img src="static/img/python.png" class="pull-right"></p>
+<h2 id="readings">Readings<a class="headerlink" href="#readings" title="Permanent link">&para;</a></h2>
+<p>The readings for this week are:</p>
+<ol>
+<li>
+<p><a href="http://www.scipy-lectures.org/intro/language/python_language.html">Scipy Lecture Notes: 1.2. The Python
+language</a></p>
+</li>
+<li>
+<p><a href="https://python.swaroopch.com/data_structures.html">A Byte of Python - Data
+Structures</a></p>
+</li>
+</ol>
+<h3 id="optional-resources">Optional Resources<a class="headerlink" href="#optional-resources" title="Permanent link">&para;</a></h3>
+<p>Here are some additional resources:</p>
+<ol>
+<li>
+<p><a href="http://python.swaroopch.com/">A Byte of Python</a></p>
+</li>
+<li>
+<p><a href="https://automatetheboringstuff.com/">Automate The Boring Stuff</a></p>
+</li>
+</ol>
+<div class="alert alert-success">
+<h4 id="python-3"><i class="fa fa-code"></i> Python 3<a class="headerlink" href="#python-3" title="Permanent link">&para;</a></h4>
+<p>In this course, we will be using <a href="https://www.python.org/">Python</a> <code>3.11+</code> and some additional
+libraries such as <a href="https://requests.readthedocs.io/en/latest/">Requests</a>.</p>
+<p>On the <strong>student</strong> machines, you can use the instructor's copy of <a href="https://www.python.org/">Python</a> by
+making the following modifications to your <code>PATH</code> environmental variable:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000">export</span> <span style="color: #19177C">PATH</span><span style="color: #666666">=</span>~pbui/pub/pkgsrc/bin:<span style="color: #19177C">$PATH</span>
+</code></pre></div>
+
+<p>This will give you access to a more current version of <a href="https://www.python.org/">Python</a> along with
+some of the libraries we will be using such as <a href="https://requests.readthedocs.io/en/latest/">Requests</a>.</p>
+<p>To make this <strong>persistent</strong>, you should add this to the bottom of your
+<code>~/.bashrc</code> if you have not already.</p>
+</div>
+<h2 id="quiz">Quiz<a class="headerlink" href="#quiz" title="Permanent link">&para;</a></h2>
+<p>This week, your reading quiz is split into two sections: the first part is
+your normal <a href="https://dredd.h4x0r.space">dredd</a> quiz, while the second part involves one <a href="https://www.python.org/">Python</a>
+script: <code>exists.py</code>.</p>
+<p>To test this script, you will need to download the <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading05/Makefile">Makefile</a> and test scripts:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ git switch master                   <span style="color: #3D7B7B; font-style: italic"># Make sure we are in master branch</span>
+$ git pull --rebase                   <span style="color: #3D7B7B; font-style: italic"># Make sure we are up-to-date with GitHub</span>
+
+$ git checkout -b reading05           <span style="color: #3D7B7B; font-style: italic"># Create reading05 branch and check it out</span>
+
+$ <span style="color: #008000">cd</span> reading05                        <span style="color: #3D7B7B; font-style: italic"># Go into reading05 folder</span>
+
+<span style="color: #3D7B7B; font-style: italic"># Download Reading 05 Makefile</span>
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading05/Makefile
+
+<span style="color: #3D7B7B; font-style: italic"># Execute tests (and download them)</span>
+$ make
+</code></pre></div>
+
+<h3 id="questions">Questions<a class="headerlink" href="#questions" title="Permanent link">&para;</a></h3>
+<p>Record the answers to the following <a href="static/json/reading05.json">Reading 05 Quiz</a> questions in your
+<code>reading05</code> branch:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+
+<script>
+loadQuiz('static/json/reading05.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<h3 id="existspy"><code>exists.py</code><a class="headerlink" href="#existspy" title="Permanent link">&para;</a></h3>
+<p>Use the <code>echo.py</code> script as the basis for a Python script called <code>exists.py</code>,
+which accomplishes the same task as the modified version of <code>exists.sh</code> in <a href="reading02.html">Reading 02</a>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Run script and check error code</span>
+$./exists.py * <span style="color: #666666">&amp;&amp;</span> <span style="color: #008000">echo</span> Success
+exists.py exists!
+README.md exists!
+Success
+
+$ ./exists.py * ASDF <span style="color: #666666">||</span> <span style="color: #008000">echo</span> Success
+<span style="color: #3D7B7B; font-style: italic"># Run script and check error code</span>
+exists.py exists!
+README.md exists!
+ASDF does not exist!
+Success
+</code></pre></div>
+
+<h4 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h4>
+<p>To test your <code>exists.py</code>, you can use the <code>test_exists.sh</code> script downloaded
+by the <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading05/Makefile">Makefile</a>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ ./test_exists.sh                    <span style="color: #3D7B7B; font-style: italic"># Test your exists.py</span>
+Checking reading05 exists.py ...
+ exists.py                                ... Success
+ exists.py *                              ... Success
+ exists.py * ASDF                         ... Success
+ exists.py /lib/*                         ... Success
+   Score <span style="color: #666666">1</span>.00 / <span style="color: #666666">1</span>.00
+  Status Success
+</code></pre></div>
+
+<h4 id="hints">Hints<a class="headerlink" href="#hints" title="Permanent link">&para;</a></h4>
+<ul>
+<li>
+<p>You will probably want to use <a href="https://docs.python.org/3/library/os.path.html#os.path.exists">os.path.exists</a>.</p>
+</li>
+<li>
+<p>You will probably want to use <a href="https://docs.python.org/3/library/sys.html#sys.exit">sys.exit</a>.</p>
+</li>
+<li>
+<p>You will probably want to use <a href="https://pyformat.info/">string formatting</a> or <a href="http://zetcode.com/python/fstring/">f-strings</a>.</p>
+</li>
+</ul>
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit your work, follow the same process outlined in <a href="reading01.html">Reading 01</a>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">#--------------------------------------------------</span>
+<span style="color: #3D7B7B; font-style: italic"># BE SURE TO DO THE PREPARATION STEPS ABOVE</span>
+<span style="color: #3D7B7B; font-style: italic">#--------------------------------------------------</span>
+
+$ <span style="color: #008000">cd</span> reading05                        <span style="color: #3D7B7B; font-style: italic"># Go into reading05 folder</span>
+$ <span style="color: #19177C">$EDITOR</span> answers.json                <span style="color: #3D7B7B; font-style: italic"># Edit your answers.json file</span>
+
+$ ../.scripts/check.py                <span style="color: #3D7B7B; font-style: italic"># Check reading05 quiz</span>
+Checking reading05 quiz ...
+      Q1 <span style="color: #666666">0</span>.30
+      Q2 <span style="color: #666666">0</span>.40
+      Q3 <span style="color: #666666">0</span>.30
+      Q4 <span style="color: #666666">0</span>.20
+      Q5 <span style="color: #666666">0</span>.80
+      Q6 <span style="color: #666666">1</span>.00
+   Score <span style="color: #666666">3</span>.00 / <span style="color: #666666">3</span>.00
+  Status Success
+
+$ git add answers.json                <span style="color: #3D7B7B; font-style: italic"># Add answers.json to staging area</span>
+$ git commit -m <span style="color: #BA2121">&quot;Reading 05: Quiz&quot;</span>    <span style="color: #3D7B7B; font-style: italic"># Commit work</span>
+
+$ <span style="color: #19177C">$EDITOR</span> exists.py                   <span style="color: #3D7B7B; font-style: italic"># Edit your exists.py file</span>
+
+$ ./test_exists.sh                    <span style="color: #3D7B7B; font-style: italic"># Test your exists.py</span>
+Checking reading05 exists.py ...
+ exists.py                                ... Success
+ exists.py *                              ... Success
+ exists.py * ASDF                         ... Success
+ exists.py /lib/*                         ... Success
+   Score <span style="color: #666666">1</span>.00 / <span style="color: #666666">1</span>.00
+  Status Success
+
+$ git add Makefile                    <span style="color: #3D7B7B; font-style: italic"># Add Makefile to staging area</span>
+$ git add exists.py                   <span style="color: #3D7B7B; font-style: italic"># Add exists.py to staging area</span>
+$ git commit -m <span style="color: #BA2121">&quot;Reading 05: Scripts&quot;</span> <span style="color: #3D7B7B; font-style: italic"># Commit work</span>
+
+$ git push -u origin reading05        <span style="color: #3D7B7B; font-style: italic"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert alert-danger">
+<h4 id="pull-request"><i class="fa fa-github"></i> Pull Request<a class="headerlink" href="#pull-request" title="Permanent link">&para;</a></h4>
+<p>Remember to create a <strong>Pull Request</strong> and assign the appropriate TA from the
+<a href="reading05_tas.html">Reading 05 TA List</a>.</p>
+<p><strong>DO NOT MERGE</strong> your own <strong>Pull Request</strong>.  The TAs use open <strong>Pull Requests</strong>
+to keep track of which assignments to grade.  Closing them yourself will
+cause a delay in grading and confuse the TAs.</p>
+</div>
+
+
+	    <div class="row">
+		<hr/>
+
+		<footer class="text-center">
+		    <p class="text-muted">
+		    <small>
+		    Built using
+		    <a href="https://getbootstrap.com/">Bootstrap</a>,
+		    <a href="https://fontawesome.com/">Font Awesome</a>, and
+		    <a href="http://www.python.org/">Python</a>.
+		    <br/>
+		    &copy; 2024 <a href="http://www.nd.edu">University of Notre Dame</a>
+		    </small>
+		    </p>
+		</footer>
+	    </div>
+
+	</div> <!-- /container -->
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	
+    </body>
+</html>
+

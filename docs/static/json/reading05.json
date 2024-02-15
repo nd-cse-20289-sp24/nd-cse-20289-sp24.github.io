@@ -1,0 +1,70 @@
+{
+    "q1": {
+        "type": "multiple",
+        "question": "\n<p>Given the following Python script, <tt>echo.py</tt>:</p>\n\n<pre>\n#!/usr/bin/env python3\n\nimport sys\n\nfor arg in sys.argv[1:]:\n    print(arg)\n</pre>\n\n<p>Which of the following statements are true (select all that apply)?</p>\n",
+        "responses": {
+            "module": "The line <tt>import sys</tt> loads the <tt>sys</tt> Python module.",
+            "argv": "The command-line arguments to the script are stored in <tt>sys.argv</tt>.",
+            "first": "Due to the <tt>[1:]</tt>, the script only prints out the first argument.",
+            "print": "It is necessary to include the parentheses in the <tt>print</tt> function.",
+            "arg": "The <tt>arg</tt> variable needs a <tt>$</tt> in front of it just like in shell.",
+            "shebang": "The <b>shebang</b> is not necessary if we want to run the script with <tt>./echo.py</tt>."
+        }
+    },
+    "q2": {
+        "type": "multiple",
+        "question": "\n<p>Given the following Python script, <tt>env.py</tt>:</p>\n\n<pre>\n#!/usr/bin/env python3\n\nimport os\n\nfor key, value in sorted(os.environ.items()):\n    print(f'{key}={value}')\n</pre>\n\n<p>Which of the following statements are true (select all that apply)?</p>\n",
+        "responses": {
+            "dict": "The <tt>os.environ</tt> is a dictionary-like object.",
+            "list": "The <tt>os.environ</tt> is a list-like object.",
+            "svars": "This script prints all the variables inside the script.",
+            "evars": "This script prints all environmental variables from the shell.",
+            "format": "Instead of <tt>print(f'{key}={value}')</tt>, we could do <tt>print('{}={}'.format(key, value))</tt>.",
+            "concat": "Instead of <tt>print(f'{key}={value}')</tt>, we could do <tt>print(key + '=' + value)</tt>."
+        }
+    },
+    "q3": {
+        "type": "multiple",
+        "question": "\n<p>Given the following Python script, <tt>pokemon.py</tt>:</p>\n\n<pre>\n#!/usr/bin/env python3\n\nPokemon = ['pikachu', 'charmander', 'bulbasaur', 'squirtle']\n\nfor pokemon in Pokemon:\n    if pokemon.endswith('r'):\n        print(pokemon.upper())\n    else:\n        print(pokemon.title())\n</pre>\n\n<p>Which of the following statements are true (select all that apply)?</p>\n",
+        "responses": {
+            "add": "To add 'meowth' to the list of <tt>Pokemon</tt>, we could do <tt>Pokemon.add('meowth')</tt>.",
+            "append": "To add 'meowth' to the list of <tt>Pokemon</tt>, we could do <tt>Pokemon.append('meowth')</tt>.",
+            "last_item": "To access the last item in the <tt>Pokemon</tt> list, we could do <tt>Pokemon[-1]</tt>",
+            "endswith": "The <tt>pokemon.endswith('r')</tt> checks if the string contains the letter <tt>r</tt>.",
+            "upper": "The <tt>pokemon.upper()</tt> permanently converts the current <tt>pokemon</tt> string into upper-case.",
+            "output": "The output of this script is <tt>Pikachu CHARMANDER BULBASAUR Squirtle</tt> (where each word is on a separate line)."
+        }
+    },
+    "q4": {
+        "type": "multiple",
+        "question": "\n<p>Which of the following statements about <b>lists</b> and\n<b>dictionaries</b> are true (select all that apply)?</p>\n",
+        "responses": {
+            "index": "Like a list, a dictionary's key must be an integer.",
+            "values": "Like a list, iterating through a dictionary provides the values in the data structure.",
+            "length": "Like a list, the <tt>len()</tt> function can be used to get the number of elements in a dictionary.",
+            "update": "Unlike a list, a dictionary cannot be updated after it has been declared.",
+            "slice": "Unlike a list, a dictionary cannot be sliced.",
+            "contains": "Unlike a list, a dictionary cannot be searched with the <tt>in</tt> operator."
+        }
+    },
+    "q5": {
+        "type": "blank",
+        "question": "\n<p>Given the following Python script, <tt>ruthless.py</tt>:</p>\n\n<pre>\n#!/usr/bin/env python3\n\nlyric  = \"I finally know now what I should have known then That I could still be ruthless if you'll let me\"\ncounts = {}\n\nfor letter in lyric.lower():\n    counts[letter] = counts.get(letter, 0) + 1\n</pre>\n\n<p>After executing the code in the <tt>hp.py</tt> script, what are the\nfollowing values?</p>\n\n<ol>\n    <li><tt>len(counts)</tt> ____</li>\n    <li><tt>counts['i']</tt> ____</li>\n    <li><tt>counts['r']</tt> ____</li>\n    <li><tt>counts['a']</tt> ____</li>\n    <li><tt>counts['t']</tt> ____</li>\n    <li><tt>counts['e']</tt> ____</li>\n    <li><tt>min(counts.values())</tt> ____</li>\n    <li><tt>max(counts.values())</tt> ____</li>\n</ol>\n"
+    },
+    "q6": {
+        "type": "order",
+        "question": "\n<p>Given the following Python script, <tt>words.py</tt>:\n\n<pre>\n#!/usr/bin/env python3\nwords  = 'I made a life out of chasin a ghost'\n    for letter in word:\n        result.append(word)\n            keep = True\nprint(' '.join(result))\nfor word in words.split():\n        if letter in 'life':\n    if keep:\n    keep = False\nresult = []\n</pre>\n\n<p>The code is suppose to only keep sub-strings in the `words` string that\ncontain any of the letters in `life`.  For instance, executing the script\nabove should print out: \"made life of chasin\".  Unfortunately, the lines of\ncode are scrambled.  Unscramble them below so that the script produces the\ncorrect output.</p>\n",
+        "responses": {
+            "A": "<tt>words  = 'I made a life out of chasin a ghost'</tt>",
+            "B": "<tt>    for letter in word:</tt>",
+            "C": "<tt>        result.append(word)</tt>",
+            "D": "<tt>            keep = True</tt>",
+            "E": "<tt>print(' '.join(result))</tt>",
+            "F": "<tt>for word in words.split():</tt>",
+            "G": "<tt>        if letter in 'life':</tt>",
+            "H": "<tt>    if keep:</tt>",
+            "I": "<tt>    keep = False</tt>",
+            "J": "<tt>result = []</tt>"
+        }
+    }
+}
