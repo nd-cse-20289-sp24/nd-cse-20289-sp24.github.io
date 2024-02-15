@@ -1,0 +1,238 @@
+title:      "Reading 05: Python Scripting"
+icon:       fa-book
+navigation:
+  - name: "Home"
+    link: "index.html"
+    icon: "fa-linux"
+internal:
+external:
+body:       |
+
+  **Everyone**:
+
+  Next week, we will transition from [shell scripting] and [filters] to
+  creating more sophisticated scripts using the [Python] programming language.
+  Using a more advanced scripting language such as [Python] will allow us to
+  use sequence data structures such as [lists] and mapping data structures such
+  as [dictionaries], and thus perform more sophisticated data manipulation
+  efficiently and effectively.
+
+  <div class="alert alert-info" markdown="1">
+  #### <i class="fa fa-search"></i> TL;DR
+
+  The focus of this reading is to introduce scripting in [Python].
+
+  </div>
+
+  <img src="static/img/python.png" class="pull-right">
+
+  ## Readings
+
+  The readings for this week are:
+
+  1. [Scipy Lecture Notes: 1.2. The Python
+  language](http://www.scipy-lectures.org/intro/language/python_language.html)
+
+  2. [A Byte of Python - Data
+  Structures](https://python.swaroopch.com/data_structures.html)
+
+  ### Optional Resources
+
+  Here are some additional resources:
+
+  1. [A Byte of Python](http://python.swaroopch.com/)
+
+  2. [Automate The Boring Stuff](https://automatetheboringstuff.com/)
+
+  <div class="alert alert-success" markdown="1">
+  #### <i class="fa fa-code"></i> Python 3
+
+  In this course, we will be using [Python] `3.11+` and some additional
+  libraries such as [Requests].
+
+  On the **student** machines, you can use the instructor's copy of [Python] by
+  making the following modifications to your `PATH` environmental variable:
+
+      :::bash
+      export PATH=~pbui/pub/pkgsrc/bin:$PATH
+
+  This will give you access to a more current version of [Python] along with
+  some of the libraries we will be using such as [Requests].
+
+  To make this **persistent**, you should add this to the bottom of your
+  `~/.bashrc` if you have not already.
+
+  </div>
+
+  [Requests]:                   https://requests.readthedocs.io/en/latest/
+  [The Linux Command Line]:     http://linuxcommand.org/tlcl.php
+  [Unix]:                       https://en.wikipedia.org/wiki/Unix
+  [Unix Shell]:                 https://en.wikipedia.org/wiki/Unix_shell
+  [Git]:                        https://git-scm.com/
+  [Bash]:                       https://www.gnu.org/software/bash/
+  [shell scripting]:            https://en.wikipedia.org/wiki/Shell_script
+  [filters]:                    https://en.wikipedia.org/wiki/Filter_(software)#Unix
+  [pipelines]:                  https://en.wikipedia.org/wiki/Pipeline_(Unix)
+  [Unix Philosophy]:            https://en.wikipedia.org/wiki/Unix_philosophy
+  [Python]:                     https://www.python.org/
+  [lists]:                      https://docs.python.org/3/library/stdtypes.html#sequence-types-list-tuple-range
+  [dictionaries]:               https://docs.python.org/3/library/stdtypes.html#mapping-types-dict
+
+  ## Quiz
+
+  This week, your reading quiz is split into two sections: the first part is
+  your normal [dredd] quiz, while the second part involves one [Python]
+  script: `exists.py`.
+
+  To test this script, you will need to download the [Makefile] and test scripts:
+
+      :::bash
+      $ git switch master                   # Make sure we are in master branch
+      $ git pull --rebase                   # Make sure we are up-to-date with GitHub
+
+      $ git checkout -b reading05           # Create reading05 branch and check it out
+
+      $ cd reading05                        # Go into reading05 folder
+
+      # Download Reading 05 Makefile
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading05/Makefile
+
+      # Execute tests (and download them)
+      $ make
+
+  ### Questions
+
+  Record the answers to the following [Reading 05 Quiz] questions in your
+  `reading05` branch:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+
+  <script>
+  loadQuiz('static/json/reading05.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  ### `exists.py`
+
+  Use the `echo.py` script as the basis for a Python script called `exists.py`,
+  which accomplishes the same task as the modified version of `exists.sh` in [Reading 02]:
+
+      :::bash
+      # Run script and check error code
+      $./exists.py * && echo Success
+      exists.py exists!
+      README.md exists!
+      Success
+
+      $ ./exists.py * ASDF || echo Success
+      # Run script and check error code
+      exists.py exists!
+      README.md exists!
+      ASDF does not exist!
+      Success
+
+  #### Testing
+
+  To test your `exists.py`, you can use the `test_exists.sh` script downloaded
+  by the [Makefile]:
+
+      :::bash
+      $ ./test_exists.sh                    # Test your exists.py
+      Checking reading05 exists.py ...
+       exists.py                                ... Success
+       exists.py *                              ... Success
+       exists.py * ASDF                         ... Success
+       exists.py /lib/*                         ... Success
+         Score 1.00 / 1.00
+        Status Success
+
+  #### Hints
+
+  - You will probably want to use [os.path.exists].
+
+  - You will probably want to use [sys.exit].
+
+  - You will probably want to use [string formatting] or [f-strings].
+
+  [os.path.exists]: https://docs.python.org/3/library/os.path.html#os.path.exists
+  [sys.exit]:       https://docs.python.org/3/library/sys.html#sys.exit
+  [string formatting]: https://pyformat.info/
+  [f-strings]:      http://zetcode.com/python/fstring/
+
+  ## Submission
+
+  To submit your work, follow the same process outlined in [Reading 01]:
+
+      :::bash
+      #--------------------------------------------------
+      # BE SURE TO DO THE PREPARATION STEPS ABOVE
+      #--------------------------------------------------
+
+      $ cd reading05                        # Go into reading05 folder
+      $ $EDITOR answers.json                # Edit your answers.json file
+
+      $ ../.scripts/check.py                # Check reading05 quiz
+      Checking reading05 quiz ...
+            Q1 0.30
+            Q2 0.40
+            Q3 0.30
+            Q4 0.20
+            Q5 0.80
+            Q6 1.00
+         Score 3.00 / 3.00
+        Status Success
+
+      $ git add answers.json                # Add answers.json to staging area
+      $ git commit -m "Reading 05: Quiz"    # Commit work
+
+      $ $EDITOR exists.py                   # Edit your exists.py file
+
+      $ ./test_exists.sh                    # Test your exists.py
+      Checking reading05 exists.py ...
+       exists.py                                ... Success
+       exists.py *                              ... Success
+       exists.py * ASDF                         ... Success
+       exists.py /lib/*                         ... Success
+         Score 1.00 / 1.00
+        Status Success
+
+      $ git add Makefile                    # Add Makefile to staging area
+      $ git add exists.py                   # Add exists.py to staging area
+      $ git commit -m "Reading 05: Scripts" # Commit work
+
+      $ git push -u origin reading05        # Push branch to GitHub
+
+  <div class="alert alert-danger" markdown="1">
+  #### <i class="fa fa-github"></i> Pull Request
+  Remember to create a **Pull Request** and assign the appropriate TA from the
+  [Reading 05 TA List].
+
+  **DO NOT MERGE** your own **Pull Request**.  The TAs use open **Pull Requests**
+  to keep track of which assignments to grade.  Closing them yourself will
+  cause a delay in grading and confuse the TAs.
+  </div>
+
+  [Markdown]:       https://daringfireball.net/projects/markdown/
+  [git]:            https://git-scm.com/
+  [clone]:          https://git-scm.com/docs/git-clone
+  [commit]:         https://git-scm.com/docs/git-commit
+  [push]:           https://git-scm.com/docs/git-push
+  [GitHub]:         https://github.com
+  [Reading 01]:     reading01.html
+  [Reading 02]:     reading02.html
+  [Reading 05 TA List]: reading05_tas.html
+  [dredd]:          https://dredd.h4x0r.space
+  [Reading 05 quiz]:    static/json/reading05.json
+
+  [The Linux Command Line]:     http://linuxcommand.org/tlcl.php
+  [Unix]:                       https://en.wikipedia.org/wiki/Unix
+  [Unix Shell]:                 https://en.wikipedia.org/wiki/Unix_shell
+  [Git]:                        https://git-scm.com/
+  [Bash]:                       https://www.gnu.org/software/bash/
+  [shell scripting]:            https://en.wikipedia.org/wiki/Shell_script
+  [Makefile]:       https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading05/Makefile
