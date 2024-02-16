@@ -288,7 +288,7 @@ body:       |
                 </tr>
                 <tr>
                     <td><span class="label label-caution">Homeworks</span> Weekly homework assignments.</td>
-                    <td class="text-center">3 &times; 10, 4 &times; 12, 2 &times; 16</td>
+                    <td class="text-center">3 &times; 10, 4 &times; 11, 3 &times; 12</td>
                 </tr>
                 <tr>
                     <td><span class="label label-danger">Exams</span> Exams covering each unit.</td>
@@ -523,6 +523,10 @@ body:       |
             of other's solutions. Furthermore, you may not utilize <b>AI</b>
             powered tools such as <b>Co-Pilot</b>, <b>Tabnine</b>, or
             <b>ChatGPT</b> for any of your programming assignments.</p>
+
+            <p>When preparing for tests in this class, <b>you may not access
+            exams from previous semesters</b>, and you may not look at or copy
+            other students' solutions.</p>
 
             <p>The following table summarizes how you may work with other
             students and use print/online sources:</p>

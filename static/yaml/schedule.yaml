@@ -153,7 +153,7 @@
         topics:         I/O, Processes, Requests, Regular Expressions
 
       - date:           Sat 02/24
-        topics:         RPN, Unique
+        topics:         Cut, WC
         assignment:     Homework 04
 
 - name:     "Data Processing"
@@ -169,7 +169,7 @@
         topics:         Functional Programming
 
       - date:           Sat 03/02
-        topics:         Reddit and CSE Demographics
+        topics:         Plox, Searx
         assignment:     Homework 05
 
 - name:     "Functional Programming"
@@ -185,7 +185,7 @@
         topics:         Server-Side Programming
 
       - date:           Sat 03/09
-        topics:         Hulk Smash
+        topics:         Miles
         assignment:     Homework 06
 
 - name:     "Spring Break"
@@ -218,65 +218,69 @@
       - date:           Fri 03/29
         topics:         Easter
 
-- name:     "Memory Management"
+- name:     "I/O and Files"
   days:
       - date:           Mon 04/01
         topics:         Easter
 
       - date:           Wed 04/03
-        topics:         Memory Allocation
+        topics:         I/O
         assignment:     Reading 10
 
       - date:           Fri 04/05
-        topics:         Structs, Unions
+        topics:         Files, Directories
 
       - date:           Sat 04/06
-        topics:         C-String Library
+        topics:         Tr
         assignment:     Homework 07
 
-- name:     "I/O and Files"
+- name:     "Memory Management"
   days:
       - date:           Mon 04/08
-        topics:         Linked Data Structures
+        topics:         Memory Allocation
         assignment:     Reading 11
 
       - date:           Wed 04/10
-        topics:         I/O
+        topics:         Structs, Unions
 
       - date:           Fri 04/12
-        topics:         Files, Directories
+        topics:         Linked Data Structures
 
       - date:           Sat 04/13
-        topics:         Detecting Duplicates
+        topics:         Find
         assignment:     Homework 08
-
-- name:     "Sockets"
-  days:
-      - date:           Mon 04/15
-        topics:         TCP/IP, URLs, Sockets
-        assignment:     Reading 12
-
-      - date:           Wed 04/17
-        topics:         HTTP Client
-
-      - date:           Fri 04/19
-        topics:         HTTP Server
 
 - name:     "Processes"
   days:
-      - date:           Mon 04/22
+      - date:           Mon 04/15
         topics:         Processes
-        assignment:     Reading 13
+        assignment:     Reading 12
 
-      - date:           Wed 04/24
+      - date:           Wed 04/17
         topics:         Signals
 
+      - date:           Fri 04/19
+        topics:         TCP/IP, URLs, Sockets
+
+      - date:           Sat 04/20
+        topics:         Xargs
+        assignment:     Homework 09
+
+- name:     "Sockets"
+  days:
+      - date:           Mon 04/22
+        assignment:     Reading 13
+        topics:         HTTP Client
+
+      - date:           Wed 04/24
+        topics:         HTTP Server
+
       - date:           Fri 04/26
-        topics:         VPS / Concurrent HTTP Server
+        topics:         VPS / HTTP Server
 
       - date:           Sat 04/27
-        topics:         "Thor's Hammer"
-        assignment:     Homework 09
+        topics:         Gwen
+        assignment:     Homework 10
 
 - name:     "Exam 03"
   days:
