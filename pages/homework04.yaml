@@ -521,8 +521,19 @@ body:       |
   For extra credit, you are to modify `wc.py` such that its output matches the
   exact formatting of [wc].  In our `wc.py`, we simply join multiple counts by
   a single space.  In the traditional [wc], however, it will compute the
-  maximum width (ie. number of digits) of the selected counts and use that to
-  organize the counts into evenly spaced columns.
+  maximum width (ie. number of digits) of the counts and use that to organize
+  the counts into evenly spaced columns.
+
+  For example:
+
+      :::bash
+      # wc.py (columns not aligned)
+      $ ./wc.py < wc.input
+      18 97 439
+
+      # wc (columns are aligned)
+      $ wc < wc.input
+       18  97 439
 
   To accomplish this task, you must do the following:
 
@@ -531,14 +542,25 @@ body:       |
 
       <div class="alert alert-success" markdown="1">
 
-      **Hint**: Once you know the maximum number of digits from the selected
-        counts, you can use [str.rjust] to format the count to a specific width.
+      **Hint**: Once you know the maximum number of digits from the counts, you
+        can use [str.rjust] to format the count to a specific width.
+
+          :::python
+          str(count).rjust(count_width)
+
+        If only one option is specified (e.g. `wc -l`), then no adjustment
+        needs to be made (ie. `count_width` should be `0`).
 
       </div>
 
+      As reference, you can look at the [wc.c] source code from the [GNU coreutils].
+
+      [wc.c]: https://github.com/coreutils/coreutils/blob/master/src/wc.c#L690
+      [GNU coreutils]: https://www.gnu.org/software/coreutils/
+
   2. `wc2.test`: Copy `wc.test` to `wc2.test` and modify the appropriate
-    functions to compare the output of `print_counts` and `main` directly
-    against the output of [wc].
+    functions to compare the output of `main` directly against the output of
+    [wc].
 
       <div class="alert alert-success" markdown="1">
 
@@ -546,17 +568,44 @@ body:       |
         in its [unit tests] (ie. it uses [subprocess.run] to execute [cut] and
         capture its output for comparison).
 
+      To avoid having to rename all references to `wc` to `wc2`, you can change
+      the `import` at the top of the new `wc2.test` to:
+
+          :::python
+          import wc2 as wc
+
+      You will need to adjust all the `print_counts_*` test cases in `wc2.test`
+      to reflect the new formatting.  Likewise, you will need to adjust the
+      [doctests] in `wc2.py` to reflect the alignment as well.
+
+      To compare the output of `main` directly against the output of [wc], you
+      should modify each of the `main_*` test cases to replace lines such as:
+
+          :::python
+          self.assertEqual(output.getvalue(), '18 97 439\n')
+
+      With the following:
+
+          :::python
+          with open(self.Path) as input_stream:
+              process = subprocess.run('wc'.split(), stdin=input_stream, capture_output=True)
+          self.assertEqual(output.getvalue(), process.stdout.decode())
+
+      This will use [subprocess.run] to execute the [wc] command, capture its
+      output, and then compare it to the output of your `main` function.
+
       </div>
 
   [str.rjust]: https://docs.python.org/3/library/stdtypes.html#str.rjust
+  [subprocess.run]: https://docs.python.org/3/library/subprocess.html#subprocess.run
 
   <div class="alert alert-info" markdown="1">
   #### <i class="fa fa-check"></i> Verification
 
-  To get credit for this Guru Point, show your modified `wc2.py` and your new
-  `wc2.test` to a TA to verify (or attached a video / screenshot to your **Pull
-  Request**). You have up until a week **after** this assignment is due to
-  verify your Guru Point.
+  To get credit for this Guru Point, show your new `wc2.py` and `wc2.test` to a
+  TA to verify (or attached a video / screenshot to your **Pull Request**). You
+  have up until a week **after** this assignment is due to verify your Guru
+  Point.
 
   </div>
 
