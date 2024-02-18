@@ -222,7 +222,8 @@ body:       |
 
       <div class="alert alert-success" markdown="1">
 
-      **Hint:** Consider how to use [str.join] to combine the selections from
+      **Hint:** Consider using [str.rstrip] to remove trailing whitespace from
+      each line while using [str.join] to combine the selections extracted from
       each line.
 
       </div>
@@ -236,13 +237,14 @@ body:       |
 
       <div class="alert alert-success" markdown="1">
 
-      **Hint:** Consider when to use `strs_to_ints` and how to check if the did
-      not specify any `FIELDS`.
+      **Hint:** Consider when to use `strs_to_ints` and how to check if the
+      user did not specify any `FIELDS`.
 
       </div>
 
   [int]: https://docs.python.org/3/library/functions.html#int
   [str.join]: https://docs.python.org/3/library/stdtypes.html#str.join
+  [str.rstrip]: https://docs.python.org/3/library/stdtypes.html#str.rstrip
 
   ### Task 2: Testing
 
@@ -317,6 +319,7 @@ body:       |
       ...
 
   [I/O redirection]: https://en.wikipedia.org/wiki/Redirection_(computing)
+  [mypy]: https://mypy-lang.org/
 
   ## Activity 2: WC (4.5 Points)
 
@@ -376,8 +379,8 @@ body:       |
   2. `print_counts(counts: dict[str, int], options: list[str]) -> None`
 
       > This function prints the `counts` of the specified `options`.  If no
-      `options` are specified, then all `options` are reported (ie. `newlines`,
-      `words`, `bytes`).
+      `options` are specified (e.g. `options` is an empty [list]), then all
+      `options` are reported (ie. `newlines`, `words`, `bytes`).
 
       <div class="alert alert-success" markdown="1">
 
@@ -519,7 +522,7 @@ body:       |
   exact formatting of [wc].  In our `wc.py`, we simply join multiple counts by
   a single space.  In the traditional [wc], however, it will compute the
   maximum width (ie. number of digits) of the selected counts and use that to
-  organize the counts in evenly spaced columns.
+  organize the counts into evenly spaced columns.
 
   To accomplish this task, you must do the following:
 
@@ -529,7 +532,7 @@ body:       |
       <div class="alert alert-success" markdown="1">
 
       **Hint**: Once you know the maximum number of digits from the selected
-        counts, you can use [str.ljust] to format the count to a specific with.
+        counts, you can use [str.ljust] to format the count to a specific width.
 
       </div>
 
@@ -540,7 +543,8 @@ body:       |
       <div class="alert alert-success" markdown="1">
 
       **Hint**: You should reference how `cut.test` checks the output of [cut]
-        in its [unit tests].
+        in its [unit tests] (ie. it uses [subprocess.run] to execute [cut] and
+        capture its output for comparison).
 
       </div>
 
