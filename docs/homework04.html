@@ -479,35 +479,72 @@ Checking homework04 quiz ...
 <p>For extra credit, you are to modify <code>wc.py</code> such that its output matches the
 exact formatting of <a href="https://man7.org/linux/man-pages/man1/wc.1.html">wc</a>.  In our <code>wc.py</code>, we simply join multiple counts by
 a single space.  In the traditional <a href="https://man7.org/linux/man-pages/man1/wc.1.html">wc</a>, however, it will compute the
-maximum width (ie. number of digits) of the selected counts and use that to
-organize the counts into evenly spaced columns.</p>
+maximum width (ie. number of digits) of the counts and use that to organize
+the counts into evenly spaced columns.</p>
+<p>For example:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># wc.py (columns not aligned)</span>
+$ ./wc.py &lt; wc.input
+<span style="color: #666666">18</span> <span style="color: #666666">97</span> <span style="color: #666666">439</span>
+
+<span style="color: #3D7B7B; font-style: italic"># wc (columns are aligned)</span>
+$ wc &lt; wc.input
+ <span style="color: #666666">18</span>  <span style="color: #666666">97</span> <span style="color: #666666">439</span>
+</code></pre></div>
+
 <p>To accomplish this task, you must do the following:</p>
 <ol>
 <li>
 <p><code>wc2.py</code>: Copy <code>wc.py</code> to <code>wc2.py</code> and modify the <code>print_counts</code> function
   mimic the reporting behavior of <a href="https://man7.org/linux/man-pages/man1/wc.1.html">wc</a>.</p>
 <div class="alert alert-success" markdown="1">
-<p><strong>Hint</strong>: Once you know the maximum number of digits from the selected
-  counts, you can use <a href="https://docs.python.org/3/library/stdtypes.html#str.ljust">str.ljust</a> to format the count to a specific width.</p>
+<p><strong>Hint</strong>: Once you know the maximum number of digits from the counts, you
+  can use <a href="https://docs.python.org/3/library/stdtypes.html#str.rjust">str.rjust</a> to format the count to a specific width.</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000">str</span>(count)<span style="color: #666666">.</span>rjust(count_width)
+</code></pre></div>
+
+<p>If only one option is specified (e.g. <code>wc -l</code>), then no adjustment
+  needs to be made (ie. <code>count_width</code> should be <code>0</code>).</p>
 </div>
+<p>As reference, you can look at the <a href="https://github.com/coreutils/coreutils/blob/master/src/wc.c#L690">wc.c</a> source code from the <a href="https://www.gnu.org/software/coreutils/">GNU coreutils</a>.</p>
 </li>
 <li>
 <p><code>wc2.test</code>: Copy <code>wc.test</code> to <code>wc2.test</code> and modify the appropriate
-  functions to compare the output of <code>print_counts</code> and <code>main</code> directly
-  against the output of <a href="https://man7.org/linux/man-pages/man1/wc.1.html">wc</a>.</p>
+  functions to compare the output of <code>main</code> directly against the output of
+  <a href="https://man7.org/linux/man-pages/man1/wc.1.html">wc</a>.</p>
 <div class="alert alert-success" markdown="1">
 <p><strong>Hint</strong>: You should reference how <code>cut.test</code> checks the output of <a href="https://man7.org/linux/man-pages/man1/cut.1.html">cut</a>
-  in its <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a> (ie. it uses [subprocess.run] to execute <a href="https://man7.org/linux/man-pages/man1/cut.1.html">cut</a> and
+  in its <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a> (ie. it uses <a href="https://docs.python.org/3/library/subprocess.html#subprocess.run">subprocess.run</a> to execute <a href="https://man7.org/linux/man-pages/man1/cut.1.html">cut</a> and
   capture its output for comparison).</p>
+<p>To avoid having to rename all references to <code>wc</code> to <code>wc2</code>, you can change
+the <code>import</code> at the top of the new <code>wc2.test</code> to:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">wc2</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">wc</span>
+</code></pre></div>
+
+<p>You will need to adjust all the <code>print_counts_*</code> test cases in <code>wc2.test</code>
+to reflect the new formatting.  Likewise, you will need to adjust the
+<a href="https://docs.python.org/3/library/doctest.html">doctests</a> in <code>wc2.py</code> to reflect the alignment as well.</p>
+<p>To compare the output of <code>main</code> directly against the output of <a href="https://man7.org/linux/man-pages/man1/wc.1.html">wc</a>, you
+should modify each of the <code>main_*</code> test cases to replace lines such as:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000">self</span><span style="color: #666666">.</span>assertEqual(output<span style="color: #666666">.</span>getvalue(), <span style="color: #BA2121">&#39;18 97 439</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&#39;</span>)
+</code></pre></div>
+
+<p>With the following:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">with</span> <span style="color: #008000">open</span>(<span style="color: #008000">self</span><span style="color: #666666">.</span>Path) <span style="color: #008000; font-weight: bold">as</span> input_stream:
+    process <span style="color: #666666">=</span> subprocess<span style="color: #666666">.</span>run(<span style="color: #BA2121">&#39;wc&#39;</span><span style="color: #666666">.</span>split(), stdin<span style="color: #666666">=</span>input_stream, capture_output<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
+<span style="color: #008000">self</span><span style="color: #666666">.</span>assertEqual(output<span style="color: #666666">.</span>getvalue(), process<span style="color: #666666">.</span>stdout<span style="color: #666666">.</span>decode())
+</code></pre></div>
+
+<p>This will use <a href="https://docs.python.org/3/library/subprocess.html#subprocess.run">subprocess.run</a> to execute the <a href="https://man7.org/linux/man-pages/man1/wc.1.html">wc</a> command, capture its
+output, and then compare it to the output of your <code>main</code> function.</p>
 </div>
 </li>
 </ol>
 <div class="alert alert-info">
 <h4 id="verification"><i class="fa fa-check"></i> Verification<a class="headerlink" href="#verification" title="Permanent link">&para;</a></h4>
-<p>To get credit for this Guru Point, show your modified <code>wc2.py</code> and your new
-<code>wc2.test</code> to a TA to verify (or attached a video / screenshot to your <strong>Pull
-Request</strong>). You have up until a week <strong>after</strong> this assignment is due to
-verify your Guru Point.</p>
+<p>To get credit for this Guru Point, show your new <code>wc2.py</code> and <code>wc2.test</code> to a
+TA to verify (or attached a video / screenshot to your <strong>Pull Request</strong>). You
+have up until a week <strong>after</strong> this assignment is due to verify your Guru
+Point.</p>
 </div>
 <div class="alert alert-success">
 <h4 id="self-service-extension"><i class="fa fa-calendar"></i> Self-Service Extension<a class="headerlink" href="#self-service-extension" title="Permanent link">&para;</a></h4>

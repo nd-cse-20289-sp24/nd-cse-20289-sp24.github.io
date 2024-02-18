@@ -12,7 +12,8 @@ import wc
 # Unit Tests
 
 class WCTest(unittest.TestCase):
-    Input  = open('wc.input').read()
+    Path   = 'wc.input'
+    Input  = open(Path).read()
     Total  = 4.5
     Points = 0
 
