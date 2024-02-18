@@ -11,18 +11,18 @@
     },
     "q02": {
         "type": "blank",
-        "question": "\n<p>In <tt>cut.py</tt>, you used a Python <tt>list</tt> as to store both the\nfields and the selected words.  Given a <tt>list</tt> variable named\n<tt>fields</tt>, how would you perform the following:</p>\n\n<ol>\n    <li>Get the number of elements in <tt>fields</tt>: ____</li>\n    <li>Access the first element in <tt>fields</tt>: ____</li>\n    <li>Access the last element in <tt>fields</tt>: ____</li>\n    <li>Create a list of the first four elements in <tt>fields</tt>: ____</li>\n    <li>Create a list of the last four elements in <tt>fields</tt>: ____</li>\n    <li>Add <tt>value</tt> to the end of <tt>fields</tt>: ____</li>\n    <li>Search if <tt>value</tt> is in <tt>fields</tt>: ____</li>\n</ol>\n"
+        "question": "\n<p>In <tt>cut.py</tt>, you used a Python <tt>list</tt> as to store both the\nfields and the selected words.  Given a <tt>list</tt> variable named\n<tt>fields</tt>, how would you perform the following:</p>\n\n<ol>\n    <li>Get the number of elements in <tt>fields</tt>: ____</li>\n    <li>Access the first element in <tt>fields</tt>: ____</li>\n    <li>Access the last element in <tt>fields</tt>: ____</li>\n    <li>Create a list of the first four elements in <tt>fields</tt>: ____</li>\n    <li>Create a list of the last four elements in <tt>fields</tt>: ____</li>\n    <li>Add <tt>value</tt> to the end of <tt>fields</tt>: ____</li>\n    <li>Search if <tt>value</tt> is in <tt>fields</tt>: <tt>if</tt> ____<tt>:</tt></li>\n</ol>\n"
     },
     "q03": {
         "type": "blank",
-        "question": "\n<p>Use your <tt>cut.py</tt> in a <b>Unix pipeline</b> to answer the\nfollowing questions:</p>\n\n<ol>\n    <li>What is the most common first word in <tt>cut.input</tt>? ____</li>\n    <li>What is count of the most frequent second field (split by commas) in <tt>cut.input</tt>? ____</li>\n</ol>\n"
+        "question": "\n<p>Use your <tt>cut.py</tt> in a <b>Unix pipeline</b> to answer the\nfollowing questions:</p>\n\n<ol>\n    <li>What is the most common first word in <tt>cut.input</tt>? ____</li>\n    <li>What is the count of the most frequent second field (split by commas) in <tt>cut.input</tt>? ____</li>\n</ol>\n"
     },
     "q04": {
         "type": "blank",
-        "question": "\n<p>In <tt>wc.py</tt>, you used a Python <tt>dict</tt> to keep track of the\ncounts of newlines, words, and bytes.  Given a <tt>dict</tt> variable named\n<tt>counts</tt>, how would you perform the following:</p>\n\n<ol>\n    <li>Get the number of pairs in <tt>counts</tt>: ____</li>\n    <li>Get the keys in <tt>counts</tt>: ____</li>\n    <li>Get the values in <tt>counts</tt>: ____</li>\n    <li>Get the pairs in <tt>counts</tt>: ____</li>\n    <li>Get the value associated with <tt>key</tt> in <tt>counts</tt> (defaulting to <tt>0</tt> if it is not there): ____</li>\n    <li>Search if <tt>key</tt> is in <tt>counts</tt>: ____</li>\n</ol>\n"
+        "question": "\n<p>In <tt>wc.py</tt>, you used a Python <tt>dict</tt> to keep track of the\ncounts of newlines, words, and bytes.  Given a <tt>dict</tt> variable named\n<tt>counts</tt>, how would you perform the following:</p>\n\n<ol>\n    <li>Get the number of pairs in <tt>counts</tt>: ____</li>\n    <li>Get the keys in <tt>counts</tt>: ____</li>\n    <li>Get the values in <tt>counts</tt>: ____</li>\n    <li>Get the pairs in <tt>counts</tt>: ____</li>\n    <li>Get the value associated with <tt>key</tt> in <tt>counts</tt> (defaulting to <tt>0</tt> if it is not there): ____</li>\n    <li>Search if <tt>key</tt> is in <tt>counts</tt>: <tt>if</tt> ____<tt>:</tt></li>\n</ol>\n"
     },
     "q05": {
         "type": "blank",
-        "question": "\n<p>Use your <tt>wc.py</tt> in a <b>Unix pipeline</b> with the text from\n<tt>https://www.gutenberg.org/cache/epub/1342/pg1342.txt</tt>to answer the\nfollowing questions:</p>\n\n<ol>\n  <li>How many <b>lines</b> are in that data? ____</li>\n  <li>How many <b>words</b> are in that data? ____</li>\n</ol>\n"
+        "question": "\n<p>Use your <tt>wc.py</tt> in a <b>Unix pipeline</b> with the text from\n<tt>https://www.gutenberg.org/cache/epub/1342/pg1342.txt</tt> to answer the\nfollowing questions:</p>\n\n<ol>\n  <li>How many <b>lines</b> are in that data? ____</li>\n  <li>How many <b>words</b> are in that data? ____</li>\n</ol>\n"
     }
 }

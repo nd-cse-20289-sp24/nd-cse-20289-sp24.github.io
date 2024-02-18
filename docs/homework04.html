@@ -213,7 +213,8 @@ specified <code>delimiter</code> and <code>fields</code>.  It joins each result 
 with the <code>delimiter</code> and then prints out the selection.</p>
 </blockquote>
 <div class="alert alert-success" markdown="1">
-<p><strong>Hint:</strong> Consider how to use <a href="https://docs.python.org/3/library/stdtypes.html#str.join">str.join</a> to combine the selections from
+<p><strong>Hint:</strong> Consider using <a href="https://docs.python.org/3/library/stdtypes.html#str.rstrip">str.rstrip</a> to remove trailing whitespace from
+each line while using <a href="https://docs.python.org/3/library/stdtypes.html#str.join">str.join</a> to combine the selections extracted from
 each line.</p>
 </div>
 </li>
@@ -226,8 +227,8 @@ calls <code>cut_stream</code> with the given <code>stream</code> and computed <c
 <code>FIELDS</code>.</p>
 </blockquote>
 <div class="alert alert-success" markdown="1">
-<p><strong>Hint:</strong> Consider when to use <code>strs_to_ints</code> and how to check if the did
-not specify any <code>FIELDS</code>.</p>
+<p><strong>Hint:</strong> Consider when to use <code>strs_to_ints</code> and how to check if the
+user did not specify any <code>FIELDS</code>.</p>
 </div>
 </li>
 </ol>
@@ -285,7 +286,7 @@ $ ./cut.test -v CutTest.test_01_mypy
 ...
 </code></pre></div>
 
-<p>To manually check your types, you can use [mypy]:</p>
+<p>To manually check your types, you can use <a href="https://mypy-lang.org/">mypy</a>:</p>
 <div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Run mypy to check types</span>
 $ mypy cut.py
 </code></pre></div>
@@ -350,8 +351,8 @@ by implementing the following functions:</p>
 <p><code>print_counts(counts: dict[str, int], options: list[str]) -&gt; None</code></p>
 <blockquote>
 <p>This function prints the <code>counts</code> of the specified <code>options</code>.  If no
-<code>options</code> are specified, then all <code>options</code> are reported (ie. <code>newlines</code>,
-<code>words</code>, <code>bytes</code>).</p>
+<code>options</code> are specified (e.g. <code>options</code> is an empty <a href="https://docs.python.org/3/tutorial/datastructures.html#more-on-lists">list</a>), then all
+<code>options</code> are reported (ie. <code>newlines</code>, <code>words</code>, <code>bytes</code>).</p>
 </blockquote>
 <div class="alert alert-success" markdown="1">
 <p><strong>Hint</strong>: Consider what you should loop over and what you should search
@@ -434,7 +435,7 @@ $ ./wc.test -v WCTest.test_01_mypy
 ...
 </code></pre></div>
 
-<p>To manually check your types, you can use [mypy]:</p>
+<p>To manually check your types, you can use <a href="https://mypy-lang.org/">mypy</a>:</p>
 <div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Run mypy to check types</span>
 $ mypy wc.py
 </code></pre></div>
@@ -479,7 +480,7 @@ Checking homework04 quiz ...
 exact formatting of <a href="https://man7.org/linux/man-pages/man1/wc.1.html">wc</a>.  In our <code>wc.py</code>, we simply join multiple counts by
 a single space.  In the traditional <a href="https://man7.org/linux/man-pages/man1/wc.1.html">wc</a>, however, it will compute the
 maximum width (ie. number of digits) of the selected counts and use that to
-organize the counts in evenly spaced columns.</p>
+organize the counts into evenly spaced columns.</p>
 <p>To accomplish this task, you must do the following:</p>
 <ol>
 <li>
@@ -487,7 +488,7 @@ organize the counts in evenly spaced columns.</p>
   mimic the reporting behavior of <a href="https://man7.org/linux/man-pages/man1/wc.1.html">wc</a>.</p>
 <div class="alert alert-success" markdown="1">
 <p><strong>Hint</strong>: Once you know the maximum number of digits from the selected
-  counts, you can use <a href="https://docs.python.org/3/library/stdtypes.html#str.ljust">str.ljust</a> to format the count to a specific with.</p>
+  counts, you can use <a href="https://docs.python.org/3/library/stdtypes.html#str.ljust">str.ljust</a> to format the count to a specific width.</p>
 </div>
 </li>
 <li>
@@ -496,7 +497,8 @@ organize the counts in evenly spaced columns.</p>
   against the output of <a href="https://man7.org/linux/man-pages/man1/wc.1.html">wc</a>.</p>
 <div class="alert alert-success" markdown="1">
 <p><strong>Hint</strong>: You should reference how <code>cut.test</code> checks the output of <a href="https://man7.org/linux/man-pages/man1/cut.1.html">cut</a>
-  in its <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>.</p>
+  in its <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a> (ie. it uses [subprocess.run] to execute <a href="https://man7.org/linux/man-pages/man1/cut.1.html">cut</a> and
+  capture its output for comparison).</p>
 </div>
 </li>
 </ol>
