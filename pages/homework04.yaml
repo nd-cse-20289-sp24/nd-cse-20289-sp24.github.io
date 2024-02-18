@@ -532,7 +532,7 @@ body:       |
       <div class="alert alert-success" markdown="1">
 
       **Hint**: Once you know the maximum number of digits from the selected
-        counts, you can use [str.ljust] to format the count to a specific width.
+        counts, you can use [str.rjust] to format the count to a specific width.
 
       </div>
 
@@ -548,7 +548,7 @@ body:       |
 
       </div>
 
-  [str.ljust]: https://docs.python.org/3/library/stdtypes.html#str.ljust
+  [str.rjust]: https://docs.python.org/3/library/stdtypes.html#str.rjust
 
   <div class="alert alert-info" markdown="1">
   #### <i class="fa fa-check"></i> Verification
