@@ -177,15 +177,20 @@ body:       |
       Harder
       Faster
 
-  The `cut.py` script reads input from [standard input] and takes two possible
-  flags:
+  The `cut.py` script reads input from [standard input] and takes the following
+  possible flags:
 
   - `-d`: This allows the user to specify a `DELIMITER`.  By default, it is the
     `TAB` character (ie. `\t`).
 
   - `-f`: This allows the user to specify which fields to select.  The user
     **must** specify this flag, otherwise it should result in a usage message
-    and a failure exit status as show above.
+    and a failure exit status as shown above.
+
+  - `-h`: This prints the usage message and exits with success.
+
+  If the user specifies an unknown flag, then the program should print the
+  usage message and exit with a failure status.
 
   As with [cut], `cut.py` processes each line from [standard input] by
   splitting the line by the `DELIMITER`, combining specified `FIELDS` by the
@@ -347,11 +352,16 @@ body:       |
       $ ./wc.py -l < wc.input
       18
 
-  The `wc.py` script reads input from [standard input] and takes three possible flags:
+  The `wc.py` script reads input from [standard input] and takes the following
+  possible flags:
 
   - `-c`: This allows the user to specify that the program should print **byte** counts.
   - `-l`: This allows the user to specify that the program should print **newline** counts.
   - `-w`: This allows the user to specify that the program should print **word** counts.
+  - `-h`: This prints the usage message and exits with success.
+
+  If the user specifies an unknown flag, then the program should print the
+  usage message and exit with a failure status.
 
   As with [wc], `wc.py` computes the newline, word, and byte counts of the data
   from [standard input] and prints out the selected counts.  If no options are
