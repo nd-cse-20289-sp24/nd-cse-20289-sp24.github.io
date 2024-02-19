@@ -168,8 +168,8 @@ Harder
 Faster
 </code></pre></div>
 
-<p>The <code>cut.py</code> script reads input from <a href="https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin)">standard input</a> and takes two possible
-flags:</p>
+<p>The <code>cut.py</code> script reads input from <a href="https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin)">standard input</a> and takes the following
+possible flags:</p>
 <ul>
 <li>
 <p><code>-d</code>: This allows the user to specify a <code>DELIMITER</code>.  By default, it is the
@@ -178,9 +178,14 @@ flags:</p>
 <li>
 <p><code>-f</code>: This allows the user to specify which fields to select.  The user
   <strong>must</strong> specify this flag, otherwise it should result in a usage message
-  and a failure exit status as show above.</p>
+  and a failure exit status as shown above.</p>
+</li>
+<li>
+<p><code>-h</code>: This prints the usage message and exits with success.</p>
 </li>
 </ul>
+<p>If the user specifies an unknown flag, then the program should print the
+usage message and exit with a failure status.</p>
 <p>As with <a href="https://man7.org/linux/man-pages/man1/cut.1.html">cut</a>, <code>cut.py</code> processes each line from <a href="https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin)">standard input</a> by
 splitting the line by the <code>DELIMITER</code>, combining specified <code>FIELDS</code> by the
 <code>DELIMITER</code>, and then printing out the resulting selection.</p>
@@ -321,12 +326,16 @@ $ ./wc.py -l &lt; wc.input
 <span style="color: #666666">18</span>
 </code></pre></div>
 
-<p>The <code>wc.py</code> script reads input from <a href="https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin)">standard input</a> and takes three possible flags:</p>
+<p>The <code>wc.py</code> script reads input from <a href="https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin)">standard input</a> and takes the following
+possible flags:</p>
 <ul>
 <li><code>-c</code>: This allows the user to specify that the program should print <strong>byte</strong> counts.</li>
 <li><code>-l</code>: This allows the user to specify that the program should print <strong>newline</strong> counts.</li>
 <li><code>-w</code>: This allows the user to specify that the program should print <strong>word</strong> counts.</li>
+<li><code>-h</code>: This prints the usage message and exits with success.</li>
 </ul>
+<p>If the user specifies an unknown flag, then the program should print the
+usage message and exit with a failure status.</p>
 <p>As with <a href="https://man7.org/linux/man-pages/man1/wc.1.html">wc</a>, <code>wc.py</code> computes the newline, word, and byte counts of the data
 from <a href="https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin)">standard input</a> and prints out the selected counts.  If no options are
 specified, then all three options are reported.</p>
