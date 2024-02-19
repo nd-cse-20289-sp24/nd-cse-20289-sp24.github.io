@@ -41,7 +41,7 @@ class CutTest(unittest.TestCase):
         CutTest.Points += 0.5
 
     def test_02_strs_to_ints(self):
-        self.assertEqual(cut.strs_to_ints('574'), [5, 7, 4])
+        self.assertEqual(cut.strs_to_ints(['5', '7', '4']), [5, 7, 4])
         CutTest.Points += 0.25
         self.assertEqual(cut.strs_to_ints(['9', '2', '8', '6', '7']), [9, 2, 8, 6, 7])
         CutTest.Points += 0.25
