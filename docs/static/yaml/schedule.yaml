@@ -145,14 +145,16 @@
 - name:     "Python Scripting"
   days:
       - date:           Mon 02/19
-        topics:         Data Structures, Arguments, I/O
+        topics:         Functions, Tests, Arguments
         assignment:     Reading 05
         items:
           - name:       Slides 10
             link:       https://docs.google.com/presentation/d/1gPH8FGVGQnbhGckyAlrrUKNSPClsfnjKDmhTXMQXQko/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=3c2de9c3-fb75-49aa-9d62-b11b013bc9c2
 
       - date:           Wed 02/21
-        topics:         Data Structures, Arguments, I/O
+        topics:         Data Structures, I/O
         items:
           - name:       Slides 10
             link:       https://docs.google.com/presentation/d/1gPH8FGVGQnbhGckyAlrrUKNSPClsfnjKDmhTXMQXQko/edit?usp=sharing
