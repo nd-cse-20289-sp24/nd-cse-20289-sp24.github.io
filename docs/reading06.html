@@ -152,7 +152,7 @@ counts of each course and the course name in descending order:</p>
 </code></pre></div>
 
 <p>It should basically be the <a href="https://www.python.org/">Python</a> equivalent of the following <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">pipeline</a>:</p>
-<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>curl -sL https://www3.nd.edu/~pbui/teaching/ | grep -Eo <span style="color: #BA2121">&#39;CSE [234][0-9]{4}&#39;</span> | sort | uniq -c | sort -rsn
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>curl -sL https://www3.nd.edu/~pbui/teaching/ | grep -Eo <span style="color: #BA2121">&#39;CSE [0-9]{5}&#39;</span> | sort | uniq -c | sort -rsn
 </code></pre></div>
 
 <h4 id="skeleton">Skeleton<a class="headerlink" href="#skeleton" title="Permanent link">&para;</a></h4>
