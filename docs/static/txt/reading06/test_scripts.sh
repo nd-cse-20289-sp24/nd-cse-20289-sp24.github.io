@@ -20,7 +20,7 @@ cleanup() {
 }
 
 courses_sh() {
-    curl -sL https://www3.nd.edu/~pbui/teaching/ | grep -Eo 'CSE [234][0-9]{4}' | sort | uniq -c | sort -rsn
+    curl -sL https://www3.nd.edu/~pbui/teaching/ | grep -Eo 'CSE [0-9]{5}' | sort | uniq -c | sort -rsn
 }
 
 shells_sh() {
