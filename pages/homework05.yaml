@@ -597,7 +597,7 @@ body:       |
       # Run mypy to check types
       $ mypy searx.py
 
-  ## Activity 3: Quiz (2 Points)
+  ## Activity 3: Quiz (1 Point)
 
   Once you have completed all the activities above, you are to complete the
   following **reflection quiz**:
