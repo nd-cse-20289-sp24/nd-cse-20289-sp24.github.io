@@ -1,0 +1,746 @@
+title:      "Homework 05: NameZ, SearX"
+icon:       fa-code
+navigation:
+- name: "Home"
+  link: "index.html"
+  icon: "fa-linux"
+internal:
+external:
+body:       |
+
+  The goal of this homework assignment is to allow you to practice using
+  [Python] to create scripts that require sophisticated parsing of data and
+  manipulation of [data structures]. In this assignment, you will process data
+  in both [CSV] and [JSON] format and then present the information to the user
+  in the terminal.
+
+  For this assignment, record your scripts and any responses to the following
+  activities in the `homework05` folder of your **assignments** [GitHub]
+  repository and push your work by **noon Saturday, March 2**.
+
+  [Python]: https://www.python.org/
+  [data structures]: https://en.wikipedia.org/wiki/Data_structure
+  [list]: https://docs.python.org/3/tutorial/datastructures.html#more-on-lists
+  [lists]: https://docs.python.org/3/tutorial/datastructures.html#more-on-lists
+  [dicts]: https://docs.python.org/3/tutorial/datastructures.html#dictionaries
+  [dict]: https://docs.python.org/3/tutorial/datastructures.html#dictionaries
+  [CSV]: https://en.wikipedia.org/wiki/Comma-separated_values
+  [JSON]: http://www.json.org/
+
+  ## Activity 0: Preparation
+
+  Before starting this homework assignment, you should first perform a `git
+  pull` to retrieve any changes in your remote [GitHub] repository:
+
+      :::bash
+      $ cd path/to/repository                   # Go to assignments repository
+
+      $ git switch master                       # Make sure we are in master branch
+
+      $ git pull --rebase                       # Get any remote changes not present locally
+
+  Next, create a new branch for this assignment:
+
+      :::bash
+      $ git checkout -b homework05              # Create homework04 branch and check it out
+
+  ### Task 1: Skeleton Code
+
+  To help you get started, the instructor has provided you with the following **skeleton code**:
+
+      ::bash
+      # Go to homework05 folder
+      $ cd homework05
+
+      # Download Makefile
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework05/Makefile
+
+      # Download Python skeleton code
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework05/namez.py
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework05/searx.py
+
+  Once downloaded, you should see the following files in your `homework05` directory:
+
+      :::bash
+      homework05
+          \_ Makefile       # This is the Makefile building all the assignment artifacts
+          \_ namez.py       # This is the Python script for the namez script
+          \_ searx.py       # This is the Python script for the searx script
+
+  <div class="alert alert-warning" markdown="1">
+  #### <i class="fa fa-warning"></i> DocTests
+
+  You may notice that in addition to the usual comments and `TODOs`, the
+  [docstrings] of each method also contains a few [doctests].
+
+  You are **not** to modify these [doctests] and must keep them in-place. They
+  are used to verify the correctness of your code.
+
+  Your code goes **below** the [docstrings], where the `TODO` and `pass`
+  commands are (you may remove the pass once you complete the method).
+
+  </div>
+
+  [docstrings]: https://peps.python.org/pep-0257/
+  [doctests]: https://docs.python.org/3/library/doctest.html
+  [unit test]: https://en.wikipedia.org/wiki/Unit_testing
+  [unit tests]: https://en.wikipedia.org/wiki/Unit_testing
+
+  ### Task 2: Initial Import
+
+  Now that the files are downloaded into the `homework05` folder, you can
+  **commit** them to your [git] repository:
+
+      :::bash
+      $ git add Makefile                            # Mark changes for commit
+      $ git add *.py
+      $ git commit -m "Homework 05: Initial Import" # Record changes
+
+  ### Task 3: Unit Tests
+
+  After downloading these files, you can run the `make` command to run the
+  tests.
+
+      :::bash
+      # Run all tests (will trigger automatic download)
+      $ make
+
+  You will notice that the Makefile downloads these additional test data and scripts:
+
+      :::bash
+      homework05
+          \_ namez.input.gz       # This is the input file for the namez script
+          \_ namez.input.test.gz  # This is the test input file for the namez script
+          \_ namez.test           # This is the Python test for the namez script
+          \_ searx.test           # This is the Python test for the searx script
+
+  In addition to the embedded [doctests] in the **skeleton code**, you will be
+  using these [unit tests] to verify the correctness and behavior of your code.
+
+  <div class="alert alert-info" markdown="1">
+  #### <i class="fa fa-download"></i> Automatic Downloads
+
+  The `test` scripts are automatically downloaded by the `Makefile`, so any
+  modifications you do to them will be lost when you run `make` again. Likewise,
+  because they are automatically downloaded, you do not need to `add` or `commit`
+  them to your [git] repository.
+
+  </div>
+
+  The details on what you need to implement for this assignment are described
+  in the following sections.
+
+  <div class="alert alert-success" markdown="1">
+  #### <i class="fa fa-question"></i> Frequently Asked Questions
+
+  <div class="text-center">
+  <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vT-JnqxMjo5njloCf4Sg9spbv8tc5XqjiNRWLqNqneV8cbRUR9796hsQt67vBtmbO5kI4tRVPgZ8k86/embed?start=false&loop=false&delayms=3000" frameborder="0" width="480" height="389" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+  </div>
+
+  </div>
+
+  ## Activity 1: Namez (5 Points)
+
+  For the first activity, you are to write a script called `namez.py`, which
+  reads [CSV] data from the [Social Security Agency] containing all the names
+  of babies born from `1880` to `2022`.
+
+      :::bash
+      # Display usage
+      $ ./namez.py -h
+      Usage: namez.py [-p -y YEARS] NAMES
+
+      Print the counts for each NAME in the corresponding YEARS.
+
+          -p          Show percentages instead of counts
+          -y YEARS    Only display these YEARS (default: all)
+
+      YEARS may be specified multiple times and can be a single year, or a list
+      separated by commas, or a range separated by -:
+
+          -y 2002 -y 2003 -y 2004
+          -y 2002,2003,2004
+          -y 2002-2004
+
+      The YEARS are always displayed in ascending order, while the NAMES are
+      displayed in the order provided.
+
+      # Print counts for Peter and James in 1983
+      $ ./namez.py -y 1983 Peter James
+      Year       Peter       James
+      1983        5525       36624
+
+      # Print percentages for Peter and James from 1980 to 1985
+      $ ./namez.py -y 1980-1985 -p Peter James
+      Year       Peter       James
+      1980     0.1746%     1.1494%
+      1981     0.1744%     1.1150%
+      1982     0.1660%     1.1172%
+      1983     0.1595%     1.0574%
+      1984     0.1628%     1.0349%
+      1985     0.1597%     1.0129%
+
+  The `namez.py` script takes the following possible flags:
+
+  - `-p`: This has the script print out the percentage within the current year
+    instead of the count for the baby name.
+
+  - `-y`: This allows the user to specify which `YEARS` to print out.  There
+    are three possible formats for this flag as noted in the **usage** above.
+
+  After the flags, the remaining arguments are the `NAMES` to include in the
+  table.
+
+  <div class="alert alert-danger" markdown="1">
+
+  If an unsupported flag is specified, or if no `NAMES` are given, then
+  `namez.py` should print out the **usage** message and exit with failure.
+
+  </div>
+
+  The baby names are stored in a [CSV] file, `namez.input.gz`, which is in the
+  following format:
+
+      :::text
+      year,name,gender,count
+      1880,Mary,F,7065
+      1880,Anna,F,2604
+      1880,Emma,F,2003
+      1880,Elizabeth,F,1939
+      1880,Minnie,F,1746
+      1880,Margaret,F,1578
+      1880,Ida,F,1472
+      1880,Alice,F,1414
+      1880,Bertha,F,1320
+      ...
+
+  Because the [CSV] file is so large, it has been compressed with [gzip], which
+  means you will need to use [gzip.open] to read the file in [Python].
+  Additionally, because the complete database is so large, it will take a few
+  seconds to load.  For testing purposes, the [doctests] and some of the [unit
+  tests] will verify the functionality of your program using
+  `names.input.test.gz` instead, which is a reduced version of the complete
+  [CSV] data.
+
+  [Social Security Agency]: https://www.ssa.gov/
+  [gzip]: https://www.gnu.org/software/gzip/
+  [gzip.open]: https://docs.python.org/3/library/gzip.html#gzip.open
+
+  ### Task 1: `namez.py`
+
+  To implement the `namez.py` [Python] script, you will need to complete the
+  following functions:
+
+  1. `load_database(path: str=PATH) -> Database`
+
+      > This function reads the [CSV] data from the specified `path` and
+      returns a [dict] that maps years to a [dict] with names mapped to counts (ie.
+      `{YEAR: {NAME: COUNT}}`).
+
+      <div class="alert alert-success" markdown="1">
+
+      **Hints**: You can use the [csv.DictReader] function with [gzip.open] to
+        read the [CSV] data.
+
+          :::python
+          for record in csv.DictReader(gzip.open(path, 'rt')):
+              ...
+
+      The [dict] you return has the *type alias*, `Database`, which can be used
+      to annotate your [dict] variable:
+
+          :::python
+          database: Database = {}
+
+      </div>
+
+  2. `print_table(database: Database, years: list[int]=[], names: list[str]=[], percentage=False) -> None`
+
+      > This function prints out a table of `years` and `names` (along with
+      their corresponding counts or percentages).  The first column contains
+      the year, while the second column contains the counts or percentages for
+      the first name in the corresponding year, etc.  The first row is a header
+      containing the word `year` and then each of the `names`.
+
+      <div class="alert alert-success" markdown="1">
+
+      **Hints**: The names can be aligned into columns by using [str.rjust] with
+      a width of `12`.  Likewise, the counts should be aligned as follows:
+
+          :::python
+          f'{count:>12}'
+
+      While percentages should be aligned as follows:
+
+          :::python
+          f'{percentage:>11.4f}%'
+
+      You should considering collecting all the columns for each row into a
+      [list] and then using [str.join] to combine them all into a single string
+      for printing.
+      </div>
+
+  3. `main(arguments=sys.argv[1:]) -> None`
+
+      > This function processes the command line `arguments`, loads the
+      database, and then prints a table with specified `years` and `names`.
+
+      <div class="alert alert-success" markdown="1">
+
+      **Hints**: To convert a sequence of `str`s to `int`s, you can use either
+      a [list comprehension]:
+
+          :::python
+          [int(s) for s in strs]
+
+      Or the [map] function:
+
+          :::python
+          map(int, strs)
+
+      To add all the elements of a [list] to an existing [list], you can use
+      the [list.extend] method:
+
+          :::python
+          list1.extend(list2)
+
+      </div>
+
+  [csv.DictReader]: https://docs.python.org/3/library/csv.html#csv.DictReader
+  [str.rjust]: https://docs.python.org/3/library/stdtypes.html#str.rjust
+  [str.join]: https://docs.python.org/3/library/stdtypes.html#str.join
+  [list comprehension]: https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
+  [map]: https://docs.python.org/3/library/functions.html#map
+  [list.extend]: https://docs.python.org/3/tutorial/datastructures.html#more-on-lists
+
+  ### Task 2: Testing
+
+  As you implement `namez.py`, you can use the provided [doctests] to verify the
+  correctness of your code:
+
+      :::bash
+      # Run doctests
+      $ python3 -m doctest namez.py -v
+      2 items had no tests:
+          namez
+          namez.usage
+      3 items passed all tests:
+         4 tests in namez.load_database
+         1 tests in namez.main
+         2 tests in namez.print_table
+      7 tests in 5 items.
+      7 passed and 0 failed.
+      Test passed.
+
+  You can also use `make` to run both the [doctests] and the [unit tests]:
+
+      :::bash
+      # Run unit tests (and doctests)
+      $ make test-namez
+      Testing NameZ ...
+      test_00_doctest (__main__.NamezTest) ... ok
+      test_01_mypy (__main__.NamezTest) ... ok
+      test_02_load_database (__main__.NamezTest) ... ok
+      test_03_print_table (__main__.NamezTest) ... ok
+      test_04_main_usage (__main__.NamezTest) ... ok
+      test_05_main_year_multiple (__main__.NamezTest) ... ok
+      test_06_main_year_list (__main__.NamezTest) ... ok
+      test_07_main_year_range (__main__.NamezTest) ... ok
+      test_08_main_year_range_percentage (__main__.NamezTest) ... ok
+
+         Score 5.00 / 5.00
+        Status Success
+
+      ----------------------------------------------------------------------
+      Ran 9 tests in 21.071s
+
+      OK
+
+  To just run the [unit tests], you can do the following:
+
+      :::bash
+      # Run unit tests
+      $ ./namez.test -v
+      ...
+
+  To run a specific [unit test], you can specify the **method name**:
+
+      :::bash
+      # Run only mypy unit test
+      $ ./namez.test -v NamezTest.test_01_mypy
+      ...
+
+  To manually check your types, you can use [mypy]:
+
+      :::bash
+      # Run mypy to check types
+      $ mypy namez.py
+
+  [mypy]: https://mypy-lang.org/
+
+  ## Activity 2: SearX (5 Points)
+
+  For the second activity, you are to write a script called `searx.py`, which
+  fetches search results from [searx.ndlug.org](https://searx.ndlug.org), a
+  website running [SearXNG]:
+
+  > [SearXNG] is a metasearch engine, aggregating the results of other search
+  engines while not storing information about its users.
+
+  With this script, you can search the Internet right from your terminal!
+
+      :::bash
+      # Display usage
+      $ ./searx.py
+      Usage: searx.py [-u URL -n LIMIT -o ORDERBY] QUERY
+
+      Fetch SearX results for QUERY and print them out.
+
+          -u URL      Use URL as the SearX instance (default is: https://searx.ndlug.org/search)
+          -n LIMIT    Only display up to LIMIT results (default is: 5)
+          -o ORDERBY  Sort the search results by ORDERBY (default is: score)
+
+      If ORDERBY is score, the results are shown in descending order.  Otherwise,
+      results are shown in ascending order.
+
+      # Search for notre dame
+      $ ./searx.py notre dame
+         1.   University of Notre Dame [4.00]
+              https://www.nd.edu/
+
+         2.   Notre-Dame de Paris [1.40]
+              https://en.wikipedia.org/wiki/Notre-Dame_de_Paris
+
+         3.   Notre Dame Athletics | The Fighting Irish [1.11]
+              https://fightingirish.com/
+
+         4.   University of Notre Dame [1.00]
+              https://en.wikipedia.org/wiki/University_of_Notre_Dame
+
+         5.   Notre Dame [1.00]
+              https://en.wikipedia.org/wiki/Notre_Dame
+
+      # Search for notre dame, limit to one result, order by title
+      $ ./searx.py -n 1 -o title notre dame
+         1.   2023 Notre Dame football schedule: Dates, times, TV channels, scores [0.05]
+              https://www.ncaa.com/news/football/article/2023-12-03/2023-notre-dame-football-schedule-dates-times-tv-channels-scores
+
+  The `searx.py` script takes the following possible arguments:
+
+    - `-u`: This allows the user to set the `URL` of the [SearXNG] instance to
+      search.  By default, this is
+      [https://searx.ndlug.org/search](https://searx.ndlug.org/search).
+
+    - `-n`: This allows the user to limit the number of search results to print
+      out.  By default, this is `5`.
+
+    - `-o`: This allows the user to specify how to sort the results.  By
+      default, it will sort by `score` in descending order.  Otherwise, it will
+      sort either the `title` or `url` in ascending order.
+
+  After the flags, the remaining arguments is the `QUERY` to search.
+
+  <div class="alert alert-danger" markdown="1">
+
+  If an unsupported flag is specified, or if no `QUERY` is given, then
+  `searx.py` should print out the **usage** message and exit with failure.
+
+  </div>
+
+  [SearXNG]: https://docs.searxng.org/
+
+  ### Task 1: `searx.py`
+
+  To implement the `searx.py` [Python] script, you will need to complete the
+  following functions:
+
+  1. `searx_query(query: str, url: str=URL) -> list[dict]`
+
+      > This function makes a [HTTP] request to the [SearXNG] instance
+      specified by `url` and returns the search results corresponding to
+      `query`.
+
+      <div class="alert alert-success" markdown="1">
+
+      **Hints**: To fetch the results from [SearXNG], you will need to specify
+      the following **parameters** when making a [HTTP] request:
+
+          :::python
+          {'q': query, 'format': 'json'}
+
+      To do so, you can use [requests.get]:
+
+          :::python
+          requests.get(url, params=...)
+
+      Remember that you want to return just the [list] of results inside the
+      [JSON] data, and not the whole response.
+
+      </div>
+
+  2. `print_results(results: list[dict], limit: int=LIMIT, orderby: str=ORDERBY) -> None`
+
+      > This function prints up to `limit` search `results` sorted by
+      `orderby`.
+
+      <div class="alert alert-success" markdown="1">
+
+      **Hints**: Each search result should be printed out in the following
+      format:
+
+          :::python
+          '{index:>4}.\t{title} [{score:0.2f}]'
+          '\t{url}'
+
+      **Note**: There should be a **blank line** between each search result,
+        but not before the first result or after the last result.
+
+      You should **sort** the results using [sorted] before **slicing** it up
+      to the `limit`.  Remember that you can control how each element is compared
+      in [sorted] by specifying a `key` function:
+
+          :::python
+          sorted(results, key=lambda r: r['score'], reversed=True)
+
+      The code above would return a sequence of results ordered by `score`
+      in **descending** order.
+
+      </div>
+
+  3. `main(arguments=sys.argv[1:]) -> None`
+
+      > This function processes the command line `arguments`, fetches the
+      search results for `QUERY`, and then prints out the results.
+
+      <div class="alert alert-success" markdown="1">
+
+      **Hints**: You may wish to use [str.join] to combine the remaining
+        arguments into a single `query`.
+
+      </div>
+
+  [HTTP]: https://en.wikipedia.org/wiki/HTTP
+  [requests.get]: https://requests.readthedocs.io/en/latest/user/quickstart/#passing-parameters-in-urls
+  [sorted]: https://docs.python.org/3/library/functions.html#sorted
+
+  ### Task 2: Testing
+
+  As you implement `searx.py`, you can use the provided [doctests] to verify the
+  correctness of your code:
+
+      :::bash
+      # Run doctests
+      $ python3 -m doctest searx.py -v
+      ...
+      2 items had no tests:
+          searx
+          searx.usage
+      3 items passed all tests:
+         1 tests in searx.main
+         1 tests in searx.print_results
+         1 tests in searx.searx_query
+      3 tests in 5 items.
+      3 passed and 0 failed.
+      Test passed.
+
+  You can also use `make` to run both the [doctests] and the [unit tests]:
+
+      :::bash
+      # Run unit tests (and doctests)
+      $ make test-searx
+      Testing SearX ...
+      test_00_doctest (__main__.SearxTest) ... ok
+      test_01_mypy (__main__.SearxTest) ... ok
+      test_02_searx_query_python (__main__.SearxTest) ... ok
+      test_03_searx_query_peter_bui (__main__.SearxTest) ... ok
+      test_04_searx_query_cse_20289_sp24 (__main__.SearxTest) ... ok
+      test_05_searx_query_url (__main__.SearxTest) ... ok
+      test_06_print_results (__main__.SearxTest) ... ok
+      test_07_print_results_limit_1 (__main__.SearxTest) ... ok
+      test_08_print_results_orderby_title (__main__.SearxTest) ... ok
+      test_09_print_results_limit_3_orderby_url (__main__.SearxTest) ... ok
+      test_10_main_usage (__main__.SearxTest) ... ok
+      test_11_main_python (__main__.SearxTest) ... ok
+      test_12_main_peter_bui (__main__.SearxTest) ... ok
+      test_13_main_cse_20289_sp24 (__main__.SearxTest) ... ok
+      test_14_main_url_python (__main__.SearxTest) ... ok
+      test_15_main_limit_1_url_python (__main__.SearxTest) ... ok
+      test_16_main_url_orderby_title_python (__main__.SearxTest) ... ok
+      test_17_main_url_orderby_url_limit_3_python (__main__.SearxTest) ... ok
+
+         Score 5.00 / 5.00
+        Status Success
+
+      ----------------------------------------------------------------------
+      Ran 18 tests in 8.387s
+
+      OK
+
+
+  To just run the [unit tests], you can do the following:
+
+      :::bash
+      # Run unit tests
+      $ ./searx.test -v
+      ...
+
+  To run a specific [unit test], you can specify the **method name**:
+
+      :::bash
+      # Run only mypy unit test
+      $ ./searx.test -v SearxTest.test_01_mypy
+      ...
+
+  To manually check your types, you can use [mypy]:
+
+      :::bash
+      # Run mypy to check types
+      $ mypy searx.py
+
+  ## Activity 3: Quiz (2 Points)
+
+  Once you have completed all the activities above, you are to complete the
+  following **reflection quiz**:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+  <script>
+  loadQuiz('static/json/homework05.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `homework05/answers.json` file.  You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To test your quiz, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking homework05 quiz ...
+           Q01 0.50
+           Q02 0.50
+         Score 1.00 / 1.00
+        Status Success
+
+  ## Guru Point (1 Extra Credit Point)
+
+  For extra credit, you are to **plot the counts of multiple names** from every
+  year using the baby names database in `namez.py`.  To do so, you should use
+  [matplotlib] inside a [Jupyter] notebook to plot multiple lines on a single
+  graph as shown below:
+
+  <div class="thumbnail text-center">
+    <img src="static/img/homework05-namez.png" class="img-responsive">
+  </div>
+
+  To run [Jupyter] on the student machines, you can use the following command:
+
+      :::bash
+      $ jupyter-notebook-3.11 --ip studentXX.cse.nd.edu --port 9000 --no-browser
+
+  Replace `studentXX.cse.nd.edu` with the name of the student machine you are
+  on.  Also, you may need to change the port to something else between `9000` -
+  `9999`.
+
+  <div class="alert alert-warning" markdown="1">
+  #### <i class="fa fa-google"></i> Google Colaboratory
+
+  Alternatively, you can use [Google Colaboratory] to run a [Jupyter] notebook
+  from your Google Drive.  This is a hassle-free way to explore developing with
+  [Python] and [matplotlib], while using Google Cloud resources (*thus no need
+  for the VPN or the student machines*).
+  </div>
+
+  [Google Colaboratory]: https://colab.research.google.com
+
+  <div class="alert alert-info" markdown="1">
+  #### <i class="fa fa-check"></i> Verification
+
+  To get credit for this Guru Point, show your [Jupyter] notebook with the
+  graphical plot to a TA to verify (or attached a video / screenshot to your
+  **Pull Request**). You have up until a week **after** this assignment is due
+  to verify your Guru Point.
+
+  </div>
+
+  <div class="alert alert-success" markdown="1">
+  #### <i class="fa fa-calendar"></i> Self-Service Extension
+
+  Remember that you can always **forgo** this Guru Point for **two extra days**
+  to do the homework.  That is, if you need an extension, you can simply skip
+  the Guru Point and you will automatically have until **Monday** to complete
+  the assignment for full credit.
+
+  Just leave a note on your **Pull Request** of your intentions.
+
+  </div>
+
+  [Jupyter]: https://jupyter.org/
+  [matplotlib]: https://matplotlib.org/
+
+  ## Submission
+
+  To submit your assignment, please commit your work to the `homework05` folder
+  of your `homework05` branch in your **assignments** [GitHub] repository.
+  Your <tt>homework05</tt> folder should **only** contain the following files:
+
+  - <tt>Makefile</tt>
+  - <tt>answers.json</tt>
+  - <tt>namez.py</tt>
+  - <tt>searx.py</tt>
+
+  <div class="alert alert-info" markdown="1">
+  **Note**: You do not need to commit the test scripts because the `Makefile`
+  automatically downloads them.
+  </div>
+
+      :::bash
+      #-----------------------------------------------------------------------
+      # Make sure you have already completed Activity 0: Preparation
+      #-----------------------------------------------------------------------
+      ...
+      $ git add namez.py                                    # Mark changes for commit
+      $ git commit -m "Homework 05: Activity 1 completed"   # Record changes
+      ...
+      $ git add searx.py                                    # Mark changes for commit
+      $ git commit -m "Homework 05: Activity 2 completed"   # Record changes
+      ...
+      $ git add answers.json                                # Mark changes for commit
+      $ git commit -m "Homework 05: Activity 3 completed"   # Record changes
+      ...
+      $ git push -u origin homework05                       # Push branch to GitHub
+
+  <div class="alert alert-danger" markdown="1">
+  #### <i class="fa fa-github"></i> Pull Request
+
+  Remember to create a **Pull Request** and assign the appropriate TA from the
+  [Reading 06 TA List].
+
+  **DO NOT MERGE** your own **Pull Request**.  The TAs use open **Pull
+  Requests** to keep track of which assignments to grade.  Closing them
+  yourself will cause a delay in grading and confuse the TAs.
+
+  </div>
+
+  [Markdown]:   https://daringfireball.net/projects/markdown/
+  [git]:    https://git-scm.com/
+  [clone]:  https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]:   https://git-scm.com/docs/git-push
+  [branching]:   https://git-scm.com/docs/git-branch
+  [code review]: https://en.wikipedia.org/wiki/Code_review
+  [GitHub]: https://github.com
+  [Linux]:  https://kernel.org
+  [branch]: https://git-scm.com/docs/git-branch
+  [add]:    https://git-scm.com/docs/git-add
+  [Reading 01]:         reading01.html
+  [Reading 06 TA List]: reading06_tas.html
+  [curl]:   http://man7.org/linux/man-pages/man1/curl.1.html
+  [wget]:   http://man7.org/linux/man-pages/man1/wget.1.html
+  [JSON]:   https://json.org/
+  [ESC]:    https://esc.nd.edu/
