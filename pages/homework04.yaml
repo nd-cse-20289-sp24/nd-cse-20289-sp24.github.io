@@ -658,13 +658,13 @@ body:       |
       #-----------------------------------------------------------------------
       ...
       $ git add cut.py                                      # Mark changes for commit
-      $ git commit -m "homework04: Activity 1 completed"    # Record changes
+      $ git commit -m "Homework 04: Activity 1 completed"   # Record changes
       ...
       $ git add wc.py                                       # Mark changes for commit
-      $ git commit -m "homework04: Activity 2 completed"    # Record changes
+      $ git commit -m "Homework 04: Activity 2 completed"   # Record changes
       ...
       $ git add answers.json                                # Mark changes for commit
-      $ git commit -m "homework04: Activity 3 completed"    # Record changes
+      $ git commit -m "Homework 04: Activity 3 completed"   # Record changes
       ...
       $ git push -u origin homework04                       # Push branch to GitHub
 
