@@ -1,0 +1,10 @@
+{
+    "q01": {
+        "type": "blank",
+        "question": "\n<p>Use your <tt>namez.py</tt> to answer the following questions:</p>\n\n<ol>\n<li>How many babies were named <b>Matthew</b> in <tt>2003</tt>? ____</li>\n<li>In <tt>1989</tt>, which name was more popular: <b>Taylor</b> or <b>Travis</b>? ____</li>\n<li>Which year had the most babies named <b>Peter</b>? ____</li>\n<li>Between the years <tt>2010</tt> through <tt>2012</tt>, what was the highest percentage of babies named <b>Caleb</b>? ____%</li>\n<li>What is the earliest year in which there were more babies named <b>Abigail</b> than there were babies named <b>Madeline</b>? ____</li>\n</ol>\n"
+    },
+    "q02": {
+        "type": "blank",
+        "question": "\n<p>Use your <tt>searx.py</tt> to answer the following questions:</p>\n\n<ol>\n<li>What is the <b>URL</b> for the <tt>Notre Dame Linux Users Group</tt>? ____</li>\n<li>What is the <b>URL</b> for the <tt>bobbit irc bot</tt>? ____</li>\n<li>What <b>video game</b> appears in the search results for <tt>pnutzh4x0r</tt>? ____</li>\n<li>What is the <b>title</b> of the first search result for <tt>nd cse bacs</tt>? ____</li>\n<li>According to the first search result for <tt>best pho south bend</tt>, which <b>restaurant</b> in South Bend has the best pho? ____</li>\n</ol>\n"
+    }
+}

@@ -1,0 +1,138 @@
+#!/usr/bin/env python3
+
+import doctest
+import json
+import itertools
+import io
+import math
+import mypy.api
+import subprocess
+import unittest
+import unittest.mock
+import urllib.request
+
+import namez
+
+# Unit Tests
+
+class NamezTest(unittest.TestCase):
+    Base    = 'https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework05/namez'
+    Output0 = f'{Base}.output.0'
+    Output1 = f'{Base}.output.1'
+    Output2 = f'{Base}.output.2'
+    Path     = 'namez.input.test.gz'
+    Total    = 5.0
+    Points   = 0
+
+    @classmethod
+    def setupClass(cls):
+        cls.Points = 0
+
+    @classmethod
+    def tearDownClass(cls):
+        print()
+        print(f'   Score {cls.Points:.2f} / {cls.Total:.2f}')
+        print(f'  Status {"Success" if math.isclose(cls.Points, cls.Total) else "Failure"}')
+
+    def test_00_doctest(self):
+        failures, tests = doctest.testmod(namez, verbose=False)
+        self.assertEqual(failures, 0)
+        self.assertEqual(tests, 7)
+        NamezTest.Points += 0.5
+
+    def test_01_mypy(self):
+        _, _, exit_status = mypy.api.run(['namez.py'])
+        self.assertTrue(exit_status == 0)
+        NamezTest.Points += 0.5
+
+    def test_02_load_database(self):
+        database = namez.load_database(self.Path)
+
+        self.assertEqual(len(database), 143)
+        self.assertEqual(len(database[2003]), 122)
+        self.assertEqual(database[2003]['Daniel'], 21116)
+        self.assertEqual(len(database[2002]), 108)
+        self.assertEqual(database[2002]['Danielle'], 4220)
+
+        NamezTest.Points += 0.5
+    
+    def test_03_print_table(self):
+        database = namez.load_database(self.Path)
+        expected = urllib.request.urlopen(self.Output0).read()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            namez.print_table(database, [2002, 2003, 2004], ['Daniel', 'Danielle'])
+
+        self.assertEqual(output.getvalue(), expected.decode())
+        NamezTest.Points += 0.5
+        
+        database = namez.load_database(self.Path)
+        expected = urllib.request.urlopen(self.Output2).read()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            namez.print_table(database, [2002, 2003, 2004], ['Daniel', 'Danielle'], True)
+
+        self.assertEqual(output.getvalue(), expected.decode())
+        NamezTest.Points += 0.5
+
+    def test_04_main_usage(self):
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                namez.main('-h'.split())
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '0')
+
+        NamezTest.Points += 0.15
+        
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                namez.main('-d'.split())
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '1')
+
+        NamezTest.Points += 0.15
+        
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                namez.main(''.split())
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '1')
+
+        NamezTest.Points += 0.20
+    
+    def test_05_main_year_multiple(self):
+        expected = urllib.request.urlopen(self.Output0).read()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            namez.main('-y 2003 -y 2002 -y 2004 Daniel Danielle'.split())
+
+        self.assertEqual(output.getvalue(), expected.decode())
+        NamezTest.Points += 0.5
+    
+    def test_06_main_year_list(self):
+        expected = urllib.request.urlopen(self.Output0).read()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            namez.main('-y 2003,2004,2002 Daniel Danielle'.split())
+
+        self.assertEqual(output.getvalue(), expected.decode())
+        NamezTest.Points += 0.5
+    
+    def test_07_main_year_range(self):
+        expected = urllib.request.urlopen(self.Output0).read()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            namez.main('-y 2002-2004 Daniel Danielle'.split())
+
+        self.assertEqual(output.getvalue(), expected.decode())
+        NamezTest.Points += 0.5
+    
+    def test_08_main_year_range_percentage(self):
+        expected = urllib.request.urlopen(self.Output1).read()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            namez.main('-y 2002-2004 -p Daniel Danielle'.split())
+
+        self.assertEqual(output.getvalue(), expected.decode())
+        NamezTest.Points += 0.5
+
+# Main Execution
+
+if __name__ == '__main__':
+    unittest.main()
+
+# vim: set sts=4 sw=4 ts=8 expandtab ft=python:
