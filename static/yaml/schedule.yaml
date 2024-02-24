@@ -176,9 +176,15 @@
       - date:           Mon 02/26
         topics:         CSV
         assignment:     Reading 06
+        items:
+          - name:       Slides 12
+            link:       https://docs.google.com/presentation/d/1FQRh0spDB02CptyraDyCh_HHQF1Z3GBrekepm1Thtc8/edit?usp=sharing
 
       - date:           Wed 02/28
         topics:         JSON
+        items:
+          - name:       Slides 12
+            link:       https://docs.google.com/presentation/d/1FQRh0spDB02CptyraDyCh_HHQF1Z3GBrekepm1Thtc8/edit?usp=sharing
 
       - date:           Fri 03/01
         topics:         Functional Programming
