@@ -128,6 +128,11 @@ body:       |
   To help you get started, we have provided you with the following [courses.py]
   skeleton code:
 
+      :::bash
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading06/courses.py
+
+  The skeleton code should contain the following:
+
       :::python
       #!/usr/bin/env python3
 
@@ -231,6 +236,11 @@ body:       |
   To help you get started, we have provided you with the following [shells.py]
   skeleton code:
 
+      :::bash
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading06/shells.py
+
+  The skeleton code should contain the following:
+
       :::python
       #!/usr/bin/env python3
 
@@ -307,6 +317,11 @@ body:       |
 
   To help you get started, we have provided you with the following [machines.py]
   skeleton code:
+
+      :::bash
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading06/machines.py
+
+  The skeleton code should contain the following:
 
       :::python
       #!/usr/bin/env python3
