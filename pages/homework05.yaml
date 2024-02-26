@@ -296,7 +296,7 @@ body:       |
       Or the [map] function:
 
           :::python
-          map(int, strs)
+          list(map(int, strs))
 
       To add all the elements of a [list] to an existing [list], you can use
       the [list.extend] method:
