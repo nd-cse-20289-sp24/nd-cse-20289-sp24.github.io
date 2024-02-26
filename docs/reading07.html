@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Reading 07: Functional Programming</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="static/css/blugold.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<style>
+	body {
+	    padding: 10px;
+	}
+	</style>
+    </head>
+    <body>
+	<div class="container">
+
+	    <div class="row">
+		<div class="page-header">
+		    <ul class="nav nav-pills pull-right">
+			
+			<li><a href="index.html"><i class="fa fa-linux"></i> <span class="visible-md-inline visible-lg-inline">Home</span></a></li>
+			
+		    </ul>
+		    <h1><i class="fa fa-book"></i> Reading 07: Functional Programming</h1>
+		</div>
+	    </div>
+
+            
+<p><strong>Everyone</strong>:</p>
+<p>Next week, we will explore a new programming paradigm called <a href="https://en.wikipedia.org/wiki/Functional_programming">functional
+programming</a>, which, if you look closely, is similar to the <a href="https://en.wikipedia.org/wiki/Unix_philosophy">Unix Philosophy</a>:</p>
+<blockquote>
+<p>By decomposing data processing problems into small functions that <strong>work
+together</strong> to process data without side-effects, we can expose opportunities
+for <a href="https://en.wikipedia.org/wiki/Concurrency_(computer_science)">concurrency</a> and <a href="https://en.wikipedia.org/wiki/Parallel_computing">parallelism</a> to build powerful <strong>abstractions</strong> such
+as <a href="https://research.google/pubs/pub62/">MapReduce</a>.</p>
+</blockquote>
+<div class="alert alert-info">
+<h4 id="tldr"><i class="fa fa-search"></i> TL;DR<a class="headerlink" href="#tldr" title="Permanent link">&para;</a></h4>
+<p>The focus of this reading is to introduce you to <a href="https://en.wikipedia.org/wiki/Functional_programming">functional programming</a> in
+<a href="https://www.python.org/">Python</a>.</p>
+</div>
+<p><img src="static/img/python.png" class="pull-right"></p>
+<h2 id="readings">Readings<a class="headerlink" href="#readings" title="Permanent link">&para;</a></h2>
+<p>The readings for this week are:</p>
+<ol>
+<li>
+<p><a href="https://realpython.com/">Real Python</a></p>
+<ul>
+<li>
+<p><a href="https://realpython.com/python-functional-programming/">Functional Programming in Python: When and How to Use It</a></p>
+</li>
+<li>
+<p><a href="https://realpython.com/list-comprehension-python/">When to Use a List Comprehension in Python</a></p>
+</li>
+<li>
+<p><a href="https://realpython.com/introduction-to-python-generators/">How to Use Generators and yield in Python</a></p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="optional-resources">Optional Resources<a class="headerlink" href="#optional-resources" title="Permanent link">&para;</a></h3>
+<p>Here are some additional resources:</p>
+<ol>
+<li>
+<p><a href="https://docs.python.org/3/howto/functional.html">Functional Programming HOWTO</a></p>
+</li>
+<li>
+<p><a href="https://maryrosecook.com/blog/post/a-practical-introduction-to-functional-programming">A practical introduction to functional programming</a></p>
+</li>
+<li>
+<p><a href="https://www.geeksforgeeks.org/functional-programming-in-python/">Functional Programming in Python</a></p>
+</li>
+<li>
+<p><a href="http://www.scipy-lectures.org/advanced/advanced_python/index.html">Iterators, generator expressions and generators</a></p>
+</li>
+</ol>
+<h2 id="quiz">Quiz<a class="headerlink" href="#quiz" title="Permanent link">&para;</a></h2>
+<p>This week the reading is split into two sections: the first part is a short
+<a href="https://dredd.h4x0r.space">dredd</a> quiz, while the second part involves a <a href="https://www.python.org/">Python</a> script: <code>odds.py</code>.</p>
+<h3 id="preparation">Preparation<a class="headerlink" href="#preparation" title="Permanent link">&para;</a></h3>
+<p>To test this script, you will need to download the <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading07/Makefile">Makefile</a> and test
+scripts:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ git switch master                   <span style="color: #3D7B7B; font-style: italic"># Make sure we are in master branch</span>
+$ git pull --rebase                   <span style="color: #3D7B7B; font-style: italic"># Make sure we are up-to-date with GitHub</span>
+
+$ git checkout -b reading07           <span style="color: #3D7B7B; font-style: italic"># Create reading07 branch and check it out</span>
+
+$ <span style="color: #008000">cd</span> reading07                        <span style="color: #3D7B7B; font-style: italic"># Go into reading07 folder</span>
+
+<span style="color: #3D7B7B; font-style: italic"># Download Makefile</span>
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading07/Makefile
+
+<span style="color: #3D7B7B; font-style: italic"># Download Skeleton Code</span>
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading07/odds.py
+</code></pre></div>
+
+<h3 id="questions-1-point">Questions (1 Point)<a class="headerlink" href="#questions-1-point" title="Permanent link">&para;</a></h3>
+<p>Record the answers to the following <a href="static/json/reading07.json">Reading 07 Quiz</a> questions in your
+<code>reading07</code> branch:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+
+<script>
+loadQuiz('static/json/reading07.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<p>As with <a href="reading01.html">Reading 01</a>, you will need to store your answers in a
+<code>reading07/answers.json</code> file. You can use the form above to generate the
+contents of this file, or you can write the <a href="https://json.org/">JSON</a> by hand.</p>
+<p>To test your quiz, you can use the <code>check.py</code> script:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ ../.scripts/check.py
+Checking reading07 quiz ...
+      Q1 <span style="color: #666666">1</span>.00
+   Score <span style="color: #666666">1</span>.00 / <span style="color: #666666">1</span>.00
+  Status Success
+</code></pre></div>
+
+<h3 id="script-oddspy-3-points">Script: <code>odds.py</code> (3 Points)<a class="headerlink" href="#script-oddspy-3-points" title="Permanent link">&para;</a></h3>
+<p>The <code>odds.py</code> script has four implementations of an <code>odds</code> function that
+processes a stream of input and returns a sequence of only the odd numbers.
+The first implementation, called <code>odds</code>, is provided to you:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">odds</span>(stream<span style="color: #666666">=</span>sys<span style="color: #666666">.</span>stdin) <span style="color: #666666">-&gt;</span> <span style="color: #008000">list</span>[<span style="color: #008000">int</span>]:
+    results <span style="color: #666666">=</span> []
+    <span style="color: #008000; font-weight: bold">for</span> line <span style="color: #AA22FF; font-weight: bold">in</span> stream:
+        number <span style="color: #666666">=</span> <span style="color: #008000">int</span>(line)
+        <span style="color: #008000; font-weight: bold">if</span> number <span style="color: #666666">%</span> <span style="color: #666666">2</span>:
+            results<span style="color: #666666">.</span>append(number)
+    <span style="color: #008000; font-weight: bold">return</span> results
+</code></pre></div>
+
+<p>Your task is to implement the three other versions of the same <code>odds</code>
+function:</p>
+<ol>
+<li>
+<p><code>odds_fp(stream=sys.stdin) -&gt; Iterator[int]</code></p>
+<blockquote>
+<p>This function uses <a href="https://docs.python.org/3/library/functions.html#map">map</a>, <a href="https://docs.python.org/3/library/functions.html#filter">filter</a>, and a <a href="https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions">lambda</a> expression to
+produce a sequence of only the odd numbers from <code>stream</code>.</p>
+</blockquote>
+</li>
+<li>
+<p><code>odds_lc(stream=sys.stdin) -&gt; list[int]</code></p>
+<blockquote>
+<p>This function uses a <a href="https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions">list comprehension</a> to produce a sequence of only
+the odd numbers from <code>stream</code>.</p>
+</blockquote>
+</li>
+<li>
+<p><code>odds_gr(stream=sys.stdin) -&gt; Iterator[int]</code></p>
+<blockquote>
+<p>This function uses <a href="https://docs.python.org/3/reference/simple_stmts.html#yield">yield</a> to generate a sequence of only the odd
+numbers from <code>stream</code>.</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h4>
+<p>As you implement <code>odds.py</code>, you can use the provided <a href="https://docs.python.org/3/library/doctest.html">doctests</a> to verify the
+correctness of your code:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Run doctests</span>
+$ python3 -m doctest odds.py -v
+<span style="color: #666666">2</span> items had no tests:
+    odds
+    odds.main
+<span style="color: #666666">4</span> items passed all tests:
+   <span style="color: #666666">1</span> tests <span style="color: #008000; font-weight: bold">in</span> odds.odds
+   <span style="color: #666666">1</span> tests <span style="color: #008000; font-weight: bold">in</span> odds.odds_fp
+   <span style="color: #666666">1</span> tests <span style="color: #008000; font-weight: bold">in</span> odds.odds_gr
+   <span style="color: #666666">1</span> tests <span style="color: #008000; font-weight: bold">in</span> odds.odds_lc
+<span style="color: #666666">4</span> tests <span style="color: #008000; font-weight: bold">in</span> <span style="color: #666666">6</span> items.
+<span style="color: #666666">4</span> passed and <span style="color: #666666">0</span> failed.
+Test passed.
+</code></pre></div>
+
+<p>You can also use <code>make</code> to run both the <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Run unit tests (and doctests)</span>
+$ make <span style="color: #008000">test</span>
+Testing Odds ...
+test_00_doctest <span style="color: #666666">(</span>__main__.OddsTest<span style="color: #666666">)</span> ... ok
+test_01_mypy <span style="color: #666666">(</span>__main__.OddsTest<span style="color: #666666">)</span> ... ok
+test_02_odds_fp <span style="color: #666666">(</span>__main__.OddsTest<span style="color: #666666">)</span> ... ok
+test_03_odds_lc <span style="color: #666666">(</span>__main__.OddsTest<span style="color: #666666">)</span> ... ok
+test_04_odds_gr <span style="color: #666666">(</span>__main__.OddsTest<span style="color: #666666">)</span> ... ok
+test_05_main_fp <span style="color: #666666">(</span>__main__.OddsTest<span style="color: #666666">)</span> ... ok
+test_06_main_lc <span style="color: #666666">(</span>__main__.OddsTest<span style="color: #666666">)</span> ... ok
+test_07_main_gr <span style="color: #666666">(</span>__main__.OddsTest<span style="color: #666666">)</span> ... ok
+
+   Score <span style="color: #666666">3</span>.00 / <span style="color: #666666">3</span>.00
+  Status Success
+
+----------------------------------------------------------------------
+Ran <span style="color: #666666">8</span> tests <span style="color: #008000; font-weight: bold">in</span> <span style="color: #666666">3</span>.407s
+
+OK
+</code></pre></div>
+
+<p>To just run the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>, you can do the following:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Run unit tests</span>
+$ ./odds.test -v
+...
+</code></pre></div>
+
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit you work, follow the same process outlined in <a href="reading01.html">Reading 01</a>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">#--------------------------------------------------</span>
+<span style="color: #3D7B7B; font-style: italic"># Make sure you have already completed Preparation</span>
+<span style="color: #3D7B7B; font-style: italic">#--------------------------------------------------</span>
+...
+$ git add answers.json                <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git commit -m <span style="color: #BA2121">&quot;Reading 07: Quiz&quot;</span>    <span style="color: #3D7B7B; font-style: italic"># Record changes</span>
+...
+$ git add Makefile                    <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git add odds.py                     <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git commit -m <span style="color: #BA2121">&quot;Reading 07: Scripts&quot;</span> <span style="color: #3D7B7B; font-style: italic"># Record changes</span>
+...
+$ git push -u origin reading07        <span style="color: #3D7B7B; font-style: italic"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert alert-danger">
+<h4 id="pull-request"><i class="fa fa-github"></i> Pull Request<a class="headerlink" href="#pull-request" title="Permanent link">&para;</a></h4>
+<p>Remember to create a <strong>Pull Request</strong> and assign the appropriate TA from the
+<a href="reading07_tas.html">Reading 07 TA List</a>.</p>
+<p><strong>DO NOT MERGE</strong> your own <strong>Pull Request</strong>.  The TAs use open <strong>Pull Requests</strong>
+to keep track of which assignments to grade.  Closing them yourself will
+cause a delay in grading and confuse the TAs.</p>
+</div>
+
+
+	    <div class="row">
+		<hr/>
+
+		<footer class="text-center">
+		    <p class="text-muted">
+		    <small>
+		    Built using
+		    <a href="https://getbootstrap.com/">Bootstrap</a>,
+		    <a href="https://fontawesome.com/">Font Awesome</a>, and
+		    <a href="http://www.python.org/">Python</a>.
+		    <br/>
+		    &copy; 2024 <a href="http://www.nd.edu">University of Notre Dame</a>
+		    </small>
+		    </p>
+		</footer>
+	    </div>
+
+	</div> <!-- /container -->
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	
+    </body>
+</html>
+
