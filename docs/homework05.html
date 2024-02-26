@@ -449,7 +449,7 @@ format:</p>
 <p>You should <strong>sort</strong> the results using <a href="https://docs.python.org/3/library/functions.html#sorted">sorted</a> before <strong>slicing</strong> it up
 to the <code>limit</code>.  Remember that you can control how each element is compared
 in <a href="https://docs.python.org/3/library/functions.html#sorted">sorted</a> by specifying a <code>key</code> function:</p>
-<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000">sorted</span>(results, key<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">lambda</span> r: r[<span style="color: #BA2121">&#39;score&#39;</span>], <span style="color: #008000">reversed</span><span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000">sorted</span>(results, key<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">lambda</span> r: r[<span style="color: #BA2121">&#39;score&#39;</span>], reverse<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
 </code></pre></div>
 
 <p>The code above would return a sequence of results ordered by <code>score</code>
