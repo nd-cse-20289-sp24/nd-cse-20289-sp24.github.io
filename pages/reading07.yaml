@@ -1,0 +1,273 @@
+title:      "Reading 07: Functional Programming"
+icon:       fa-book
+navigation:
+  - name: "Home"
+    link: "index.html"
+    icon: "fa-linux"
+internal:
+external:
+body:       |
+
+  **Everyone**:
+
+  Next week, we will explore a new programming paradigm called [functional
+  programming], which, if you look closely, is similar to the [Unix Philosophy]:
+
+  > By decomposing data processing problems into small functions that **work
+  together** to process data without side-effects, we can expose opportunities
+  for [concurrency] and [parallelism] to build powerful **abstractions** such
+  as [MapReduce].
+
+  <div class="alert alert-info" markdown="1">
+  #### <i class="fa fa-search"></i> TL;DR
+
+  The focus of this reading is to introduce you to [functional programming] in
+  [Python].
+
+  </div>
+
+  <img src="static/img/python.png" class="pull-right">
+
+  ## Readings
+
+  The readings for this week are:
+
+  1. [Real Python](https://realpython.com/)
+
+      - [Functional Programming in Python: When and How to Use It](https://realpython.com/python-functional-programming/)
+
+      - [When to Use a List Comprehension in Python](https://realpython.com/list-comprehension-python/)
+
+      - [How to Use Generators and yield in Python](https://realpython.com/introduction-to-python-generators/)
+
+  ### Optional Resources
+
+  Here are some additional resources:
+
+  1. [Functional Programming HOWTO](https://docs.python.org/3/howto/functional.html)
+
+  2. [A practical introduction to functional programming](https://maryrosecook.com/blog/post/a-practical-introduction-to-functional-programming)
+
+  3. [Functional Programming in Python](https://www.geeksforgeeks.org/functional-programming-in-python/)
+
+  4. [Iterators, generator expressions and generators](http://www.scipy-lectures.org/advanced/advanced_python/index.html)
+
+  [The Linux Command Line]:     http://linuxcommand.org/tlcl.php
+  [Unix]:                       https://en.wikipedia.org/wiki/Unix
+  [Unix Shell]:                 https://en.wikipedia.org/wiki/Unix_shell
+  [Git]:                        https://git-scm.com/
+  [Bash]:                       https://www.gnu.org/software/bash/
+  [shell scripting]:            https://en.wikipedia.org/wiki/Shell_script
+  [filters]:                    https://en.wikipedia.org/wiki/Filter_(software)#Unix
+  [pipelines]:                  https://en.wikipedia.org/wiki/Pipeline_(Unix)
+  [Unix Philosophy]:            https://en.wikipedia.org/wiki/Unix_philosophy
+  [functional programming]:     https://en.wikipedia.org/wiki/Functional_programming
+  [data structures]:            https://en.wikipedia.org/wiki/Data_structure
+  [Python]:                     https://www.python.org/
+  [list]:                       https://docs.python.org/3/library/stdtypes.html#sequence-types-list-tuple-range
+  [dict]:                       https://docs.python.org/3/library/stdtypes.html#mapping-types-dict
+  [MapReduce]:                  https://research.google/pubs/pub62/
+  [concurrency]:                https://en.wikipedia.org/wiki/Concurrency_(computer_science)
+  [parallelism]:                https://en.wikipedia.org/wiki/Parallel_computing
+
+  ## Quiz
+
+  This week the reading is split into two sections: the first part is a short
+  [dredd] quiz, while the second part involves a [Python] script: `odds.py`.
+
+  ### Preparation
+
+  To test this script, you will need to download the [Makefile] and test
+  scripts:
+
+      :::bash
+      $ git switch master                   # Make sure we are in master branch
+      $ git pull --rebase                   # Make sure we are up-to-date with GitHub
+
+      $ git checkout -b reading07           # Create reading07 branch and check it out
+
+      $ cd reading07                        # Go into reading07 folder
+
+      # Download Makefile
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading07/Makefile
+
+      # Download Skeleton Code
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading07/odds.py
+
+  ### Questions (1 Point)
+
+  Record the answers to the following [Reading 07 Quiz] questions in your
+  `reading07` branch:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+
+  <script>
+  loadQuiz('static/json/reading07.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `reading07/answers.json` file. You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To test your quiz, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking reading07 quiz ...
+            Q1 1.00
+         Score 1.00 / 1.00
+        Status Success
+
+  ### Script: `odds.py` (3 Points)
+
+  The `odds.py` script has four implementations of an `odds` function that
+  processes a stream of input and returns a sequence of only the odd numbers.
+  The first implementation, called `odds`, is provided to you:
+
+      :::python
+      def odds(stream=sys.stdin) -> list[int]:
+          results = []
+          for line in stream:
+              number = int(line)
+              if number % 2:
+                  results.append(number)
+          return results
+
+  Your task is to implement the three other versions of the same `odds`
+  function:
+
+  1. `odds_fp(stream=sys.stdin) -> Iterator[int]`
+
+      > This function uses [map], [filter], and a [lambda] expression to
+      produce a sequence of only the odd numbers from `stream`.
+
+  2. `odds_lc(stream=sys.stdin) -> list[int]`
+
+      > This function uses a [list comprehension] to produce a sequence of only
+      the odd numbers from `stream`.
+
+  3. `odds_gr(stream=sys.stdin) -> Iterator[int]`
+
+      > This function uses [yield] to generate a sequence of only the odd
+      numbers from `stream`.
+
+  #### Testing
+
+  As you implement `odds.py`, you can use the provided [doctests] to verify the
+  correctness of your code:
+
+      :::bash
+      # Run doctests
+      $ python3 -m doctest odds.py -v
+      2 items had no tests:
+          odds
+          odds.main
+      4 items passed all tests:
+         1 tests in odds.odds
+         1 tests in odds.odds_fp
+         1 tests in odds.odds_gr
+         1 tests in odds.odds_lc
+      4 tests in 6 items.
+      4 passed and 0 failed.
+      Test passed.
+
+  You can also use `make` to run both the [doctests] and the [unit tests]:
+
+      :::bash
+      # Run unit tests (and doctests)
+      $ make test
+      Testing Odds ...
+      test_00_doctest (__main__.OddsTest) ... ok
+      test_01_mypy (__main__.OddsTest) ... ok
+      test_02_odds_fp (__main__.OddsTest) ... ok
+      test_03_odds_lc (__main__.OddsTest) ... ok
+      test_04_odds_gr (__main__.OddsTest) ... ok
+      test_05_main_fp (__main__.OddsTest) ... ok
+      test_06_main_lc (__main__.OddsTest) ... ok
+      test_07_main_gr (__main__.OddsTest) ... ok
+
+         Score 3.00 / 3.00
+        Status Success
+
+      ----------------------------------------------------------------------
+      Ran 8 tests in 3.407s
+
+      OK
+
+  To just run the [unit tests], you can do the following:
+
+      :::bash
+      # Run unit tests
+      $ ./odds.test -v
+      ...
+
+  [map]: https://docs.python.org/3/library/functions.html#map
+  [filter]: https://docs.python.org/3/library/functions.html#filter
+  [lambda]: https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions
+  [list comprehension]: https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
+  [list comprehensions]: https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
+  [generator]: https://docs.python.org/3/howto/functional.html#generators
+  [yield]: https://docs.python.org/3/reference/simple_stmts.html#yield
+  [doctests]: https://docs.python.org/3/library/doctest.html
+  [unit tests]: https://en.wikipedia.org/wiki/Unit_testing
+
+  ## Submission
+
+  To submit you work, follow the same process outlined in [Reading 01]:
+
+      :::bash
+      #--------------------------------------------------
+      # Make sure you have already completed Preparation
+      #--------------------------------------------------
+      ...
+      $ git add answers.json                # Mark changes for commit
+      $ git commit -m "Reading 07: Quiz"    # Record changes
+      ...
+      $ git add Makefile                    # Mark changes for commit
+      $ git add odds.py                     # Mark changes for commit
+      $ git commit -m "Reading 07: Scripts" # Record changes
+      ...
+      $ git push -u origin reading07        # Push branch to GitHub
+
+  <div class="alert alert-danger" markdown="1">
+  #### <i class="fa fa-github"></i> Pull Request
+  Remember to create a **Pull Request** and assign the appropriate TA from the
+  [Reading 07 TA List].
+
+  **DO NOT MERGE** your own **Pull Request**.  The TAs use open **Pull Requests**
+  to keep track of which assignments to grade.  Closing them yourself will
+  cause a delay in grading and confuse the TAs.
+  </div>
+
+  [re.findall]: https://docs.python.org/3/library/re.html#re.findall
+  [requests]: https://requests.readthedocs.io/en/master/
+  [Python]: https://www.python.org/
+  [lists]: https://docs.python.org/3/library/stdtypes.html#sequence-types-list-tuple-range
+  [dictionaries]: https://docs.python.org/3/library/stdtypes.html#mapping-types-dict
+  [Cooperative Computing Lab]: http://ccl.cse.nd.edu/
+
+  [Markdown]: https://daringfireball.net/projects/markdown/
+  [git]: https://git-scm.com/
+  [clone]: https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]: https://git-scm.com/docs/git-push
+  [GitHub]: https://github.com
+  [Reading 01]: reading01.html
+  [Reading 07 TA List]: reading07_tas.html
+  [dredd]: https://dredd.h4x0r.space
+  [Reading 07 Quiz]: static/json/reading07.json
+  [JSON]: https://json.org/
+
+  [The Linux Command Line]: http://linuxcommand.org/tlcl.php
+  [Unix]: https://en.wikipedia.org/wiki/Unix
+  [Unix Shell]: https://en.wikipedia.org/wiki/Unix_shell
+  [Git]: https://git-scm.com/
+  [Bash]: https://www.gnu.org/software/bash/
+  [shell scripting]: https://en.wikipedia.org/wiki/Shell_script
+  [Makefile]: https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading07/Makefile
