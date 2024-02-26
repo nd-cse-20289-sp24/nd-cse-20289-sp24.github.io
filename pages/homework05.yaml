@@ -500,7 +500,7 @@ body:       |
       in [sorted] by specifying a `key` function:
 
           :::python
-          sorted(results, key=lambda r: r['score'], reversed=True)
+          sorted(results, key=lambda r: r['score'], reverse=True)
 
       The code above would return a sequence of results ordered by `score`
       in **descending** order.
