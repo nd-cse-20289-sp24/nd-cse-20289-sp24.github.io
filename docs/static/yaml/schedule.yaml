@@ -192,6 +192,9 @@
 
       - date:           Fri 03/01
         topics:         Functional Programming
+        items:
+          - name:       Slides 13
+            link:       https://docs.google.com/presentation/d/1WD3WBZskn93t7ib81yu9ccvwDweCIUdQ1MbLp4Andis/edit?usp=sharing
 
       - date:           Sat 03/02
         topics:         NameZ, SearX
@@ -202,6 +205,10 @@
       - date:           Mon 03/04
         topics:         Iterators, Generators
         assignment:     Reading 07
+        items:
+          - name:       Slides 14
+            link:       https://docs.google.com/presentation/d/1_Wkdwc9CaOyIpR7nyR2ocV8YD94moSkKFn9ILMIjiE8/edit?usp=sharing
+
 
       - date:           Wed 03/06
         topics:         Parallel Computing
