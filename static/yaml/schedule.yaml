@@ -212,6 +212,9 @@
 
       - date:           Wed 03/06
         topics:         Parallel Computing
+        items:
+          - name:       Slides 15
+            link:       https://docs.google.com/presentation/d/1bHJjf9T_O1lJjKBBYq5_5RaZyn5NjJMts0ianxdRVvM/edit?usp=sharing
 
       - date:           Fri 03/08
         topics:         Server-Side Programming
