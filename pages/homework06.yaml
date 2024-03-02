@@ -1,0 +1,582 @@
+title:      "Homework 06: Miles"
+icon:       fa-code
+navigation:
+- name: "Home"
+  link: "index.html"
+  icon: "fa-linux"
+internal:
+external:
+body:       |
+
+  The goal of this homework assignment is to allow you to practice using
+  [functional programming] to process data in [Python]. In this assignment, you
+  will write a script a small [web crawler] that uses [regular expressions] to
+  extract links to media files such as [JPGs], [PNGs], [PDFs], and [MP3s], and
+  then downloads them concurrently using a [process pool].
+
+  <div class="thumbnail text-center">
+  <img src="static/img/homework06-miles.png" class="img-responsive">
+  </div>
+
+  By using [functional programming] to structure your application in a
+  [concurrent] manner, you will be able to take advantage of multiple CPU cores
+  to execute the program in [parallel].
+
+  For this assignment, record your scripts and any responses to the following
+  activities in the `homework06` folder of your **assignments** [GitHub]
+  repository and push your work by **noon Saturday, March 9**.
+
+  [Python]: https://www.python.org/
+  [data structures]: https://en.wikipedia.org/wiki/Data_structure
+  [list]: https://docs.python.org/3/tutorial/datastructures.html#more-on-lists
+  [lists]: https://docs.python.org/3/tutorial/datastructures.html#more-on-lists
+  [dicts]: https://docs.python.org/3/tutorial/datastructures.html#dictionaries
+  [dict]: https://docs.python.org/3/tutorial/datastructures.html#dictionaries
+
+  [functional programming]: https://en.wikipedia.org/wiki/Functional_programming
+  [web crawler]: https://en.wikipedia.org/wiki/Web_crawler
+  [regular expression]: https://en.wikipedia.org/wiki/Regular_expression
+  [regular expressions]: https://en.wikipedia.org/wiki/Regular_expression
+  [JPGs]: https://en.wikipedia.org/wiki/JPEG
+  [PNGs]: https://en.wikipedia.org/wiki/PNG
+  [PDFs]: https://en.wikipedia.org/wiki/PDF
+  [MP3s]: https://en.wikipedia.org/wiki/MP3
+  [concurrent]: https://en.wikipedia.org/wiki/Concurrency_(computer_science)
+  [parallel]: https://en.wikipedia.org/wiki/Parallel_computing
+  [process pool]: https://docs.python.org/3/library/concurrent.futures.html#processpoolexecutor
+
+  ## Activity 0: Preparation
+
+  Before starting this homework assignment, you should first perform a `git
+  pull` to retrieve any changes in your remote [GitHub] repository:
+
+      :::bash
+      $ cd path/to/repository                   # Go to assignments repository
+
+      $ git switch master                       # Make sure we are in master branch
+
+      $ git pull --rebase                       # Get any remote changes not present locally
+
+  Next, create a new branch for this assignment:
+
+      :::bash
+      $ git checkout -b homework06              # Create homework06 branch and check it out
+
+  ### Task 1: Skeleton Code
+
+  To help you get started, the instructor has provided you with the following **skeleton code**:
+
+      ::bash
+      # Go to homework06 folder
+      $ cd homework06
+
+      # Download Makefile
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework06/Makefile
+
+      # Download Python skeleton code
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework06/miles.py
+
+  Once downloaded, you should see the following files in your `homework06` directory:
+
+      :::bash
+      homework06
+          \_ Makefile       # This is the Makefile building all the assignment artifacts
+          \_ miles.py       # This is the Python script for the miles script
+
+  <div class="alert alert-warning" markdown="1">
+  #### <i class="fa fa-warning"></i> DocTests
+
+  You may notice that in addition to the usual comments and `TODOs`, the
+  [docstrings] of each method also contains a few [doctests].
+
+  You are **not** to modify these [doctests] and must keep them in-place. They
+  are used to verify the correctness of your code.
+
+  Your code goes **below** the [docstrings], where the `TODO` and `pass`
+  commands are (you may remove the pass once you complete the method).
+
+  </div>
+
+  [docstrings]: https://peps.python.org/pep-0257/
+  [doctests]: https://docs.python.org/3/library/doctest.html
+  [unit test]: https://en.wikipedia.org/wiki/Unit_testing
+  [unit tests]: https://en.wikipedia.org/wiki/Unit_testing
+
+  ### Task 2: Initial Import
+
+  Now that the files are downloaded into the `homework06` folder, you can
+  **commit** them to your [git] repository:
+
+      :::bash
+      $ git add Makefile                            # Mark changes for commit
+      $ git add *.py
+      $ git commit -m "Homework 06: Initial Import" # Record changes
+
+  ### Task 3: Unit Tests
+
+  After downloading these files, you can run the `make` command to run the
+  tests.
+
+      :::bash
+      # Run all tests (will trigger automatic download)
+      $ make
+
+  You will notice that the Makefile downloads these additional test data and scripts:
+
+      :::bash
+      homework06
+          \_ miles.test           # This is the Python test for the miles script
+
+  In addition to the embedded [doctests] in the **skeleton code**, you will be
+  using these [unit tests] to verify the correctness and behavior of your code.
+
+  <div class="alert alert-info" markdown="1">
+  #### <i class="fa fa-download"></i> Automatic Downloads
+
+  The `test` scripts are automatically downloaded by the `Makefile`, so any
+  modifications you do to them will be lost when you run `make` again. Likewise,
+  because they are automatically downloaded, you do not need to `add` or `commit`
+  them to your [git] repository.
+
+  </div>
+
+  The details on what you need to implement for this assignment are described
+  in the following sections.
+
+  <div class="alert alert-success" markdown="1">
+  #### <i class="fa fa-question"></i> Frequently Asked Questions
+
+  <div class="text-center">
+  <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vSQYtJQK00NXdZJPwuEyO3v3hoI7kV4TC1_c3nKMUGg0ydGLw8mLebly5pR59Yjx8r4qAMtkCvfhMsz/embed?start=false&loop=false&delayms=3000" frameborder="0" width="480" height="389" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+  </div>
+
+  </div>
+
+  ## Activity 1: Miles (10 Points)
+
+  For the first activity, you are to write a script called `miles.py`, which
+  acts a small [web crawler] that does the following:
+
+  1. **Extract URLs**: `miles.py` will scan a given website for specified media
+    files such as [JPGs], [MP3s], [PDFs], and [PNGs] using [regular
+    expressions].
+
+  2. **Process Pool**: `miles.py` will take advantage of [functional
+    programming] and a [process pool] to distribute the found media files to
+    multiple [processes].
+
+  3. **Download URLs**: `miles.py` will download the found media files
+    concurrently to a destination folder.
+
+  With this script, you can **crawl** a website and **extract** any interesting
+  media assets in parallel!
+
+      :::bash
+      # Display usage
+      $ ./miles.py
+      Usage: miles.py [-d DESTINATION -n CPUS -f FILETYPES] URL
+
+      Crawl the given URL for the specified FILETYPES and download the files to the
+      DESTINATION folder using CPUS cores in parallel.
+
+          -d DESTINATION      Save the files to this folder (default: .)
+          -n CPUS             Number of CPU cores to use (default: 1)
+          -f FILETYPES        List of file types: jpg, mp3, pdf, png (default: all)
+
+      Multiple FILETYPES can be specified in the following manner:
+
+          -f jpg,png
+          -f jpg -f png
+
+      # Download jpg and pngs from course website to downloads destination folder using 4 CPUs
+      $ ./miles.py -d downloads -f jpg,png -n 4 https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/
+      Downloading https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/img/tlcl.jpg...
+      Downloading https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/img/ostep.jpg...
+      Downloading https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/img/logo.png...
+      Downloading https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/img/automate.png...
+      Files Downloaded: 4
+      Bytes Downloaded: 0.23 MB
+      Elapsed Time:     0.43 s
+      Bandwidth:        0.54 MB/s
+
+  The `miles.py` script takes the following possible arguments:
+
+  - `-d`: This allows the user to set the `DESTINATION` folder where it should
+    save downloaded media files.  If this directory does not exist, then the
+    script should create it.
+
+  - `-n`: This allows the user to set the number of `CPUs` (ie. [processes]) to
+    use when downloading the media files concurrently.
+
+  - `-f`: This allows the user to set which `FILETYPES` to extract.  The script
+    must support: [JPGs], [MP3s], [PDFs], and [PNGs].  If no `FILETYPES` are
+      specified, then all of them will be extracted.
+
+  After these flags, the remaining argument is the `URL` to crawl.
+
+  <div class="alert alert-danger" markdown="1">
+
+  If an unsupported flag is specified, or if no `URL` is given, then `miles.py`
+  should print out the **usage** message and exit with **failure**.
+
+  </div>
+
+  [processes]: https://en.wikipedia.org/wiki/Process_(computing)
+  
+  ### Task 1: `miles.py`
+
+  To implement the `miles.py` [Python] script, you will need to complete the
+  following functions:
+
+  1. `resolve_url(base: str, url: str) -> str`
+
+      > This function **resolves** a `url` given a `base` URL.
+
+      > Many websites will utilize *relative* URLs such as
+      `static/img/homework06-miles.png`.  These *relative* URLs need to be
+      expanded or *resolved* to *absolute* URLs given a *base*.  
+
+      > For instance, the *relative* URL `static/img/homework06-miles.png` on
+      this page should resolve to
+      `https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/img/homework06-miles.png`
+      since the *base* is
+      `https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/homework06.html`
+
+      <div class="alert alert-success" markdown="1">
+
+      **Hint**:  You can use [urllib.parse.urljoin] with the `base` if the
+      given `url` is not already an *absolute* URL (ie. has `://`).
+
+      <div>
+
+  2. `extract_urls(url: str, file_types: list[str]) -> Iterator[str]`
+
+      > This function extracts the urls of the specified `file_types` from the
+      given `url` and `yields` them one at a time.
+
+      > To implement this function you will need to fill in the `FILE_REGEX`
+      [dict] at the top of the script.  This [dict] should hold a mapping from
+      `file_type` to a list of [regular expressions] that can be used with
+      [re.findall] to extract the **URL** corresponding to the media type.
+
+      <div class="alert alert-success" markdown="1">
+
+      **Hints**:
+
+      - Use `requests.get` to retrieve the [HTML] of the given `url`.  Be sure
+        to check for any errors.
+
+      - Use [re.findall] with the appropriate `file_types` [regular
+        expressions] on the contents of the response to find the corresponding
+        medial URLs.
+      
+      - You must support the following patterns:
+
+          <table class="table" markdown="1">
+          <thead>
+            <th>File Type</th>
+            <th>Patterns</th>
+          </thead>
+          <tbody markdown="1">
+            <tr>
+            <tr markdown="1">
+            <td>JPG</td>
+            <td markdown="1">`<img src="path.jpg">`, `<a href="path.jpg">`<td>
+            </tr>
+            <tr markdown="1">
+            <td>MP3</td>
+            <td markdown="1">`<audio src="path.mp3">`, `<a href="path.mp3">`<td>
+            </tr>
+            <tr markdown="1">
+            <td>PDF</td>
+            <td markdown="1">`<a href="path.pdf">`<td>
+            </tr>
+            <tr markdown="1">
+            <td>PNG</td>
+            <td markdown="1">`<img src="path.png">`, `<a href="path.png">`<td>
+            </tr>
+          </tbody>
+          </table>
+
+          Your [regular expressions] will need account of variations in spaces
+          and different [HTML] attributes, as well as the presence or absence of
+          quotes around the URL.
+
+          Here is an example [regular expression] for the [PDFs]:
+
+              :::python
+              r'<a.*href="?([^\" ]+.pdf)'
+
+      - Use `yield` with `resolve_url` to generate *absolute* URLs.
+
+      </div>
+
+  3. `download_url(url: str, destination: str=DESTINATION) -> Optional[str]`
+
+      > This function downloads the media asset specified by `url` to the
+      `destination` directory and returns the path to this new file.
+
+      <div class="alert alert-success" markdown="1">
+
+      **Hints**:
+
+      - Use `requests.get` to retrieve the **contents** of the given `url`.  Be
+        sure to check for any errors.
+
+      - Use [os.path.basename] to get the name of the file based on the `url`
+        and create a new path with [os.path.join] with the `destination` and
+        this name.
+
+      - Using `with` and [open] in *write* and *binary* mode to create the file
+        you wish to store the contents of the response into.
+
+  4. `crawl(url: str, file_types: list[str], destination: str=DESTINATION, cpus: int=CPUS) -> None`
+
+      > This function *crawls* the specified `url` by extracting the urls for
+      the specified `file_types` and then uses a [process pool] to download the
+      found media assets concurrently to the `destination` folder using
+      multiple `cpus`.
+
+      > At the end of the function, it will print out the following information:
+      >
+      > 1. The number of files successfully downloaded.
+      > 2. The number of bytes downloaded to the destination folder (`megabytes`).
+      > 3. The elapsed time required to crawl the site (`seconds`).
+      > 4. The estimated bandwidth based on the bytes downloaded and the elapsed time (`MB/s`).
+
+      <div class="alert alert-success" markdown="1">
+
+      **Hints**:
+
+      - Use [time.time] to create timestamps to keep track of your start and end times.
+
+      - Use [concurrent.futures.ProcessPoolExecutor] to create a [process pool].
+
+      - Use [os.stat] get the size of each of the downloaded files in `destination`
+
+      See the **FAQ** slides for a more extensive outline and example of how to
+      use the `map` function in the [concurrent.futures.ProcessPoolExecutor].
+
+      </div>
+
+  5. `main(arguments=sys.argv[1:]) -> None`
+
+      > This function processes the command line `arguments`, crawls the given
+      `URL` for the specified `FILETYPES`, and downloads the found media assets
+      to the `DESTINATION` folder using `CPUs` processes.
+      
+      <div class="alert alert-success" markdown="1">
+      **Hints**: Use [os.path.exists] to check if the `DESTINATION` exists and
+        use [os.makedirs] if it does not.
+      </div>
+
+  [urllib.parse.urljoin]: https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urljoin
+  [re.findall]: https://docs.python.org/3/library/re.html#re.findall
+  [HTML]: https://en.wikipedia.org/wiki/HTML
+  [requests.get]: https://requests.readthedocs.io/en/latest/user/quickstart/#response-content
+  [os.path.basename]: https://docs.python.org/3/library/os.path.html#os.path.basename
+  [os.path.join]: https://docs.python.org/3/library/os.path.html#os.path.join
+  [open]: https://docs.python.org/3/library/functions.html#open
+  [time.time]: https://docs.python.org/3/library/time.html#time.time
+  [concurrent.futures.ProcessPoolExecutor]: https://docs.python.org/3/library/concurrent.futures.html#processpoolexecutor
+  [os.stat]: https://docs.python.org/3/library/os.html#os.stat
+  [os.path.exists]: https://docs.python.org/3/library/os.path.html#os.path.exists
+  [os.makedirs]: https://docs.python.org/3/library/os.html#os.makedirs
+
+  ### Task 2: Testing
+
+  As you implement `miles.py`, you can use the provided [doctests] to verify the
+  correctness of your code:
+
+      :::bash
+      # Run doctests
+      $ python3 -m doctest miles.py -v
+      ...
+      2 items had no tests:
+          miles
+          miles.usage
+      5 items passed all tests:
+         4 tests in miles.crawl
+         6 tests in miles.download_url
+         3 tests in miles.extract_urls
+         4 tests in miles.main
+         3 tests in miles.resolve_url
+      20 tests in 7 items.
+      20 passed and 0 failed.
+      Test passed.
+
+  You can also use `make` to run both the [doctests] and the [unit tests]:
+
+      :::bash
+      # Run unit tests (and doctests)
+      $ make test-miles
+      Testing miles...
+      test_00_doctest (__main__.MilesTest) ... ok
+      test_01_mypy (__main__.MilesTest) ... ok
+      test_02_resolve_url (__main__.MilesTest) ... ok
+      test_03_extract_urls (__main__.MilesTest) ... ok
+      test_04_download_url (__main__.MilesTest) ... ok
+      test_05_crawl_single (__main__.MilesTest) ... ok
+      test_06_crawl_multi (__main__.MilesTest) ... ok
+      test_07_main_usage (__main__.MilesTest) ... ok
+      test_08_main_destination_filetypes (__main__.MilesTest) ... ok
+      test_09_main_destination_filetypes_cpus (__main__.MilesTest) ... ok
+      test_10_script_strace (__main__.MilesTest) ... ok
+
+         Score 10.00 / 10.00
+        Status Success
+
+      ----------------------------------------------------------------------
+      Ran 11 tests in 30.277s
+
+      OK
+
+  To just run the [unit tests], you can do the following:
+
+      :::bash
+      # Run unit tests
+      $ ./miles.test -v
+      ...
+
+  To run a specific [unit test], you can specify the **method name**:
+
+      :::bash
+      # Run only mypy unit test
+      $ ./miles.test -v milesTest.test_01_mypy
+      ...
+
+  To manually check your types, you can use [mypy]:
+
+      :::bash
+      # Run mypy to check types
+      $ mypy miles.py
+
+  ## Activity 3: Quiz (1 Point)
+
+  Once you have completed all the activities above, you are to complete the
+  following **reflection quiz**:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+  <script>
+  loadQuiz('static/json/homework06.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `homework06/answers.json` file.  You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To test your quiz, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking homework06 quiz ...
+           Q01 0.20
+           Q02 0.20
+           Q03 0.10
+           Q04 0.20
+           Q05 0.30
+         Score 1.00 / 1.00
+        Status Success
+
+  ## Guru Point (1 Extra Credit Point)
+  
+  For extra credit, you are to make your own **personal website** such as:
+
+  - [Steven Conaway](https://stevenconaway.me/)
+  - [Daniel Blittschau](https://dblitt.com/)
+  - [Mayleen Liu](https://mayleenliu.com/)
+  - [Josh Chun](https://jchun.me/)
+
+  To do so, you can use a platform such as [GitHub Pages] or use resources from
+  the [GitHub Student Developer Pack] (which includes cloud and domain name
+  credits).
+
+  <div class="alert alert-info" markdown="1">
+  #### <i class="fa fa-check"></i> Verification
+
+  To get credit for this Guru Point, share the link to your **personal
+  website** to a TA to verify. You have up until a week **after** this
+  assignment is due to verify your Guru Point.
+
+  </div>
+
+  <div class="alert alert-success" markdown="1">
+  #### <i class="fa fa-calendar"></i> Self-Service Extension
+
+  Remember that you can always **forgo** this Guru Point for **two extra days**
+  to do the homework.  That is, if you need an extension, you can simply skip
+  the Guru Point and you will automatically have until **Monday** to complete
+  the assignment for full credit.
+
+  Just leave a note on your **Pull Request** of your intentions.
+
+  </div>
+
+  [GitHub Pages]: https://pages.github.com/
+  [GitHub Student Developer Pack]: https://education.github.com/pack
+
+  ## Submission (11 Points)
+
+  To submit your assignment, please commit your work to the `homework06` folder
+  of your `homework06` branch in your **assignments** [GitHub] repository.
+  Your <tt>homework06</tt> folder should **only** contain the following files:
+
+  - <tt>Makefile</tt>
+  - <tt>answers.json</tt>
+  - <tt>miles.py</tt>
+
+  <div class="alert alert-info" markdown="1">
+  **Note**: You do not need to commit the test scripts because the `Makefile`
+  automatically downloads them.
+  </div>
+
+      :::bash
+      #-----------------------------------------------------------------------
+      # Make sure you have already completed Activity 0: Preparation
+      #-----------------------------------------------------------------------
+      ...
+      $ git add miles.py                                    # Mark changes for commit
+      $ git commit -m "Homework 06: Activity 1 completed"   # Record changes
+      ...
+      $ git add answers.json                                # Mark changes for commit
+      $ git commit -m "Homework 06: Activity 2 completed"   # Record changes
+      ...
+      $ git push -u origin homework06                       # Push branch to GitHub
+
+  <div class="alert alert-danger" markdown="1">
+  #### <i class="fa fa-github"></i> Pull Request
+
+  Remember to create a **Pull Request** and assign the appropriate TA from the
+  [Reading 07 TA List].
+
+  **DO NOT MERGE** your own **Pull Request**.  The TAs use open **Pull
+  Requests** to keep track of which assignments to grade.  Closing them
+  yourself will cause a delay in grading and confuse the TAs.
+
+  </div>
+
+  [Markdown]:   https://daringfireball.net/projects/markdown/
+  [git]:    https://git-scm.com/
+  [clone]:  https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]:   https://git-scm.com/docs/git-push
+  [branching]:   https://git-scm.com/docs/git-branch
+  [code review]: https://en.wikipedia.org/wiki/Code_review
+  [GitHub]: https://github.com
+  [Linux]:  https://kernel.org
+  [branch]: https://git-scm.com/docs/git-branch
+  [add]:    https://git-scm.com/docs/git-add
+  [Reading 01]:         reading01.html
+  [Reading 07 TA List]: reading07_tas.html
+  [curl]:   http://man7.org/linux/man-pages/man1/curl.1.html
+  [wget]:   http://man7.org/linux/man-pages/man1/wget.1.html
+  [JSON]:   https://json.org/
+  [ESC]:    https://esc.nd.edu/
+  [mypy]:   https://mypy-lang.org/
+
