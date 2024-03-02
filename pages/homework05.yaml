@@ -42,7 +42,7 @@ body:       |
   Next, create a new branch for this assignment:
 
       :::bash
-      $ git checkout -b homework05              # Create homework04 branch and check it out
+      $ git checkout -b homework05              # Create homework05 branch and check it out
 
   ### Task 1: Skeleton Code
 
