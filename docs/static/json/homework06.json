@@ -1,0 +1,50 @@
+{
+    "q01": {
+        "type": "multiple",
+        "question": "\n<p>In the previous two homework assignments, you needed to convert a a\nstring containing numbers separated by commas into a sequence of integers\nas part of your command line parsing.  Given a string <tt>data =\n\"9,2,8,6,7\"</tt>, how would you convert <tt>data</tt> into a <b>sequence of\nindividual integers</b> using <b>functional programming</b> or <b>list\ncomprehensions</b> (select all that apply)?</p>\n",
+        "responses": {
+            "a": "<tt>map(int, data.split(','))</tt>",
+            "b": "<tt>int(data.split(','))</tt>",
+            "c": "<tt>map(data.split(','), lambda d: int(d))</tt>",
+            "d": "<tt>[int(d) for d in ','.split(data)]</tt>",
+            "e": "<tt>[int(d) for d in data.split(',')]</tt>",
+            "f": "<tt>[for d in data.split(',') int(d)]</tt>"
+        }
+    },
+    "q02": {
+        "type": "multiple",
+        "question": "\n<p>In this homework assignment, the sequence of paths produced by\n<tt>map(download_url, ...)</tt> may contain invalid paths (ie.\n<tt>None</tt>) if the <tt>url</tt> cannot be downloaded.  Given the\nfollowing sequence, <tt>downloads = map(download_url, ...)</tt>, how would\nyou produce a new sequence with <b>only valid paths</b> using <b>functional\nprogramming</b> or <b>list comprehensions</b> (select all that apply)?</p>\n",
+        "responses": {
+            "a": "<tt>map(lambda path: path, downloads)</tt>",
+            "b": "<tt>filter(lambda path: path, downloads)</tt>",
+            "c": "<tt>filter(map(lambda path: path, downloads))</tt>",
+            "d": "<tt>[path for path in downloads if path]</tt>",
+            "e": "<tt>[path for path in downloads]</tt>",
+            "f": "<tt>[for path in downloads path if path]</tt>"
+        }
+    },
+    "q03": {
+        "type": "single",
+        "question": "\n<p>Looking at the <b>doctest</b> for <tt>extract_urls</tt>, you notice the\nfollowing code: <tt>len(list(extract_urls(url, ['jpg'])))</tt>.  Is it\nnecessary to call <tt>list</tt> over the result of <tt>extract_urls</tt>\nbefore calling <tt>len</tt> to get the number of items in the sequence?</p>\n",
+        "responses": {
+            "a": "No, <tt>extract_urls</tt> returns a <tt>list</tt>.",
+            "b": "No, <tt>len(extract_urls(...))</tt> would also work.",
+            "c": "Yes, because <tt>len</tt> only works on <tt>lists</tt>.",
+            "d": "Yes, <tt>extract_urls</tt> is a <b>generator</b>."
+        }
+    },
+    "q04": {
+        "type": "blank",
+        "question": "\n<p>Use your <tt>miles.py</tt> script on the following URL:</p>\n\n<pre>https://stories.nd.edu/series/virtual-connections/zoom-backgrounds/</pre>\n\n<ol>\n<li>How many <b>files</b> are <b>downloaded</b>? ____</li>\n<li>How many <b>bytes</b> are <b>downloaded</b>? ____ MB</li>\n</ol>\n"
+    },
+    "q05": {
+        "type": "multiple",
+        "question": "\n<p>Which of the following statements regarding <b>concurrency</b> and\n<b>parallelism</bb> in <tt>miles.py</tt> are true (select all that\napply)?</p>\n",
+        "responses": {
+            "serial": "<tt>miles.py</tt> is inherently <b>serial</b>.",
+            "embarrassingly": "<tt>miles.py</tt> is an <b>embarrassingly parallel</b> problem.",
+            "task": "<tt>miles.py</tt> exhibits <b>task parallelism</b>.",
+            "data": "<tt>miles.py</tt> exhibits <b>data parallelism</b>."
+        }
+    }
+}

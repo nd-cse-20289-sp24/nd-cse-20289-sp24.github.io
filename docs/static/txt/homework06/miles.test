@@ -1,0 +1,293 @@
+#!/usr/bin/env python3
+
+import doctest
+import hashlib
+import itertools
+import io
+import json
+import math
+import mypy.api
+import os
+import re
+import subprocess
+import tempfile
+import unittest
+import unittest.mock
+
+import miles
+
+# Unit Tests
+
+class MilesTest(unittest.TestCase):
+    Total    = 10.0
+    Points   = 0
+
+    @classmethod
+    def setupClass(cls):
+        cls.Points = 0
+
+    @classmethod
+    def tearDownClass(cls):
+        print()
+        print(f'   Score {cls.Points:.2f} / {cls.Total:.2f}')
+        print(f'  Status {"Success" if math.isclose(cls.Points, cls.Total) else "Failure"}')
+
+    def test_00_doctest(self):
+        failures, tests = doctest.testmod(miles, verbose=False)
+        self.assertEqual(failures, 0)
+        self.assertEqual(tests, 20)
+        MilesTest.Points += 0.5
+
+    def test_01_mypy(self):
+        _, _, exit_status = mypy.api.run(['miles.py'])
+        self.assertTrue(exit_status == 0)
+        MilesTest.Points += 0.5
+
+    def test_02_resolve_url(self):
+        base = 'https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/'
+        self.assertEqual(
+            miles.resolve_url(base, 'static/img/tlcl.jpg'),
+            'https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/img/tlcl.jpg'
+        )
+        MilesTest.Points += 0.25
+
+        base = 'https://ndlug.org/posts/2021-11-17-ricing-unix.html'
+        self.assertEqual(
+            miles.resolve_url(base, '../assets/img/rice-pop-1.png'),
+            'https://ndlug.org/assets/img/rice-pop-1.png'
+        )
+        MilesTest.Points += 0.25
+
+        base = 'https://yld.me/raw/ctwt.png'
+        self.assertEqual(
+            miles.resolve_url(base, base),
+            base
+        )
+        MilesTest.Points += 0.25
+
+    def test_03_extract_urls(self):
+        url = 'https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/'
+        extracted = miles.extract_urls(url, ['jpg', 'png'])
+        expected  = [
+            'https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/img/tlcl.jpg',
+            'https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/img/ostep.jpg',
+            'https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/img/logo.png',
+            'https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/img/automate.png',
+        ]
+        for url_a, url_b in itertools.zip_longest(extracted, expected):
+            self.assertEqual(url_a, url_b)
+        MilesTest.Points += 0.5
+
+        url = 'https://www3.nd.edu/~pbui/research/publications.html'
+        extracted = miles.extract_urls(url, ['pdf'])
+        expected  = [
+            'http://www3.nd.edu/~pbui/static/pdf/obelisk-mics2015.pdf',
+            'http://www3.nd.edu/~pbui/static/pdf/widle-mics2015.pdf',
+            'http://www3.nd.edu/~pbui/static/pdf/darknebula-mics2014.pdf',
+            'http://www3.nd.edu/~pbui/static/pdf/dsabr-mics2014.pdf',
+            'http://www3.nd.edu/~pbui/static/pdf/dcur-cluster2013.pdf',
+            'http://www3.nd.edu/~pbui/static/pdf/dp3-mics2013.pdf',
+            'http://www3.nd.edu/~pbui/static/pdf/transcoding-mics2013.pdf',
+            'http://ccl.cse.nd.edu/research/papers/makeflow-sweet12-camera.pdf',
+            'http://ccl.cse.nd.edu/research/papers/pbui-dissertation.pdf',
+            'http://ccl.cse.nd.edu/research/papers/makeflow-sweet12-camera.pdf',
+            'http://ccl.cse.nd.edu/research/papers/wq-python-pyhpc2011.pdf',
+            'http://ccl.cse.nd.edu/research/papers/adapting-ecmls11.pdf',
+            'http://cse.nd.edu/Reports/2011/TR-2011-02.pdf',
+            'http://ccl.cse.nd.edu/research/papers/chirp+parrot+hdfs.pdf',
+            'http://ccl.cse.nd.edu/research/papers/taming-works10.pdf',
+            'http://ccl.cse.nd.edu/research/pubs/roars-didc.pdf',
+            'http://ccl.cse.nd.edu/research/pubs/weaver-clade2010.pdf',
+            'http://www3.nd.edu/~pbui/static/pdf/performance-gpgpu2.pdf',
+        ]
+        for url_a, url_b in itertools.zip_longest(extracted, expected):
+            self.assertEqual(url_a, url_b)
+        MilesTest.Points += 0.5
+
+        url = 'https://yld.me/raw/aAZy.html'
+        extracted = miles.extract_urls(url, ['mp3'])
+        expected  = [
+            'https://lofigirl.com/wp-content/uploads/2024/01/1.-i_m-alone-out-here-ft.-Outgrown-master.mp3',
+            'https://lofigirl.com/wp-content/uploads/2024/01/2.-aurora-ft.-Outgrown-master.mp3',
+            'https://lofigirl.com/wp-content/uploads/2024/01/3.-dusk-master.mp3',
+            'https://lofigirl.com/wp-content/uploads/2024/01/4.-aria-ft.-after-noon-master.mp3',
+            'https://lofigirl.com/wp-content/uploads/2024/01/5.-dreamscape-ft.-Luke-Tidbury-master.mp3',
+        ]
+        for url_a, url_b in itertools.zip_longest(extracted, expected):
+            self.assertEqual(url_a, url_b)
+        MilesTest.Points += 0.5
+
+    def test_04_download_url(self):
+        with tempfile.TemporaryDirectory() as destination:
+            with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+                url  = 'https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/img/ostep.jpg'
+                path = miles.download_url(url, destination)
+
+            self.assertEqual(os.path.basename(path), 'ostep.jpg')
+            self.assertEqual(os.path.dirname(path), destination)
+            self.assertEqual(
+                output.getvalue(),
+                'Downloading https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/img/ostep.jpg...\n'
+            )
+            with open(path, 'rb') as data:
+                self.assertEqual(
+                    hashlib.sha1(data.read()).hexdigest(),
+                    '9a440c13cd0600843880c53d181ad8477f313f62'
+                )
+        MilesTest.Points += 0.5
+
+        with tempfile.TemporaryDirectory() as destination:
+            with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+                url  = 'http://www3.nd.edu/~pbui/static/pdf/performance-gpgpu2.pdf'
+                path = miles.download_url(url, destination)
+
+            self.assertEqual(os.path.basename(path), 'performance-gpgpu2.pdf')
+            self.assertEqual(os.path.dirname(path), destination)
+            self.assertEqual(
+                output.getvalue(),
+                'Downloading http://www3.nd.edu/~pbui/static/pdf/performance-gpgpu2.pdf...\n'
+            )
+            with open(path, 'rb') as data:
+                self.assertEqual(
+                    hashlib.sha1(data.read()).hexdigest(),
+                    '128b38c6625dcf508fb155ddb11210d8fd4d9689'
+                )
+        MilesTest.Points += 0.5
+
+        with tempfile.TemporaryDirectory() as destination:
+            with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+                url  = 'http://www3.nd.edu/~pbui/fake.url'
+                path = miles.download_url(url, destination)
+
+            self.assertEqual(path, None)
+            self.assertEqual(
+                output.getvalue(),
+                'Downloading http://www3.nd.edu/~pbui/fake.url...\n'
+            )
+            self.assertFalse(os.path.exists(os.path.join(destination, 'fake.url')))
+        MilesTest.Points += 0.5
+
+    def test_05_crawl_single(self):
+        with tempfile.TemporaryDirectory() as destination:
+            with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+                url = 'https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/'
+                miles.crawl(url, ['jpg', 'png'], destination)
+            output_files, output_bytes, output_time, output_bandwidth = output.getvalue().splitlines()
+            self.assertEqual('Files Downloaded: 4', output_files)
+            self.assertEqual('Bytes Downloaded: 0.23 MB', output_bytes)
+            self.assertTrue(re.match('Elapsed Time:     [0-9].[0-9]{2} s', output_time))
+            self.assertTrue(re.match('Bandwidth:        [0-9].[0-9]{2} MB/s', output_bandwidth))
+            self.assertEqual(len(os.listdir(destination)), 4)
+        MilesTest.Points += 0.5
+
+        with tempfile.TemporaryDirectory() as destination:
+            with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+                url = 'https://www3.nd.edu/~pbui/teaching/cse.40166.fa10/gallery/gallery_01.html'
+                miles.crawl(url, ['jpg', 'png'], destination)
+            output_files, output_bytes, output_time, output_bandwidth = output.getvalue().splitlines()
+            self.assertEqual('Files Downloaded: 54', output_files)
+            self.assertEqual('Bytes Downloaded: 0.85 MB', output_bytes)
+            self.assertTrue(re.match('Elapsed Time:     [0-9]+.[0-9]{2} s', output_time))
+            self.assertTrue(re.match('Bandwidth:        [0-9]+.[0-9]{2} MB/s', output_bandwidth))
+            self.assertEqual(len(os.listdir(destination)), 54)
+        MilesTest.Points += 0.5
+
+    def test_06_crawl_multi(self):
+        with tempfile.TemporaryDirectory() as destination:
+            with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+                url = 'https://www3.nd.edu/~pbui/teaching/cse.40166.fa10/gallery/gallery_01.html'
+                miles.crawl(url, ['jpg', 'png'], destination, 4)
+            output_files, output_bytes, output_time, output_bandwidth = output.getvalue().splitlines()
+            self.assertEqual('Files Downloaded: 54', output_files)
+            self.assertEqual('Bytes Downloaded: 0.85 MB', output_bytes)
+            self.assertTrue(re.match('Elapsed Time:     [0-9]+.[0-9]{2} s', output_time))
+            self.assertTrue(re.match('Bandwidth:        [0-9]+.[0-9]{2} MB/s', output_bandwidth))
+            self.assertEqual(len(os.listdir(destination)), 54)
+        MilesTest.Points += 0.5
+
+        with tempfile.TemporaryDirectory() as destination:
+            with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+                url = 'https://www3.nd.edu/~pbui/research/publications.html'
+                miles.crawl(url, ['pdf'], destination)
+            output_files, output_bytes, output_time, output_bandwidth = output.getvalue().splitlines()
+            self.assertEqual('Files Downloaded: 17', output_files, 8)
+            self.assertEqual('Bytes Downloaded: 8.03 MB', output_bytes)
+            self.assertTrue(re.match('Elapsed Time:     [0-9].[0-9]{2} s', output_time))
+            self.assertTrue(re.match('Bandwidth:        [0-9].[0-9]{2} MB/s', output_bandwidth))
+            self.assertEqual(len(os.listdir(destination)), 16)
+        MilesTest.Points += 0.5
+
+    def test_07_main_usage(self):
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                miles.main('-h'.split())
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '0')
+        MilesTest.Points += 0.25
+
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                miles.main('-z'.split())
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '1')
+        MilesTest.Points += 0.25
+
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                miles.main(''.split())
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '1')
+        MilesTest.Points += 0.25
+
+    def test_08_main_destination_filetypes(self):
+        with tempfile.TemporaryDirectory() as destination:
+            destination = os.path.join(destination, 'downloads')
+            with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+                url = 'https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/'
+                miles.main(f'-d {destination} -f jpg,png {url}'.split())
+            output_files, output_bytes, output_time, output_bandwidth = output.getvalue().splitlines()
+            self.assertTrue(os.path.isdir(destination))
+            self.assertEqual('Files Downloaded: 4', output_files)
+            self.assertEqual('Bytes Downloaded: 0.23 MB', output_bytes)
+            self.assertTrue(re.match('Elapsed Time:     [0-9].[0-9]{2} s', output_time))
+            self.assertTrue(re.match('Bandwidth:        [0-9].[0-9]{2} MB/s', output_bandwidth))
+            self.assertEqual(len(os.listdir(destination)), 4)
+        MilesTest.Points += 0.75
+
+    def test_09_main_destination_filetypes_cpus(self):
+        with tempfile.TemporaryDirectory() as destination:
+            destination = os.path.join(destination, 'downloads')
+            with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+                url = 'https://www3.nd.edu/~pbui/teaching/cse.40166.fa10/gallery/gallery_01.html'
+                miles.main(f'-d {destination} -f jpg,png -n 4 {url}'.split())
+            output_files, output_bytes, output_time, output_bandwidth = output.getvalue().splitlines()
+            self.assertTrue(os.path.isdir(destination))
+            self.assertEqual('Files Downloaded: 54', output_files)
+            self.assertEqual('Bytes Downloaded: 0.85 MB', output_bytes)
+            self.assertTrue(re.match('Elapsed Time:     [0-9]+.[0-9]{2} s', output_time))
+            self.assertTrue(re.match('Bandwidth:        [0-9]+.[0-9]{2} MB/s', output_bandwidth))
+            self.assertEqual(len(os.listdir(destination)), 54)
+        MilesTest.Points += 0.75
+
+    def test_10_script_strace(self):
+        with tempfile.TemporaryDirectory() as destination:
+            url = 'https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/'
+            command = f'strace -e clone ./miles.py -d {destination} -f jpg,png {url}'
+            process = subprocess.run(command, shell=True, capture_output=True)
+            self.assertTrue(len(re.findall(r'clone\(child_stack=NULL.*\)', process.stderr.decode())) == 1)
+
+        MilesTest.Points += 0.5
+        with tempfile.TemporaryDirectory() as destination:
+            url = 'https://www3.nd.edu/~pbui/teaching/cse.40166.fa10/gallery/gallery_01.html'
+            command = f'strace -e clone ./miles.py -d {destination} -f jpg,png -n 4 {url}'
+            process = subprocess.run(command, shell=True, capture_output=True)
+            self.assertTrue(len(re.findall(r'clone\(child_stack=NULL.*\)', process.stderr.decode())) == 4)
+
+        MilesTest.Points += 0.5
+
+# Main Execution
+
+if __name__ == '__main__':
+    unittest.main()
+
+# vim: set sts=4 sw=4 ts=8 expandtab ft=python:

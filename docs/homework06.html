@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Homework 06: Miles</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="static/css/blugold.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<style>
+	body {
+	    padding: 10px;
+	}
+	</style>
+    </head>
+    <body>
+	<div class="container">
+
+	    <div class="row">
+		<div class="page-header">
+		    <ul class="nav nav-pills pull-right">
+			
+			<li><a href="index.html"><i class="fa fa-linux"></i> <span class="visible-md-inline visible-lg-inline">Home</span></a></li>
+			
+		    </ul>
+		    <h1><i class="fa fa-code"></i> Homework 06: Miles</h1>
+		</div>
+	    </div>
+
+            
+<p>The goal of this homework assignment is to allow you to practice using
+<a href="https://en.wikipedia.org/wiki/Functional_programming">functional programming</a> to process data in <a href="https://www.python.org/">Python</a>. In this assignment, you
+will write a script a small <a href="https://en.wikipedia.org/wiki/Web_crawler">web crawler</a> that uses <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> to
+extract links to media files such as <a href="https://en.wikipedia.org/wiki/JPEG">JPGs</a>, <a href="https://en.wikipedia.org/wiki/PNG">PNGs</a>, <a href="https://en.wikipedia.org/wiki/PDF">PDFs</a>, and <a href="https://en.wikipedia.org/wiki/MP3">MP3s</a>, and
+then downloads them concurrently using a <a href="https://docs.python.org/3/library/concurrent.futures.html#processpoolexecutor">process pool</a>.</p>
+<div class="thumbnail text-center">
+<img src="static/img/homework06-miles.png" class="img-responsive">
+</div>
+
+<p>By using <a href="https://en.wikipedia.org/wiki/Functional_programming">functional programming</a> to structure your application in a
+<a href="https://en.wikipedia.org/wiki/Concurrency_(computer_science)">concurrent</a> manner, you will be able to take advantage of multiple CPU cores
+to execute the program in <a href="https://en.wikipedia.org/wiki/Parallel_computing">parallel</a>.</p>
+<p>For this assignment, record your scripts and any responses to the following
+activities in the <code>homework06</code> folder of your <strong>assignments</strong> <a href="https://github.com">GitHub</a>
+repository and push your work by <strong>noon Saturday, March 9</strong>.</p>
+<h2 id="activity-0-preparation">Activity 0: Preparation<a class="headerlink" href="#activity-0-preparation" title="Permanent link">&para;</a></h2>
+<p>Before starting this homework assignment, you should first perform a <code>git
+pull</code> to retrieve any changes in your remote <a href="https://github.com">GitHub</a> repository:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ <span style="color: #008000">cd</span> path/to/repository                   <span style="color: #3D7B7B; font-style: italic"># Go to assignments repository</span>
+
+$ git switch master                       <span style="color: #3D7B7B; font-style: italic"># Make sure we are in master branch</span>
+
+$ git pull --rebase                       <span style="color: #3D7B7B; font-style: italic"># Get any remote changes not present locally</span>
+</code></pre></div>
+
+<p>Next, create a new branch for this assignment:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ git checkout -b homework06              <span style="color: #3D7B7B; font-style: italic"># Create homework06 branch and check it out</span>
+</code></pre></div>
+
+<h3 id="task-1-skeleton-code">Task 1: Skeleton Code<a class="headerlink" href="#task-1-skeleton-code" title="Permanent link">&para;</a></h3>
+<p>To help you get started, the instructor has provided you with the following <strong>skeleton code</strong>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Go to homework06 folder</span>
+$ <span style="color: #008000">cd</span> homework06
+
+<span style="color: #3D7B7B; font-style: italic"># Download Makefile</span>
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework06/Makefile
+
+<span style="color: #3D7B7B; font-style: italic"># Download Python skeleton code</span>
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework06/miles.py
+</code></pre></div>
+
+<p>Once downloaded, you should see the following files in your <code>homework06</code> directory:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>homework06
+    <span style="color: #AA5D1F; font-weight: bold">\_</span> Makefile       <span style="color: #3D7B7B; font-style: italic"># This is the Makefile building all the assignment artifacts</span>
+    <span style="color: #AA5D1F; font-weight: bold">\_</span> miles.py       <span style="color: #3D7B7B; font-style: italic"># This is the Python script for the miles script</span>
+</code></pre></div>
+
+<div class="alert alert-warning">
+<h4 id="doctests"><i class="fa fa-warning"></i> DocTests<a class="headerlink" href="#doctests" title="Permanent link">&para;</a></h4>
+<p>You may notice that in addition to the usual comments and <code>TODOs</code>, the
+<a href="https://peps.python.org/pep-0257/">docstrings</a> of each method also contains a few <a href="https://docs.python.org/3/library/doctest.html">doctests</a>.</p>
+<p>You are <strong>not</strong> to modify these <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and must keep them in-place. They
+are used to verify the correctness of your code.</p>
+<p>Your code goes <strong>below</strong> the <a href="https://peps.python.org/pep-0257/">docstrings</a>, where the <code>TODO</code> and <code>pass</code>
+commands are (you may remove the pass once you complete the method).</p>
+</div>
+<h3 id="task-2-initial-import">Task 2: Initial Import<a class="headerlink" href="#task-2-initial-import" title="Permanent link">&para;</a></h3>
+<p>Now that the files are downloaded into the <code>homework06</code> folder, you can
+<strong>commit</strong> them to your <a href="https://git-scm.com/">git</a> repository:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ git add Makefile                            <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git add *.py
+$ git commit -m <span style="color: #BA2121">&quot;Homework 06: Initial Import&quot;</span> <span style="color: #3D7B7B; font-style: italic"># Record changes</span>
+</code></pre></div>
+
+<h3 id="task-3-unit-tests">Task 3: Unit Tests<a class="headerlink" href="#task-3-unit-tests" title="Permanent link">&para;</a></h3>
+<p>After downloading these files, you can run the <code>make</code> command to run the
+tests.</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Run all tests (will trigger automatic download)</span>
+$ make
+</code></pre></div>
+
+<p>You will notice that the Makefile downloads these additional test data and scripts:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>homework06
+    <span style="color: #AA5D1F; font-weight: bold">\_</span> miles.test           <span style="color: #3D7B7B; font-style: italic"># This is the Python test for the miles script</span>
+</code></pre></div>
+
+<p>In addition to the embedded <a href="https://docs.python.org/3/library/doctest.html">doctests</a> in the <strong>skeleton code</strong>, you will be
+using these <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a> to verify the correctness and behavior of your code.</p>
+<div class="alert alert-info">
+<h4 id="automatic-downloads"><i class="fa fa-download"></i> Automatic Downloads<a class="headerlink" href="#automatic-downloads" title="Permanent link">&para;</a></h4>
+<p>The <code>test</code> scripts are automatically downloaded by the <code>Makefile</code>, so any
+modifications you do to them will be lost when you run <code>make</code> again. Likewise,
+because they are automatically downloaded, you do not need to <code>add</code> or <code>commit</code>
+them to your <a href="https://git-scm.com/">git</a> repository.</p>
+</div>
+<p>The details on what you need to implement for this assignment are described
+in the following sections.</p>
+<div class="alert alert-success">
+<h4 id="frequently-asked-questions"><i class="fa fa-question"></i> Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permanent link">&para;</a></h4>
+<div class="text-center">
+<iframe allowfullscreen="true" frameborder="0" height="389" mozallowfullscreen="true" src="https://docs.google.com/presentation/d/e/2PACX-1vSQYtJQK00NXdZJPwuEyO3v3hoI7kV4TC1_c3nKMUGg0ydGLw8mLebly5pR59Yjx8r4qAMtkCvfhMsz/embed?start=false&amp;loop=false&amp;delayms=3000" webkitallowfullscreen="true" width="480"></iframe>
+</div>
+</div>
+<h2 id="activity-1-miles-10-points">Activity 1: Miles (10 Points)<a class="headerlink" href="#activity-1-miles-10-points" title="Permanent link">&para;</a></h2>
+<p>For the first activity, you are to write a script called <code>miles.py</code>, which
+acts a small <a href="https://en.wikipedia.org/wiki/Web_crawler">web crawler</a> that does the following:</p>
+<ol>
+<li>
+<p><strong>Extract URLs</strong>: <code>miles.py</code> will scan a given website for specified media
+  files such as <a href="https://en.wikipedia.org/wiki/JPEG">JPGs</a>, <a href="https://en.wikipedia.org/wiki/MP3">MP3s</a>, <a href="https://en.wikipedia.org/wiki/PDF">PDFs</a>, and <a href="https://en.wikipedia.org/wiki/PNG">PNGs</a> using <a href="https://en.wikipedia.org/wiki/Regular_expression">regular
+  expressions</a>.</p>
+</li>
+<li>
+<p><strong>Process Pool</strong>: <code>miles.py</code> will take advantage of <a href="https://en.wikipedia.org/wiki/Functional_programming">functional
+  programming</a> and a <a href="https://docs.python.org/3/library/concurrent.futures.html#processpoolexecutor">process pool</a> to distribute the found media files to
+  multiple <a href="https://en.wikipedia.org/wiki/Process_(computing)">processes</a>.</p>
+</li>
+<li>
+<p><strong>Download URLs</strong>: <code>miles.py</code> will download the found media files
+  concurrently to a destination folder.</p>
+</li>
+</ol>
+<p>With this script, you can <strong>crawl</strong> a website and <strong>extract</strong> any interesting
+media assets in parallel!</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Display usage</span>
+$ ./miles.py
+Usage: miles.py <span style="color: #666666">[</span>-d DESTINATION -n CPUS -f FILETYPES<span style="color: #666666">]</span> URL
+
+Crawl the given URL <span style="color: #008000; font-weight: bold">for</span> the specified FILETYPES and download the files to the
+DESTINATION folder using CPUS cores <span style="color: #008000; font-weight: bold">in</span> parallel.
+
+    -d DESTINATION      Save the files to this folder <span style="color: #666666">(</span>default: .<span style="color: #666666">)</span>
+    -n CPUS             Number of CPU cores to use <span style="color: #666666">(</span>default: <span style="color: #666666">1)</span>
+    -f FILETYPES        List of file types: jpg, mp3, pdf, png <span style="color: #666666">(</span>default: all<span style="color: #666666">)</span>
+
+Multiple FILETYPES can be specified <span style="color: #008000; font-weight: bold">in</span> the following manner:
+
+    -f jpg,png
+    -f jpg -f png
+
+<span style="color: #3D7B7B; font-style: italic"># Download jpg and pngs from course website to downloads destination folder using 4 CPUs</span>
+$ ./miles.py -d downloads -f jpg,png -n <span style="color: #666666">4</span> https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/
+Downloading https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/img/tlcl.jpg...
+Downloading https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/img/ostep.jpg...
+Downloading https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/img/logo.png...
+Downloading https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/img/automate.png...
+Files Downloaded: <span style="color: #666666">4</span>
+Bytes Downloaded: <span style="color: #666666">0</span>.23 MB
+Elapsed Time:     <span style="color: #666666">0</span>.43 s
+Bandwidth:        <span style="color: #666666">0</span>.54 MB/s
+</code></pre></div>
+
+<p>The <code>miles.py</code> script takes the following possible arguments:</p>
+<ul>
+<li>
+<p><code>-d</code>: This allows the user to set the <code>DESTINATION</code> folder where it should
+  save downloaded media files.  If this directory does not exist, then the
+  script should create it.</p>
+</li>
+<li>
+<p><code>-n</code>: This allows the user to set the number of <code>CPUs</code> (ie. <a href="https://en.wikipedia.org/wiki/Process_(computing)">processes</a>) to
+  use when downloading the media files concurrently.</p>
+</li>
+<li>
+<p><code>-f</code>: This allows the user to set which <code>FILETYPES</code> to extract.  The script
+  must support: <a href="https://en.wikipedia.org/wiki/JPEG">JPGs</a>, <a href="https://en.wikipedia.org/wiki/MP3">MP3s</a>, <a href="https://en.wikipedia.org/wiki/PDF">PDFs</a>, and <a href="https://en.wikipedia.org/wiki/PNG">PNGs</a>.  If no <code>FILETYPES</code> are
+    specified, then all of them will be extracted.</p>
+</li>
+</ul>
+<p>After these flags, the remaining argument is the <code>URL</code> to crawl.</p>
+<div class="alert alert-danger">
+<p>If an unsupported flag is specified, or if no <code>URL</code> is given, then <code>miles.py</code>
+should print out the <strong>usage</strong> message and exit with <strong>failure</strong>.</p>
+</div>
+<h3 id="task-1-milespy">Task 1: <code>miles.py</code><a class="headerlink" href="#task-1-milespy" title="Permanent link">&para;</a></h3>
+<p>To implement the <code>miles.py</code> <a href="https://www.python.org/">Python</a> script, you will need to complete the
+following functions:</p>
+<ol>
+<li>
+<p><code>resolve_url(base: str, url: str) -&gt; str</code></p>
+<blockquote>
+<p>This function <strong>resolves</strong> a <code>url</code> given a <code>base</code> URL.</p>
+<p>Many websites will utilize <em>relative</em> URLs such as
+<code>static/img/homework06-miles.png</code>.  These <em>relative</em> URLs need to be
+expanded or <em>resolved</em> to <em>absolute</em> URLs given a <em>base</em>.  </p>
+<p>For instance, the <em>relative</em> URL <code>static/img/homework06-miles.png</code> on
+this page should resolve to
+<code>https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/img/homework06-miles.png</code>
+since the <em>base</em> is
+<code>https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/homework06.html</code></p>
+</blockquote>
+<div class="alert alert-success" markdown="1">
+<p><strong>Hint</strong>:  You can use <a href="https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urljoin">urllib.parse.urljoin</a> with the <code>base</code> if the
+given <code>url</code> is not already an <em>absolute</em> URL (ie. has <code>://</code>).</p>
+<div>
+</li>
+<li>
+<p><code>extract_urls(url: str, file_types: list[str]) -&gt; Iterator[str]</code></p>
+<blockquote>
+<p>This function extracts the urls of the specified <code>file_types</code> from the
+given <code>url</code> and <code>yields</code> them one at a time.</p>
+<p>To implement this function you will need to fill in the <code>FILE_REGEX</code>
+<a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries">dict</a> at the top of the script.  This <a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries">dict</a> should hold a mapping from
+<code>file_type</code> to a list of <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> that can be used with
+<a href="https://docs.python.org/3/library/re.html#re.findall">re.findall</a> to extract the <strong>URL</strong> corresponding to the media type.</p>
+</blockquote>
+<div class="alert alert-success" markdown="1">
+<p><strong>Hints</strong>:</p>
+<ul>
+<li>
+<p>Use <code>requests.get</code> to retrieve the <a href="https://en.wikipedia.org/wiki/HTML">HTML</a> of the given <code>url</code>.  Be sure
+  to check for any errors.</p>
+</li>
+<li>
+<p>Use <a href="https://docs.python.org/3/library/re.html#re.findall">re.findall</a> with the appropriate <code>file_types</code> <a href="https://en.wikipedia.org/wiki/Regular_expression">regular
+  expressions</a> on the contents of the response to find the corresponding
+  medial URLs.</p>
+</li>
+<li>
+<p>You must support the following patterns:</p>
+<p><table class="table" markdown="1">
+<thead>
+  <th>File Type</th>
+  <th>Patterns</th>
+</thead>
+<tbody markdown="1">
+  <tr>
+  <tr markdown="1">
+  <td>JPG</td>
+  <td markdown="1"><code>&lt;img src="path.jpg"&gt;</code>, <code>&lt;a href="path.jpg"&gt;</code><td>
+  </tr>
+  <tr markdown="1">
+  <td>MP3</td>
+  <td markdown="1"><code>&lt;audio src="path.mp3"&gt;</code>, <code>&lt;a href="path.mp3"&gt;</code><td>
+  </tr>
+  <tr markdown="1">
+  <td>PDF</td>
+  <td markdown="1"><code>&lt;a href="path.pdf"&gt;</code><td>
+  </tr>
+  <tr markdown="1">
+  <td>PNG</td>
+  <td markdown="1"><code>&lt;img src="path.png"&gt;</code>, <code>&lt;a href="path.png"&gt;</code><td>
+  </tr>
+</tbody>
+</table></p>
+<p>Your <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> will need account of variations in spaces
+and different <a href="https://en.wikipedia.org/wiki/HTML">HTML</a> attributes, as well as the presence or absence of
+quotes around the URL.</p>
+<p>Here is an example <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expression</a> for the <a href="https://en.wikipedia.org/wiki/PDF">PDFs</a>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #BA2121">r&#39;&lt;a.*href=&quot;?([^\&quot; ]+.pdf)&#39;</span>
+</code></pre></div>
+
+</li>
+<li>
+<p>Use <code>yield</code> with <code>resolve_url</code> to generate <em>absolute</em> URLs.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>download_url(url: str, destination: str=DESTINATION) -&gt; Optional[str]</code></p>
+<blockquote>
+<p>This function downloads the media asset specified by <code>url</code> to the
+<code>destination</code> directory and returns the path to this new file.</p>
+</blockquote>
+<div class="alert alert-success" markdown="1">
+<p><strong>Hints</strong>:</p>
+<ul>
+<li>
+<p>Use <code>requests.get</code> to retrieve the <strong>contents</strong> of the given <code>url</code>.  Be
+  sure to check for any errors.</p>
+</li>
+<li>
+<p>Use <a href="https://docs.python.org/3/library/os.path.html#os.path.basename">os.path.basename</a> to get the name of the file based on the <code>url</code>
+  and create a new path with <a href="https://docs.python.org/3/library/os.path.html#os.path.join">os.path.join</a> with the <code>destination</code> and
+  this name.</p>
+</li>
+<li>
+<p>Using <code>with</code> and <a href="https://docs.python.org/3/library/functions.html#open">open</a> in <em>write</em> and <em>binary</em> mode to create the file
+  you wish to store the contents of the response into.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><code>crawl(url: str, file_types: list[str], destination: str=DESTINATION, cpus: int=CPUS) -&gt; None</code></p>
+<blockquote>
+<p>This function <em>crawls</em> the specified <code>url</code> by extracting the urls for
+the specified <code>file_types</code> and then uses a <a href="https://docs.python.org/3/library/concurrent.futures.html#processpoolexecutor">process pool</a> to download the
+found media assets concurrently to the <code>destination</code> folder using
+multiple <code>cpus</code>.</p>
+<p>At the end of the function, it will print out the following information:</p>
+<ol>
+<li>The number of files successfully downloaded.</li>
+<li>The number of bytes downloaded to the destination folder (<code>megabytes</code>).</li>
+<li>The elapsed time required to crawl the site (<code>seconds</code>).</li>
+<li>The estimated bandwidth based on the bytes downloaded and the elapsed time (<code>MB/s</code>).</li>
+</ol>
+</blockquote>
+<div class="alert alert-success" markdown="1">
+<p><strong>Hints</strong>:</p>
+<ul>
+<li>
+<p>Use <a href="https://docs.python.org/3/library/time.html#time.time">time.time</a> to create timestamps to keep track of your start and end times.</p>
+</li>
+<li>
+<p>Use <a href="https://docs.python.org/3/library/concurrent.futures.html#processpoolexecutor">concurrent.futures.ProcessPoolExecutor</a> to create a <a href="https://docs.python.org/3/library/concurrent.futures.html#processpoolexecutor">process pool</a>.</p>
+</li>
+<li>
+<p>Use <a href="https://docs.python.org/3/library/os.html#os.stat">os.stat</a> get the size of each of the downloaded files in <code>destination</code></p>
+</li>
+</ul>
+<p>See the <strong>FAQ</strong> slides for a more extensive outline and example of how to
+use the <code>map</code> function in the <a href="https://docs.python.org/3/library/concurrent.futures.html#processpoolexecutor">concurrent.futures.ProcessPoolExecutor</a>.</p>
+</div>
+</li>
+<li>
+<p><code>main(arguments=sys.argv[1:]) -&gt; None</code></p>
+<blockquote>
+<p>This function processes the command line <code>arguments</code>, crawls the given
+<code>URL</code> for the specified <code>FILETYPES</code>, and downloads the found media assets
+to the <code>DESTINATION</code> folder using <code>CPUs</code> processes.</p>
+</blockquote>
+<p><div class="alert alert-success" markdown="1">
+<strong>Hints</strong>: Use <a href="https://docs.python.org/3/library/os.path.html#os.path.exists">os.path.exists</a> to check if the <code>DESTINATION</code> exists and
+  use <a href="https://docs.python.org/3/library/os.html#os.makedirs">os.makedirs</a> if it does not.
+</div></p>
+</li>
+</ol>
+<h3 id="task-2-testing">Task 2: Testing<a class="headerlink" href="#task-2-testing" title="Permanent link">&para;</a></h3>
+<p>As you implement <code>miles.py</code>, you can use the provided <a href="https://docs.python.org/3/library/doctest.html">doctests</a> to verify the
+correctness of your code:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Run doctests</span>
+$ python3 -m doctest miles.py -v
+...
+<span style="color: #666666">2</span> items had no tests:
+    miles
+    miles.usage
+<span style="color: #666666">5</span> items passed all tests:
+   <span style="color: #666666">4</span> tests <span style="color: #008000; font-weight: bold">in</span> miles.crawl
+   <span style="color: #666666">6</span> tests <span style="color: #008000; font-weight: bold">in</span> miles.download_url
+   <span style="color: #666666">3</span> tests <span style="color: #008000; font-weight: bold">in</span> miles.extract_urls
+   <span style="color: #666666">4</span> tests <span style="color: #008000; font-weight: bold">in</span> miles.main
+   <span style="color: #666666">3</span> tests <span style="color: #008000; font-weight: bold">in</span> miles.resolve_url
+<span style="color: #666666">20</span> tests <span style="color: #008000; font-weight: bold">in</span> <span style="color: #666666">7</span> items.
+<span style="color: #666666">20</span> passed and <span style="color: #666666">0</span> failed.
+Test passed.
+</code></pre></div>
+
+<p>You can also use <code>make</code> to run both the <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Run unit tests (and doctests)</span>
+$ make test-miles
+Testing miles...
+test_00_doctest <span style="color: #666666">(</span>__main__.MilesTest<span style="color: #666666">)</span> ... ok
+test_01_mypy <span style="color: #666666">(</span>__main__.MilesTest<span style="color: #666666">)</span> ... ok
+test_02_resolve_url <span style="color: #666666">(</span>__main__.MilesTest<span style="color: #666666">)</span> ... ok
+test_03_extract_urls <span style="color: #666666">(</span>__main__.MilesTest<span style="color: #666666">)</span> ... ok
+test_04_download_url <span style="color: #666666">(</span>__main__.MilesTest<span style="color: #666666">)</span> ... ok
+test_05_crawl_single <span style="color: #666666">(</span>__main__.MilesTest<span style="color: #666666">)</span> ... ok
+test_06_crawl_multi <span style="color: #666666">(</span>__main__.MilesTest<span style="color: #666666">)</span> ... ok
+test_07_main_usage <span style="color: #666666">(</span>__main__.MilesTest<span style="color: #666666">)</span> ... ok
+test_08_main_destination_filetypes <span style="color: #666666">(</span>__main__.MilesTest<span style="color: #666666">)</span> ... ok
+test_09_main_destination_filetypes_cpus <span style="color: #666666">(</span>__main__.MilesTest<span style="color: #666666">)</span> ... ok
+test_10_script_strace <span style="color: #666666">(</span>__main__.MilesTest<span style="color: #666666">)</span> ... ok
+
+   Score <span style="color: #666666">10</span>.00 / <span style="color: #666666">10</span>.00
+  Status Success
+
+----------------------------------------------------------------------
+Ran <span style="color: #666666">11</span> tests <span style="color: #008000; font-weight: bold">in</span> <span style="color: #666666">30</span>.277s
+
+OK
+</code></pre></div>
+
+<p>To just run the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>, you can do the following:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Run unit tests</span>
+$ ./miles.test -v
+...
+</code></pre></div>
+
+<p>To run a specific <a href="https://en.wikipedia.org/wiki/Unit_testing">unit test</a>, you can specify the <strong>method name</strong>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Run only mypy unit test</span>
+$ ./miles.test -v milesTest.test_01_mypy
+...
+</code></pre></div>
+
+<p>To manually check your types, you can use <a href="https://mypy-lang.org/">mypy</a>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Run mypy to check types</span>
+$ mypy miles.py
+</code></pre></div>
+
+<h2 id="activity-3-quiz-1-point">Activity 3: Quiz (1 Point)<a class="headerlink" href="#activity-3-quiz-1-point" title="Permanent link">&para;</a></h2>
+<p>Once you have completed all the activities above, you are to complete the
+following <strong>reflection quiz</strong>:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+<script>
+loadQuiz('static/json/homework06.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<p>As with <a href="reading01.html">Reading 01</a>, you will need to store your answers in a
+<code>homework06/answers.json</code> file.  You can use the form above to generate the
+contents of this file, or you can write the <a href="https://json.org/">JSON</a> by hand.</p>
+<p>To test your quiz, you can use the <code>check.py</code> script:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ ../.scripts/check.py
+Checking homework06 quiz ...
+     Q01 <span style="color: #666666">0</span>.20
+     Q02 <span style="color: #666666">0</span>.20
+     Q03 <span style="color: #666666">0</span>.10
+     Q04 <span style="color: #666666">0</span>.20
+     Q05 <span style="color: #666666">0</span>.30
+   Score <span style="color: #666666">1</span>.00 / <span style="color: #666666">1</span>.00
+  Status Success
+</code></pre></div>
+
+<h2 id="guru-point-1-extra-credit-point">Guru Point (1 Extra Credit Point)<a class="headerlink" href="#guru-point-1-extra-credit-point" title="Permanent link">&para;</a></h2>
+<p>For extra credit, you are to make your own <strong>personal website</strong> such as:</p>
+<ul>
+<li><a href="https://stevenconaway.me/">Steven Conaway</a></li>
+<li><a href="https://dblitt.com/">Daniel Blittschau</a></li>
+<li><a href="https://mayleenliu.com/">Mayleen Liu</a></li>
+<li><a href="https://jchun.me/">Josh Chun</a></li>
+</ul>
+<p>To do so, you can use a platform such as <a href="https://pages.github.com/">GitHub Pages</a> or use resources from
+the <a href="https://education.github.com/pack">GitHub Student Developer Pack</a> (which includes cloud and domain name
+credits).</p>
+<div class="alert alert-info">
+<h4 id="verification"><i class="fa fa-check"></i> Verification<a class="headerlink" href="#verification" title="Permanent link">&para;</a></h4>
+<p>To get credit for this Guru Point, share the link to your <strong>personal
+website</strong> to a TA to verify. You have up until a week <strong>after</strong> this
+assignment is due to verify your Guru Point.</p>
+</div>
+<div class="alert alert-success">
+<h4 id="self-service-extension"><i class="fa fa-calendar"></i> Self-Service Extension<a class="headerlink" href="#self-service-extension" title="Permanent link">&para;</a></h4>
+<p>Remember that you can always <strong>forgo</strong> this Guru Point for <strong>two extra days</strong>
+to do the homework.  That is, if you need an extension, you can simply skip
+the Guru Point and you will automatically have until <strong>Monday</strong> to complete
+the assignment for full credit.</p>
+<p>Just leave a note on your <strong>Pull Request</strong> of your intentions.</p>
+</div>
+<h2 id="submission-11-points">Submission (11 Points)<a class="headerlink" href="#submission-11-points" title="Permanent link">&para;</a></h2>
+<p>To submit your assignment, please commit your work to the <code>homework06</code> folder
+of your <code>homework06</code> branch in your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.
+Your <tt>homework06</tt> folder should <strong>only</strong> contain the following files:</p>
+<ul>
+<li><tt>Makefile</tt></li>
+<li><tt>answers.json</tt></li>
+<li><tt>miles.py</tt></li>
+</ul>
+<div class="alert alert-info">
+<p><strong>Note</strong>: You do not need to commit the test scripts because the <code>Makefile</code>
+automatically downloads them.</p>
+</div>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">#-----------------------------------------------------------------------</span>
+<span style="color: #3D7B7B; font-style: italic"># Make sure you have already completed Activity 0: Preparation</span>
+<span style="color: #3D7B7B; font-style: italic">#-----------------------------------------------------------------------</span>
+...
+$ git add miles.py                                    <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git commit -m <span style="color: #BA2121">&quot;Homework 06: Activity 1 completed&quot;</span>   <span style="color: #3D7B7B; font-style: italic"># Record changes</span>
+...
+$ git add answers.json                                <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git commit -m <span style="color: #BA2121">&quot;Homework 06: Activity 2 completed&quot;</span>   <span style="color: #3D7B7B; font-style: italic"># Record changes</span>
+...
+$ git push -u origin homework06                       <span style="color: #3D7B7B; font-style: italic"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert alert-danger">
+<h4 id="pull-request"><i class="fa fa-github"></i> Pull Request<a class="headerlink" href="#pull-request" title="Permanent link">&para;</a></h4>
+<p>Remember to create a <strong>Pull Request</strong> and assign the appropriate TA from the
+<a href="reading07_tas.html">Reading 07 TA List</a>.</p>
+<p><strong>DO NOT MERGE</strong> your own <strong>Pull Request</strong>.  The TAs use open <strong>Pull
+Requests</strong> to keep track of which assignments to grade.  Closing them
+yourself will cause a delay in grading and confuse the TAs.</p>
+</div>
+
+
+	    <div class="row">
+		<hr/>
+
+		<footer class="text-center">
+		    <p class="text-muted">
+		    <small>
+		    Built using
+		    <a href="https://getbootstrap.com/">Bootstrap</a>,
+		    <a href="https://fontawesome.com/">Font Awesome</a>, and
+		    <a href="http://www.python.org/">Python</a>.
+		    <br/>
+		    &copy; 2024 <a href="http://www.nd.edu">University of Notre Dame</a>
+		    </small>
+		    </p>
+		</footer>
+	    </div>
+
+	</div> <!-- /container -->
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	
+    </body>
+</html>
+
