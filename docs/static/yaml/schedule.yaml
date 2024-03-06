@@ -238,7 +238,8 @@
       - date:           Mon 03/18
         assignment:     Reading 08
         items:
-          - name:       Checklist 01
+          - name:       Checklist 02
+            link:       checklist02.html
 
       - date:           Wed 03/20
         items:

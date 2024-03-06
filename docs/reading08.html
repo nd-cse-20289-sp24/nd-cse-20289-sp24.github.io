@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Reading 08: Exam 02</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="static/css/blugold.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<style>
+	body {
+	    padding: 10px;
+	}
+	</style>
+    </head>
+    <body>
+	<div class="container">
+
+	    <div class="row">
+		<div class="page-header">
+		    <ul class="nav nav-pills pull-right">
+			
+		    </ul>
+		    <h1><i class="fa fa-book"></i> Reading 08: Exam 02</h1>
+		</div>
+	    </div>
+
+            
+<p><strong>Everyone</strong>:</p>
+<p>Next week, we will have <strong>Exam 02</strong>, which will cover scripting in <a href="https://www.python.org/">Python</a>
+with a focus on: <a href="https://en.wikipedia.org/wiki/Data_structure">data structures</a>, <a href="https://en.wikipedia.org/wiki/Functional_programming">functional programming</a>, and
+<a href="https://en.wikipedia.org/wiki/Concurrency_(computer_science)">concurrency</a> and <a href="https://en.wikipedia.org/wiki/Parallel_computing">parallelism</a>.  This reading assignment is meant to prepare
+you for this exam and is based on the items in <a href="checklist02.html">Checklist 02</a>.</p>
+<p>Because of the exam on <strong>Wednesday, March 20</strong>, there will be <strong>no homework</strong>
+for the upcoming week.</p>
+<div class="alert alert-info">
+<h4 id="tldr"><i class="fa fa-search"></i> TL;DR<a class="headerlink" href="#tldr" title="Permanent link">&para;</a></h4>
+<p>The focus of this reading is to allow you to review for <strong>Exam 02</strong>.</p>
+</div>
+<p><img src="static/img/python.png" class="pull-right"></p>
+<h2 id="readings">Readings<a class="headerlink" href="#readings" title="Permanent link">&para;</a></h2>
+<p>The readings for this week are:</p>
+<ol>
+<li><a href="checklist02.html">Checklist 02</a></li>
+</ol>
+<h2 id="quiz">Quiz<a class="headerlink" href="#quiz" title="Permanent link">&para;</a></h2>
+<p>This week, the reading is split into two sections: the first part is a short
+<a href="https://dredd.h4x0r.space">dredd</a> quiz, while the second part involves <strong>four</strong> short <a href="https://www.python.org/">Python</a> scripts:
+  <code>translate1.py</code>, <code>translate2.py</code>, <code>translate3.py</code>, and <code>translate4.py</code>.</p>
+<p>To test these scripts, you will need to download the <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading08/Makefile">Makefile</a> and test
+scripts:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ git switch master                   <span style="color: #3D7B7B; font-style: italic"># Make sure we are in master branch</span>
+$ git pull --rebase                   <span style="color: #3D7B7B; font-style: italic"># Make sure we are up-to-date with GitHub</span>
+
+$ git checkout -b reading08           <span style="color: #3D7B7B; font-style: italic"># Create reading08 branch and check it out</span>
+
+$ <span style="color: #008000">cd</span> reading08                        <span style="color: #3D7B7B; font-style: italic"># Go into reading08 folder</span>
+
+<span style="color: #3D7B7B; font-style: italic"># Download Reading 08 Makefile</span>
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading08/Makefile
+
+<span style="color: #3D7B7B; font-style: italic"># Download and execute scripts</span>
+$ make
+</code></pre></div>
+
+<h3 id="code-snippets">Code Snippets<a class="headerlink" href="#code-snippets" title="Permanent link">&para;</a></h3>
+<p>Record the answers to the following <a href="static/json/reading08.json">Reading 08 Quiz</a> questions in your
+<code>reading08</code> branch:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+
+<script>
+loadQuiz('static/json/reading08.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<h3 id="translations">Translations<a class="headerlink" href="#translations" title="Permanent link">&para;</a></h3>
+<p>Given the following Unix pipelines, write Python scripts (ie.
+<code>translateX.py</code>) that accomplishes the same task.</p>
+<ol>
+<li>
+<p><code>translate1.py</code>: <code>grep -Po ':1\d*0:' /etc/passwd | wc -l</code></p>
+</li>
+<li>
+<p><code>translate2.py</code>: <code>/bin/ls -ld /etc/* | awk '{print $4}' | sort | uniq</code></p>
+</li>
+<li>
+<p><code>translate3.py</code>: <code>curl -sLk http://yld.me/raw/fDIO | cut -d , -f 4 | grep -Eo '^M.*' | sort</code></p>
+</li>
+<li>
+<p><code>translate4.py</code>: <code>cat /etc/passwd | cut -d : -f 7 | sort | uniq -c | sort -srn</code></p>
+</li>
+</ol>
+<h4 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h4>
+<ul>
+<li>
+<p><strong>No credit</strong> will be given for simply calling <code>os.system</code> or <code>os.popen</code> on
+  the given pipeline.</p>
+</li>
+<li>
+<p>You may use <code>os.popen</code> to read the output of a single command, but not for
+  a <strong>pipeline</strong>.</p>
+</li>
+<li>
+<p>Use <a href="https://en.wikipedia.org/wiki/Functional_programming">functional programming</a>, <a href="https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions">list comprehensions</a>, or <a href="https://www.python.org/dev/peps/pep-0289/">generator
+  expressions</a> whenever possible.</p>
+</li>
+<li>
+<p>You do not need to do a literal translation (that is you don't have to
+  replicate each portion of the pipeline); you just need to accomplish the
+  same overall task and emit the same output.</p>
+</li>
+<li>
+<p>Most of the scripts should only be <code>5</code> - <code>10</code> lines long.</p>
+</li>
+</ul>
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit you work, follow the same process outlined in <a href="reading01.html">Reading 01</a>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">#--------------------------------------------------</span>
+<span style="color: #3D7B7B; font-style: italic"># BE SURE TO DO THE PREPARATION STEPS ABOVE</span>
+<span style="color: #3D7B7B; font-style: italic">#--------------------------------------------------</span>
+
+$ <span style="color: #008000">cd</span> reading08                        <span style="color: #3D7B7B; font-style: italic"># Go into reading08 folder</span>
+$ <span style="color: #19177C">$EDITOR</span> answers.json                <span style="color: #3D7B7B; font-style: italic"># Edit your answers.json file</span>
+
+$ ../.scripts/check.py                <span style="color: #3D7B7B; font-style: italic"># Check reading08 quiz</span>
+Checking reading08 quiz ...
+     Q01 <span style="color: #666666">0</span>.20
+     Q02 <span style="color: #666666">0</span>.20
+     Q03 <span style="color: #666666">0</span>.20
+     Q04 <span style="color: #666666">0</span>.20
+     Q05 <span style="color: #666666">0</span>.20
+     Q06 <span style="color: #666666">0</span>.20
+     Q07 <span style="color: #666666">0</span>.20
+     Q08 <span style="color: #666666">0</span>.20
+     Q09 <span style="color: #666666">0</span>.20
+     Q10 <span style="color: #666666">0</span>.20
+   Score <span style="color: #666666">2</span>.00 / <span style="color: #666666">2</span>.00
+  Status Success
+
+$ git add answers.json                <span style="color: #3D7B7B; font-style: italic"># Add answers.json to staging area</span>
+$ git commit -m <span style="color: #BA2121">&quot;Reading 08: Quiz&quot;</span>    <span style="color: #3D7B7B; font-style: italic"># Commit work</span>
+
+$ <span style="color: #19177C">$EDITOR</span> translate1.py               <span style="color: #3D7B7B; font-style: italic"># Edit your translate1.py file</span>
+$ <span style="color: #19177C">$EDITOR</span> translate2.py               <span style="color: #3D7B7B; font-style: italic"># Edit your translate2.py file</span>
+$ <span style="color: #19177C">$EDITOR</span> translate3.py               <span style="color: #3D7B7B; font-style: italic"># Edit your translate3.py file</span>
+$ <span style="color: #19177C">$EDITOR</span> translate4.py               <span style="color: #3D7B7B; font-style: italic"># Edit your translate4.py file</span>
+
+$ make                                <span style="color: #3D7B7B; font-style: italic"># Test all scripts</span>
+Testing translations ...
+ translate1.py                            ... Success
+ translate2.py                            ... Success
+ translate3.py                            ... Success
+ translate4.py                            ... Success
+
+   Score <span style="color: #666666">2</span>.00 / <span style="color: #666666">2</span>.00
+  Status Success
+
+$ git add Makefile                    <span style="color: #3D7B7B; font-style: italic"># Add Makefile to staging area</span>
+$ git add translate1.py               <span style="color: #3D7B7B; font-style: italic"># Add translate1.py to staging area</span>
+$ git add translate2.py               <span style="color: #3D7B7B; font-style: italic"># Add translate2.py to staging area</span>
+$ git add translate3.py               <span style="color: #3D7B7B; font-style: italic"># Add translate3.py to staging area</span>
+$ git add translate4.py               <span style="color: #3D7B7B; font-style: italic"># Add translate4.py to staging area</span>
+$ git commit -m <span style="color: #BA2121">&quot;Reading 08: Scripts&quot;</span> <span style="color: #3D7B7B; font-style: italic"># Commit work</span>
+
+$ git push -u origin reading08        <span style="color: #3D7B7B; font-style: italic"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert alert-danger">
+<h4 id="pull-request"><i class="fa fa-github"></i> Pull Request<a class="headerlink" href="#pull-request" title="Permanent link">&para;</a></h4>
+<p>Remember to create a <strong>Pull Request</strong> and assign the appropriate TA from the
+<a href="reading08_tas.html">Reading 08 TA List</a>.</p>
+<p><strong>DO NOT MERGE</strong> your own <strong>Pull Request</strong>.  The TAs use open <strong>Pull Requests</strong>
+to keep track of which assignments to grade.  Closing them yourself will
+cause a delay in grading and confuse the TAs.</p>
+</div>
+
+
+	    <div class="row">
+		<hr/>
+
+		<footer class="text-center">
+		    <p class="text-muted">
+		    <small>
+		    Built using
+		    <a href="https://getbootstrap.com/">Bootstrap</a>,
+		    <a href="https://fontawesome.com/">Font Awesome</a>, and
+		    <a href="http://www.python.org/">Python</a>.
+		    <br/>
+		    &copy; 2024 <a href="http://www.nd.edu">University of Notre Dame</a>
+		    </small>
+		    </p>
+		</footer>
+	    </div>
+
+	</div> <!-- /container -->
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	
+    </body>
+</html>
+
