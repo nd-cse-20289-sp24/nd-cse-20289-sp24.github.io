@@ -42,9 +42,9 @@
             
 <p>The goal of this homework assignment is to allow you to practice using
 <a href="https://en.wikipedia.org/wiki/Functional_programming">functional programming</a> to process data in <a href="https://www.python.org/">Python</a>. In this assignment, you
-will write a script a small <a href="https://en.wikipedia.org/wiki/Web_crawler">web crawler</a> that uses <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> to
-extract links to media files such as <a href="https://en.wikipedia.org/wiki/JPEG">JPGs</a>, <a href="https://en.wikipedia.org/wiki/PNG">PNGs</a>, <a href="https://en.wikipedia.org/wiki/PDF">PDFs</a>, and <a href="https://en.wikipedia.org/wiki/MP3">MP3s</a>, and
-then downloads them concurrently using a <a href="https://docs.python.org/3/library/concurrent.futures.html#processpoolexecutor">process pool</a>.</p>
+will write a small <a href="https://en.wikipedia.org/wiki/Web_crawler">web crawler</a> that uses <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> to extract
+links to media files such as <a href="https://en.wikipedia.org/wiki/JPEG">JPGs</a>, <a href="https://en.wikipedia.org/wiki/PNG">PNGs</a>, <a href="https://en.wikipedia.org/wiki/PDF">PDFs</a>, and <a href="https://en.wikipedia.org/wiki/MP3">MP3s</a>, and then
+downloads them concurrently using a <a href="https://docs.python.org/3/library/concurrent.futures.html#processpoolexecutor">process pool</a>.</p>
 <div class="thumbnail text-center">
 <img src="static/img/homework06-miles.png" class="img-responsive">
 </div>
@@ -154,8 +154,11 @@ acts a small <a href="https://en.wikipedia.org/wiki/Web_crawler">web crawler</a>
 </ol>
 <p>With this script, you can <strong>crawl</strong> a website and <strong>extract</strong> any interesting
 media assets in parallel!</p>
-<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Display usage</span>
-$ ./miles.py
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Make script executable</span>
+$ chmod +x ./miles.py
+
+<span style="color: #3D7B7B; font-style: italic"># Display usage</span>
+$ ./miles.py -h
 Usage: miles.py <span style="color: #666666">[</span>-d DESTINATION -n CPUS -f FILETYPES<span style="color: #666666">]</span> URL
 
 Crawl the given URL <span style="color: #008000; font-weight: bold">for</span> the specified FILETYPES and download the files to the
@@ -197,6 +200,9 @@ Bandwidth:        <span style="color: #666666">0</span>.54 MB/s
 <p><code>-f</code>: This allows the user to set which <code>FILETYPES</code> to extract.  The script
   must support: <a href="https://en.wikipedia.org/wiki/JPEG">JPGs</a>, <a href="https://en.wikipedia.org/wiki/MP3">MP3s</a>, <a href="https://en.wikipedia.org/wiki/PDF">PDFs</a>, and <a href="https://en.wikipedia.org/wiki/PNG">PNGs</a>.  If no <code>FILETYPES</code> are
     specified, then all of them will be extracted.</p>
+</li>
+<li>
+<p><code>-h</code>: This prints the usage message and exits with success. </p>
 </li>
 </ul>
 <p>After these flags, the remaining argument is the <code>URL</code> to crawl.</p>
@@ -299,8 +305,12 @@ quotes around the URL.</p>
 <p><strong>Hints</strong>:</p>
 <ul>
 <li>
+<p>Print the message <code>Downloading {url}...</code> at the top of the function to
+  inform the user what is being downloaded.</p>
+</li>
+<li>
 <p>Use <code>requests.get</code> to retrieve the <strong>contents</strong> of the given <code>url</code>.  Be
-  sure to check for any errors.</p>
+  sure to check for any errors (ie. if the <strong>status code</strong> is not <code>200</code>).</p>
 </li>
 <li>
 <p>Use <a href="https://docs.python.org/3/library/os.path.html#os.path.basename">os.path.basename</a> to get the name of the file based on the <code>url</code>
@@ -411,7 +421,7 @@ $ ./miles.test -v
 
 <p>To run a specific <a href="https://en.wikipedia.org/wiki/Unit_testing">unit test</a>, you can specify the <strong>method name</strong>:</p>
 <div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Run only mypy unit test</span>
-$ ./miles.test -v milesTest.test_01_mypy
+$ ./miles.test -v MilesTest.test_01_mypy
 ...
 </code></pre></div>
 
