@@ -270,6 +270,8 @@ class MilesTest(unittest.TestCase):
         MilesTest.Points += 0.75
 
     def test_10_script_strace(self):
+        self.assertTrue(os.access('miles.py', os.X_OK))
+
         with tempfile.TemporaryDirectory() as destination:
             url = 'https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/'
             command = f'strace -e clone ./miles.py -d {destination} -f jpg,png {url}'
