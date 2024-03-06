@@ -1,0 +1,203 @@
+title:      "Reading 08: Exam 02"
+icon:       fa-book
+navigation: []
+internal:
+external:
+body:       |
+
+  **Everyone**:
+
+  Next week, we will have **Exam 02**, which will cover scripting in [Python]
+  with a focus on: [data structures], [functional programming], and
+  [concurrency] and [parallelism].  This reading assignment is meant to prepare
+  you for this exam and is based on the items in [Checklist 02].
+
+  Because of the exam on **Wednesday, March 20**, there will be **no homework**
+  for the upcoming week.
+
+  <div class="alert alert-info" markdown="1">
+  #### <i class="fa fa-search"></i> TL;DR
+
+  The focus of this reading is to allow you to review for **Exam 02**.
+
+  </div>
+
+  <img src="static/img/python.png" class="pull-right">
+
+  ## Readings
+
+  The readings for this week are:
+
+  1. [Checklist 02]
+
+  [Unix]:                       https://en.wikipedia.org/wiki/Unix
+  [Unix Shell]:                 https://en.wikipedia.org/wiki/Unix_shell
+  [Git]:                        https://git-scm.com/
+  [Bash]:                       https://www.gnu.org/software/bash/
+  [shell scripting]:            https://en.wikipedia.org/wiki/Shell_script
+  [filters]:                    https://en.wikipedia.org/wiki/Filter_(software)#Unix
+  [pipelines]:                  https://en.wikipedia.org/wiki/Pipeline_(Unix)
+  [data structures]:            https://en.wikipedia.org/wiki/Data_structure
+  [Unix Philosophy]:            https://en.wikipedia.org/wiki/Unix_philosophy
+  [functional programming]:     https://en.wikipedia.org/wiki/Functional_programming
+  [Python]:                     https://www.python.org/
+  [list]:                       https://docs.python.org/3/library/stdtypes.html#sequence-types-list-tuple-range
+  [dict]:                       https://docs.python.org/3/library/stdtypes.html#mapping-types-dict
+  [MapReduce]:                  https://en.wikipedia.org/wiki/MapReduce
+  [concurrency]:                https://en.wikipedia.org/wiki/Concurrency_(computer_science)
+  [parallelism]:                https://en.wikipedia.org/wiki/Parallel_computing
+  [Checklist 02]:               checklist02.html
+  [list comprehensions]:        https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
+  [generator expressions]:      https://www.python.org/dev/peps/pep-0289/
+
+  ## Quiz
+
+  This week, the reading is split into two sections: the first part is a short
+  [dredd] quiz, while the second part involves **four** short [Python] scripts:
+    `translate1.py`, `translate2.py`, `translate3.py`, and `translate4.py`.
+
+  To test these scripts, you will need to download the [Makefile] and test
+  scripts:
+
+      :::bash
+      $ git switch master                   # Make sure we are in master branch
+      $ git pull --rebase                   # Make sure we are up-to-date with GitHub
+
+      $ git checkout -b reading08           # Create reading08 branch and check it out
+
+      $ cd reading08                        # Go into reading08 folder
+
+      # Download Reading 08 Makefile
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading08/Makefile
+
+      # Download and execute scripts
+      $ make
+
+  ### Code Snippets
+
+  Record the answers to the following [Reading 08 Quiz] questions in your
+  `reading08` branch:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+
+  <script>
+  loadQuiz('static/json/reading08.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  ### Translations
+
+  Given the following Unix pipelines, write Python scripts (ie.
+  `translateX.py`) that accomplishes the same task.
+
+  1. `translate1.py`: `grep -Po ':1\d*0:' /etc/passwd | wc -l`
+
+  2. `translate2.py`: `/bin/ls -ld /etc/* | awk '{print $4}' | sort | uniq`
+
+  3. `translate3.py`: `curl -sLk http://yld.me/raw/fDIO | cut -d , -f 4 | grep -Eo '^M.*' | sort`
+
+  4. `translate4.py`: `cat /etc/passwd | cut -d : -f 7 | sort | uniq -c | sort -srn`
+
+  #### Notes
+
+  - **No credit** will be given for simply calling `os.system` or `os.popen` on
+    the given pipeline.
+
+  - You may use `os.popen` to read the output of a single command, but not for
+    a **pipeline**.
+
+  - Use [functional programming], [list comprehensions], or [generator
+    expressions] whenever possible.
+
+  - You do not need to do a literal translation (that is you don't have to
+    replicate each portion of the pipeline); you just need to accomplish the
+    same overall task and emit the same output.
+
+  - Most of the scripts should only be `5` - `10` lines long.
+
+  ## Submission
+
+  To submit you work, follow the same process outlined in [Reading 01]:
+
+      :::bash
+      #--------------------------------------------------
+      # BE SURE TO DO THE PREPARATION STEPS ABOVE
+      #--------------------------------------------------
+
+      $ cd reading08                        # Go into reading08 folder
+      $ $EDITOR answers.json                # Edit your answers.json file
+
+      $ ../.scripts/check.py                # Check reading08 quiz
+      Checking reading08 quiz ...
+           Q01 0.20
+           Q02 0.20
+           Q03 0.20
+           Q04 0.20
+           Q05 0.20
+           Q06 0.20
+           Q07 0.20
+           Q08 0.20
+           Q09 0.20
+           Q10 0.20
+         Score 2.00 / 2.00
+        Status Success
+
+      $ git add answers.json                # Add answers.json to staging area
+      $ git commit -m "Reading 08: Quiz"    # Commit work
+
+      $ $EDITOR translate1.py               # Edit your translate1.py file
+      $ $EDITOR translate2.py               # Edit your translate2.py file
+      $ $EDITOR translate3.py               # Edit your translate3.py file
+      $ $EDITOR translate4.py               # Edit your translate4.py file
+
+      $ make                                # Test all scripts
+      Testing translations ...
+       translate1.py                            ... Success
+       translate2.py                            ... Success
+       translate3.py                            ... Success
+       translate4.py                            ... Success
+
+         Score 2.00 / 2.00
+        Status Success
+
+      $ git add Makefile                    # Add Makefile to staging area
+      $ git add translate1.py               # Add translate1.py to staging area
+      $ git add translate2.py               # Add translate2.py to staging area
+      $ git add translate3.py               # Add translate3.py to staging area
+      $ git add translate4.py               # Add translate4.py to staging area
+      $ git commit -m "Reading 08: Scripts" # Commit work
+
+      $ git push -u origin reading08        # Push branch to GitHub
+
+  <div class="alert alert-danger" markdown="1">
+  #### <i class="fa fa-github"></i> Pull Request
+  Remember to create a **Pull Request** and assign the appropriate TA from the
+  [Reading 08 TA List].
+
+  **DO NOT MERGE** your own **Pull Request**.  The TAs use open **Pull Requests**
+  to keep track of which assignments to grade.  Closing them yourself will
+  cause a delay in grading and confuse the TAs.
+  </div>
+
+  [git]:            https://git-scm.com/
+  [clone]:          https://git-scm.com/docs/git-clone
+  [commit]:         https://git-scm.com/docs/git-commit
+  [push]:           https://git-scm.com/docs/git-push
+  [GitHub]:         https://github.com
+  [Reading 01]:     reading01.html
+  [Reading 08 TA List]: reading08_tas.html
+  [dredd]:          https://dredd.h4x0r.space
+  [Reading 08 Quiz]: static/json/reading08.json
+
+  [The Linux Command Line]:     http://linuxcommand.org/tlcl.php
+  [Unix]:                       https://en.wikipedia.org/wiki/Unix
+  [Unix Shell]:                 https://en.wikipedia.org/wiki/Unix_shell
+  [Git]:                        https://git-scm.com/
+  [Bash]:                       https://www.gnu.org/software/bash/
+  [shell scripting]:            https://en.wikipedia.org/wiki/Shell_script
+  [Makefile]:                   https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading08/Makefile
