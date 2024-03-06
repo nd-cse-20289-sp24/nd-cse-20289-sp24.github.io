@@ -10,9 +10,9 @@ body:       |
 
   The goal of this homework assignment is to allow you to practice using
   [functional programming] to process data in [Python]. In this assignment, you
-  will write a script a small [web crawler] that uses [regular expressions] to
-  extract links to media files such as [JPGs], [PNGs], [PDFs], and [MP3s], and
-  then downloads them concurrently using a [process pool].
+  will write a small [web crawler] that uses [regular expressions] to extract
+  links to media files such as [JPGs], [PNGs], [PDFs], and [MP3s], and then
+  downloads them concurrently using a [process pool].
 
   <div class="thumbnail text-center">
   <img src="static/img/homework06-miles.png" class="img-responsive">
@@ -172,8 +172,11 @@ body:       |
   media assets in parallel!
 
       :::bash
+      # Make script executable
+      $ chmod +x ./miles.py
+
       # Display usage
-      $ ./miles.py
+      $ ./miles.py -h
       Usage: miles.py [-d DESTINATION -n CPUS -f FILETYPES] URL
 
       Crawl the given URL for the specified FILETYPES and download the files to the
@@ -211,6 +214,8 @@ body:       |
   - `-f`: This allows the user to set which `FILETYPES` to extract.  The script
     must support: [JPGs], [MP3s], [PDFs], and [PNGs].  If no `FILETYPES` are
       specified, then all of them will be extracted.
+
+  - `-h`: This prints the usage message and exits with success. 
 
   After these flags, the remaining argument is the `URL` to crawl.
 
@@ -320,8 +325,11 @@ body:       |
 
       **Hints**:
 
+      - Print the message `Downloading {url}...` at the top of the function to
+        inform the user what is being downloaded.
+
       - Use `requests.get` to retrieve the **contents** of the given `url`.  Be
-        sure to check for any errors.
+        sure to check for any errors (ie. if the **status code** is not `200`).
 
       - Use [os.path.basename] to get the name of the file based on the `url`
         and create a new path with [os.path.join] with the `destination` and
@@ -442,7 +450,7 @@ body:       |
 
       :::bash
       # Run only mypy unit test
-      $ ./miles.test -v milesTest.test_01_mypy
+      $ ./miles.test -v MilesTest.test_01_mypy
       ...
 
   To manually check your types, you can use [mypy]:
