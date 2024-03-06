@@ -188,6 +188,8 @@ body:       |
   - `-y`: This allows the user to specify which `YEARS` to print out.  There
     are three possible formats for this flag as noted in the **usage** above.
 
+  - `-h`: This prints the usage message and exits with success.
+
   After the flags, the remaining arguments are the `NAMES` to include in the
   table.
 
@@ -437,6 +439,8 @@ body:       |
     - `-o`: This allows the user to specify how to sort the results.  By
       default, it will sort by `score` in descending order.  Otherwise, it will
       sort either the `title` or `url` in ascending order.
+
+    - `-h`: This prints the usage message and exits with success.
 
   After the flags, the remaining arguments is the `QUERY` to search.
 
