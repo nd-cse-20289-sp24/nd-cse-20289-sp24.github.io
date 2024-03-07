@@ -215,7 +215,7 @@ body:       |
     must support: [JPGs], [MP3s], [PDFs], and [PNGs].  If no `FILETYPES` are
       specified, then all of them will be extracted.
 
-  - `-h`: This prints the usage message and exits with success. 
+  - `-h`: This prints the usage message and exits with success.
 
   After these flags, the remaining argument is the `URL` to crawl.
 
@@ -227,7 +227,7 @@ body:       |
   </div>
 
   [processes]: https://en.wikipedia.org/wiki/Process_(computing)
-  
+
   ### Task 1: `miles.py`
 
   To implement the `miles.py` [Python] script, you will need to complete the
@@ -239,7 +239,7 @@ body:       |
 
       > Many websites will utilize *relative* URLs such as
       `static/img/homework06-miles.png`.  These *relative* URLs need to be
-      expanded or *resolved* to *absolute* URLs given a *base*.  
+      expanded or *resolved* to *absolute* URLs given a *base*.
 
       > For instance, the *relative* URL `static/img/homework06-miles.png` on
       this page should resolve to
@@ -274,7 +274,7 @@ body:       |
       - Use [re.findall] with the appropriate `file_types` [regular
         expressions] on the contents of the response to find the corresponding
         medial URLs.
-      
+
       - You must support the following patterns:
 
           <table class="table" markdown="1">
@@ -372,7 +372,7 @@ body:       |
       > This function processes the command line `arguments`, crawls the given
       `URL` for the specified `FILETYPES`, and downloads the found media assets
       to the `DESTINATION` folder using `CPUs` processes.
-      
+
       <div class="alert alert-success" markdown="1">
       **Hints**: Use [os.path.exists] to check if the `DESTINATION` exists and
         use [os.makedirs] if it does not.
@@ -427,9 +427,10 @@ body:       |
       test_05_crawl_single (__main__.MilesTest) ... ok
       test_06_crawl_multi (__main__.MilesTest) ... ok
       test_07_main_usage (__main__.MilesTest) ... ok
-      test_08_main_destination_filetypes (__main__.MilesTest) ... ok
-      test_09_main_destination_filetypes_cpus (__main__.MilesTest) ... ok
-      test_10_script_strace (__main__.MilesTest) ... ok
+      test_08_main_destination (__main__.MilesTest) ... ok
+      test_09_main_destination_filetypes (__main__.MilesTest) ... ok
+      test_10_main_destination_filetypes_cpus (__main__.MilesTest) ... ok
+      test_11_script_strace (__main__.MilesTest) ... ok
 
          Score 10.00 / 10.00
         Status Success
@@ -493,7 +494,7 @@ body:       |
         Status Success
 
   ## Guru Point (1 Extra Credit Point)
-  
+
   For extra credit, you are to make your own **personal website** such as:
 
   - [Steven Conaway](https://stevenconaway.me/)
