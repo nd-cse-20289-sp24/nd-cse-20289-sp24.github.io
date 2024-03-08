@@ -1,0 +1,42 @@
+{
+    "q01": {
+        "type": "blank",
+        "question": "\n<p>Ignoring the name of the script, print out the number of command-line\narguments passed to a Python script:</p>\n\n<pre>\nprint(____)\n</pre>\n"
+    },
+    "q02": {
+        "type": "blank",
+        "question": "\n<p>Ignoring the name of the script, print out the command-line arguments\npassed to a Python script in a single string separated by commas:</p>\n\n<pre>\nprint(____)\n</pre>\n"
+    },
+    "q03": {
+        "type": "blank",
+        "question": "\n<p>Print out the first 10 command-line argument passed to a Python\nscript:</p>\n\n<pre>\nprint(____)\n</pre>\n"
+    },
+    "q04": {
+        "type": "blank",
+        "question": "\n<p>Print out the last command-line argument passed to a Python\nscript in all caps:</p>\n\n<pre>\nprint(____)\n</pre>\n"
+    },
+    "q05": {
+        "type": "blank",
+        "question": "\n<p>Print out the largest (in terms of value) command-line argument passed\nto a Python script:</p>\n\n<pre>\nprint(____)\n</pre>\n"
+    },
+    "q06": {
+        "type": "blank",
+        "question": "\n<p>Print the number of unique elements in the list <tt>data</tt>:</p>\n\n<pre>\nprint(____)\n</pre>\n"
+    },
+    "q07": {
+        "type": "blank",
+        "question": "\n<p>Print the number of words in the string <tt>text</tt>:</p>\n\n<pre>\nprint(____)\n</pre>\n"
+    },
+    "q08": {
+        "type": "blank",
+        "question": "\n<p>Print the first line of output from <tt>ps aux</tt> command.</p>\n\n<pre>\nprint(____)\n</pre>\n"
+    },
+    "q09": {
+        "type": "blank",
+        "question": "\n<p>Download the resource referenced by an <tt>URL</tt> variable and parse\nthe text into a list of lines.</p>\n\n<pre>\ndata = ____\n</pre>\n"
+    },
+    "q10": {
+        "type": "blank",
+        "question": "\n<p>Download the resource referenced by an <tt>URL</tt> variable and\nparse the JSON into a <tt>data</tt> variable:</p>\n\n<pre>\ndata = ____\n</pre>\n"
+    }
+}
