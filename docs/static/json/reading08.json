@@ -17,7 +17,7 @@
     },
     "q05": {
         "type": "blank",
-        "question": "\n<p>Print out the largest (in terms of value) command-line argument passed\nto a Python script:</p>\n\n<pre>\nprint(____)\n</pre>\n"
+        "question": "\n<p>Print out the largest (in terms of string value) command-line argument\npassed to a Python script:</p>\n\n<pre>\nprint(____)\n</pre>\n"
     },
     "q06": {
         "type": "blank",
