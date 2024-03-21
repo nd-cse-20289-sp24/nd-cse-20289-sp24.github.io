@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Reading 09: Pointers, Arrays, Strings</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="static/css/blugold.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<style>
+	body {
+	    padding: 10px;
+	}
+	</style>
+    </head>
+    <body>
+	<div class="container">
+
+	    <div class="row">
+		<div class="page-header">
+		    <ul class="nav nav-pills pull-right">
+			
+		    </ul>
+		    <h1><i class="fa fa-book"></i> Reading 09: Pointers, Arrays, Strings</h1>
+		</div>
+	    </div>
+
+            
+<p><strong>Everyone</strong>:</p>
+<p>Next week, we will transition from high-level scripting languages such as
+<a href="https://en.wikipedia.org/wiki/Bourne_shell">Bourne Shell</a> and <a href="https://www.python.org/">Python</a> to the ubiquitious <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> systems programming
+language.  We shall descend down the <em>software stack</em>, away from user
+applications, and towards the lower level <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> that power our
+programs.</p>
+<div class="thumbnail">
+<img src="static/img/house.png" class="img-responsive">
+</div>
+
+<p>That is, rather than focusing on how to use or compose tools such as <a href="http://man7.org/linux/man-pages/man1/cat.1.html">cat</a>,
+<a href="http://man7.org/linux/man-pages/man1/grep.1.html">grep</a>, or <a href="http://man7.org/linux/man-pages/man1/sort.1.html">sort</a>, we will instead learn how to build these basic components,
+while adhering to the <a href="https://en.wikipedia.org/wiki/Unix_philosophy">Unix philosophy</a>.</p>
+<div class="alert alert-info">
+<h4 id="tldr"><i class="fa fa-search"></i> TL;DR<a class="headerlink" href="#tldr" title="Permanent link">&para;</a></h4>
+<p>The focus of this reading is to introduce you to programming the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a>
+programming language.  In particular, you should become familiar with
+<a href="https://en.wikipedia.org/wiki/C_(programming_language)#Pointers">pointers</a>, <a href="https://en.wikipedia.org/wiki/C_(programming_language)#Arrays">arrays</a>, and <a href="https://en.wikipedia.org/wiki/C_string_handling">strings</a>.</p>
+</div>
+<p><img src="static/img/c.png" class="pull-right"></p>
+<h2 id="readings">Readings<a class="headerlink" href="#readings" title="Permanent link">&para;</a></h2>
+<p>The readings for this week are:</p>
+<ol>
+<li>
+<p><a href="https://beej.us/guide/bgc/html/index-wide.html">Beej's Guide to C Programming</a></p>
+<p>Most of this should be review from <strong>Fundamentals of Computing</strong>, so
+<em>skim</em> through <strong>Chapter 1</strong> through <strong>Chapter 7</strong>.  In particular, focus
+on <strong>Chapter 5. Pointers</strong>, <strong>Chapter 6. Arrays</strong>, and <strong>Chapter 7.
+Strings</strong>.</p>
+</li>
+<li>
+<p><a href="http://gromnitsky.users.sourceforge.net/articles/notes-for-new-make-users/">Notes for new Make users</a></p>
+<p>Again, most of this should be review from <strong>Fundamentals of Computing</strong>
+and <strong>Data Structures</strong>, so <em>skim</em> this document and make sure you
+understand how to write and use a Makefile.</p>
+</li>
+</ol>
+<h3 id="optional-references">Optional References<a class="headerlink" href="#optional-references" title="Permanent link">&para;</a></h3>
+<table class="table">
+<tbody>
+<tr>
+<td>
+<h4 id="propaganda">Propaganda<a class="headerlink" href="#propaganda" title="Permanent link">&para;</a></h4>
+<ul>
+<li><a href="https://www.zeroequalsfalse.press/2017/11/29/c/">Learn C programming and the rest will come</a></li>
+<li><a href="https://blog.bradfieldcs.com/the-cost-of-forsaking-c-113986438784">The cost of forsaking C</a></li>
+<li><a href="https://blog.regehr.org/archives/1393">Teaching C</a></li>
+</ul>
+<h4 id="c-language">C Language<a class="headerlink" href="#c-language" title="Permanent link">&para;</a></h4>
+<ul>
+<li><a href="https://en.wikibooks.org/wiki/A_Little_C_Primer">A Little C Primer</a></li>
+<li><a href="https://www.geeksforgeeks.org/c-programming-language/">C Programming Language</a></li>
+<li><a href="http://www.chiark.greenend.org.uk/~sgtatham/cdescent/">The Descent to C</a></li>
+</ul>
+</td>
+<td>
+<h4 id="pointers-and-arrays">Pointers and Arrays<a class="headerlink" href="#pointers-and-arrays" title="Permanent link">&para;</a></h4>
+<ul>
+<li><a href="http://denniskubes.com/2017/01/24/the-5-minute-guide-to-c-pointers/">The 5 Minute Guide to C Pointers</a>
+<ul>
+<li><a href="http://denniskubes.com/2012/08/19/pointers-and-arrays-in-c/">Basics of Pointers and Arrays in C</a></li>
+<li><a href="http://denniskubes.com/2012/08/17/basics-of-memory-addresses-in-c/">Basics of Memory Addresses in C</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="makefiles">Makefiles<a class="headerlink" href="#makefiles" title="Permanent link">&para;</a></h4>
+<ul>
+<li><a href="https://www.gnu.org/software/make/manual/make.html">GNU Make</a></li>
+<li><a href="https://fabianstumpf.de/articles/makefiles.htm">Make files not war</a></li>
+<li><a href="https://www.ploxiln.net/make.html">Make</a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-warning">
+<h4 id="compiler-flags"><i class="fa fa-flag"></i> Compiler Flags<a class="headerlink" href="#compiler-flags" title="Permanent link">&para;</a></h4>
+<p>We will be using <a href="https://en.wikipedia.org/wiki/C_(programming_language)#C99">C99</a> version of the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> programming language. This means that
+when you compile your programs with <a href="https://gcc.gnu.org/">gcc</a>, you should include the <code>-std=gnu99</code>
+compiler flag:<br><br></p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ gcc -Wall -g -std<span style="color: #666666">=</span>gnu99 -o program source.c
+</code></pre></div>
+
+<p><strong>Note</strong>: The <code>-Wall</code> flags enable most warnings while the <code>-g</code> flags
+enable debugging symbols, which will come in handy when we need to use tools
+such as <a href="https://www.gnu.org/software/gdb/">gdb</a> and <a href="http://valgrind.org/">valgrind</a>.</p>
+</div>
+<h2 id="quiz">Quiz<a class="headerlink" href="#quiz" title="Permanent link">&para;</a></h2>
+<p>This week, the reading is split into two sections: the first part is a
+<a href="https://dredd.h4x0r.space">dredd</a> quiz, while the second part involves two <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> programs: <code>sort.c</code> and
+<code>grep.c</code>.</p>
+<p>To test the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program, you will need to download the <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading09/Makefile">Makefile</a> and test
+scripts:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ git switch master                   <span style="color: #3D7B7B; font-style: italic"># Make sure we are in master branch</span>
+$ git pull --rebase                   <span style="color: #3D7B7B; font-style: italic"># Make sure we are up-to-date with GitHub</span>
+
+$ git checkout -b reading09           <span style="color: #3D7B7B; font-style: italic"># Create reading09 branch and check it out</span>
+
+$ <span style="color: #008000">cd</span> reading09                        <span style="color: #3D7B7B; font-style: italic"># Go into reading09 folder</span>
+
+<span style="color: #3D7B7B; font-style: italic"># Download Reading 09 Makefile</span>
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading09/Makefile
+
+<span style="color: #3D7B7B; font-style: italic"># Download, build, and execute tests</span>
+$ make <span style="color: #008000">test</span>
+</code></pre></div>
+
+<h3 id="questions">Questions<a class="headerlink" href="#questions" title="Permanent link">&para;</a></h3>
+<p>Given the following <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program, <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading09/sum.c">sum.c</a>, which computes the sum of all the
+integers read from <a href="https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin)">standard input</a>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/* sum.c */</span><span style="color: #bbbbbb"></span>
+
+<span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdio.h&gt;</span><span style="color: #9C6500"></span>
+<span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdlib.h&gt;</span><span style="color: #9C6500"></span>
+
+<span style="color: #3D7B7B; font-style: italic">/* Constants */</span><span style="color: #bbbbbb"></span>
+
+<span style="color: #9C6500">#define MAX_NUMBERS (1&lt;&lt;10)</span>
+
+<span style="color: #3D7B7B; font-style: italic">/* Functions */</span><span style="color: #bbbbbb"></span>
+
+<span style="color: #B00040">size_t</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">read_numbers</span>(<span style="color: #B00040">FILE</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>stream,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>numbers[],<span style="color: #bbbbbb"> </span><span style="color: #B00040">size_t</span><span style="color: #bbbbbb"> </span>n)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">size_t</span><span style="color: #bbbbbb"> </span>i<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">while</span><span style="color: #bbbbbb"> </span>(i<span style="color: #bbbbbb"> </span><span style="color: #666666">&lt;</span><span style="color: #bbbbbb"> </span>n<span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;&amp;</span><span style="color: #bbbbbb"> </span>scanf(<span style="color: #BA2121">&quot;%d&quot;</span>,<span style="color: #bbbbbb"> </span>numbers[i])<span style="color: #bbbbbb"> </span><span style="color: #666666">!=</span><span style="color: #bbbbbb"> </span>EOF)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>i<span style="color: #666666">++</span>;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>}<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>i;<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span>
+
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">sum_numbers</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>numbers[])<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>total<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">for</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">size_t</span><span style="color: #bbbbbb"> </span>i<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;<span style="color: #bbbbbb"> </span>i<span style="color: #bbbbbb"> </span><span style="color: #666666">&lt;</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span>(numbers);<span style="color: #bbbbbb"> </span>i<span style="color: #666666">++</span>)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>total<span style="color: #bbbbbb"> </span><span style="color: #666666">+=</span><span style="color: #bbbbbb"> </span>numbers[i];<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>}<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>total;<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span>
+
+<span style="color: #3D7B7B; font-style: italic">/* Main Execution */</span><span style="color: #bbbbbb"></span>
+
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">main</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>argc,<span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>argv[])<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>numbers[MAX_NUMBERS];<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>total;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">size_t</span><span style="color: #bbbbbb"> </span>nsize;<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span>nsize<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>read_numbers(stdin,<span style="color: #bbbbbb"> </span>numbers,<span style="color: #bbbbbb"> </span>MAX_NUMBERS);<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>total<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>sum_numbers(numbers);<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>printf(<span style="color: #BA2121">&quot;{}</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>total);<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>EXIT_SUCCESS;<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<p>And the following <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program, <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading09/cat.c">cat.c</a>, which implements the <a href="http://man7.org/linux/man-pages/man1/cat.1.html">cat</a> command:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/* cat.c */</span><span style="color: #bbbbbb"></span>
+
+<span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;errno.h&gt;</span><span style="color: #9C6500"></span>
+<span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdbool.h&gt;</span><span style="color: #9C6500"></span>
+<span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdio.h&gt;</span><span style="color: #9C6500"></span>
+<span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdlib.h&gt;</span><span style="color: #9C6500"></span>
+<span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;string.h&gt;</span><span style="color: #9C6500"></span>
+
+<span style="color: #3D7B7B; font-style: italic">/* Globals */</span><span style="color: #bbbbbb"></span>
+
+<span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span>PROGRAM_NAME<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #008000">NULL</span>;<span style="color: #bbbbbb"></span>
+
+<span style="color: #3D7B7B; font-style: italic">/* Functions */</span><span style="color: #bbbbbb"></span>
+
+<span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">usage</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>status)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>____(stderr,<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;Usage: %s</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>PROGRAM_NAME);<span style="color: #bbbbbb">                                    </span><span style="color: #3D7B7B; font-style: italic">/* 1 */</span><span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>____(status);<span style="color: #bbbbbb">                                                                 </span><span style="color: #3D7B7B; font-style: italic">/* 2 */</span><span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span>
+
+<span style="color: #B00040">bool</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">cat_stream</span>(<span style="color: #B00040">FILE</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>stream)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>buffer[BUFSIZ];<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">while</span><span style="color: #bbbbbb"> </span>(____(buffer,<span style="color: #bbbbbb"> </span>BUFSIZ,<span style="color: #bbbbbb"> </span>stream))<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb">                                        </span><span style="color: #3D7B7B; font-style: italic">/* 3 */</span><span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>____(buffer,<span style="color: #bbbbbb"> </span>stdout);<span style="color: #bbbbbb">                                                     </span><span style="color: #3D7B7B; font-style: italic">/* 4 */</span><span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>}<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span><span style="color: #008000">true</span>;<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span>
+
+<span style="color: #3D7B7B; font-style: italic">/* Main Execution */</span><span style="color: #bbbbbb"></span>
+
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">main</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>argc,<span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>argv[])<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>argind<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">1</span>;<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #3D7B7B; font-style: italic">/* Parse command line arguments */</span><span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>PROGRAM_NAME<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>____;<span style="color: #bbbbbb">                                                          </span><span style="color: #3D7B7B; font-style: italic">/* 5 */</span><span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">while</span><span style="color: #bbbbbb"> </span>(argind<span style="color: #bbbbbb"> </span><span style="color: #666666">&lt;</span><span style="color: #bbbbbb"> </span>argc<span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;&amp;</span><span style="color: #bbbbbb"> </span>____(argv[argind])<span style="color: #bbbbbb"> </span><span style="color: #666666">&gt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">1</span><span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;&amp;</span><span style="color: #bbbbbb"> </span>argv[argind][<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">==</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;-&#39;</span>)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb">   </span><span style="color: #3D7B7B; font-style: italic">/* 6 */</span><span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>arg<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>argv[argind<span style="color: #666666">++</span>];<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">switch</span><span style="color: #bbbbbb"> </span>(arg[<span style="color: #666666">1</span>])<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">case</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;h&#39;</span><span style="color: #666666">:</span><span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                </span>usage(<span style="color: #666666">0</span>);<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                </span><span style="color: #008000; font-weight: bold">break</span>;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">default</span><span style="color: #666666">:</span><span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                </span>usage(<span style="color: #666666">1</span>);<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                </span><span style="color: #008000; font-weight: bold">break</span>;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>}<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>}<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #3D7B7B; font-style: italic">/* Process each file */</span><span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span><span style="color: #666666">!</span>cat_stream(stdin);<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span>
+
+<span style="color: #3D7B7B; font-style: italic">/* vim: set sts=4 sw=4 ts=8 expandtab ft=c: */</span><span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<div class="alert alert-success">
+<h4 id="code-is-not-literature"><i class="fa fa-code"></i> Code is not Literature<a class="headerlink" href="#code-is-not-literature" title="Permanent link">&para;</a></h4>
+<p>For these types of questions, your first <strong>instinct</strong> should be to <strong>play</strong>
+with the code. As a <strong>computer scientist</strong>, your approach to any new body of
+code is to study and investigate it by <strong>taking it apart</strong>, <strong>modifying it</strong>,
+<strong>breaking it</strong>, and <strong>putting it back together</strong>.</p>
+<p>As <a href="http://www.gigamonkeys.com/">Peter Seibel</a> writes, <a href="http://www.gigamonkeys.com/code-reading/">code is not literature</a>:</p>
+<blockquote>
+<p>We don’t read code, we decode it. We examine it. A piece of code is not
+literature; it is a specimen ... and we are naturalists.</p>
+</blockquote>
+<p>If you truly want to <strong>understand</strong> something, simply looking up an answer on
+<a href="https://www.google.com/">Google</a> or <a href="https://stackoverflow.com/">StackOverflow</a> is <strong>insufficient</strong>. For true <strong>mastery</strong>, you
+need to apply the principle of the <a href="https://en.wikipedia.org/wiki/Hacker_ethic#Hands-On_Imperative">Hands-On Imperative</a>:</p>
+<blockquote>
+<p>Hackers believe that essential lessons can be learned about the
+systems—about the world—from taking things apart, seeing how they work, and
+using this knowledge to create new and more interesting things.</p>
+</blockquote>
+<p><strong>TL;DR</strong>: <strong>Download</strong> the code. <strong>Compile</strong> it. <strong>Break</strong> it. <strong>Fix</strong> it.
+<strong>Happy Hacking</strong>.</p>
+</div>
+<p>Record the answers to the following <a href="static/json/reading09.json">Reading 09 Quiz</a> questions in your
+<code>reading09</code> branch:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+
+<script>
+loadQuiz('static/json/reading09.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<h3 id="programs">Programs<a class="headerlink" href="#programs" title="Permanent link">&para;</a></h3>
+<p>You are to write two simple <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> programs based on the examples above.</p>
+<h4 id="sortc"><code>sort.c</code><a class="headerlink" href="#sortc" title="Permanent link">&para;</a></h4>
+<p>Use <code>sum.c</code> as the basis for a <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program called <code>sort.c</code>, which uses
+<a href="http://man7.org/linux/man-pages/man3/qsort.3.html">qsort</a> to implement a basic version of <a href="http://man7.org/linux/man-pages/man1/sort.1.html">sort</a>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ shuf -i <span style="color: #666666">1</span>-10 | ./sort
+<span style="color: #666666">1</span>
+<span style="color: #666666">2</span>
+<span style="color: #666666">3</span>
+<span style="color: #666666">4</span>
+<span style="color: #666666">5</span>
+<span style="color: #666666">6</span>
+<span style="color: #666666">7</span>
+<span style="color: #666666">8</span>
+<span style="color: #666666">9</span>
+<span style="color: #666666">10</span>
+</code></pre></div>
+
+<div class="alert alert-warning">
+<p><strong>Note</strong>: You should use the provided <code>read_numbers</code> function and simply call
+<a href="http://man7.org/linux/man-pages/man3/qsort.3.html">qsort</a> of <code>numbers</code> and print out each element in the array.</p>
+</div>
+<div class="alert alert-success">
+<p><strong>Hint</strong>: Since you will be sorting <code>int</code>s, you will need a <strong>custom
+comparison function</strong>.  To save you the trouble of searching
+<strong>StackOverflow</strong>, you can use the following:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">compare_ints</span>(<span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>a,<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>b)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>ia<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>(<span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>)a;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>ib<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>(<span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>)b;<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>ia<span style="color: #bbbbbb"> </span><span style="color: #666666">-</span><span style="color: #bbbbbb"> </span>ib;<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<p>This should be the last argument to <a href="http://man7.org/linux/man-pages/man3/qsort.3.html">qsort</a>.  You can also refer to the
+<a href="https://beej.us/guide/bgc/html/index-wide.html#man-qsort">example</a> in
+<a href="https://beej.us/guide/bgc/html/index-wide.html">Beej's Guide to C Programming</a>.</p>
+</div>
+<h4 id="grepc"><code>grep.c</code><a class="headerlink" href="#grepc" title="Permanent link">&para;</a></h4>
+<p>Use <code>cat.c</code> as the basis for a <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program called <code>grep.c</code>, which uses
+<a href="http://man7.org/linux/man-pages/man3/strstr.3.html">strstr</a> to implement a basic version of <a href="http://man7.org/linux/man-pages/man1/grep.1.html">grep</a>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ ./grep -h                                   <span style="color: #3D7B7B; font-style: italic"># Display Usage</span>
+Usage: ./grep PATTERN
+
+$ ls | ./grep ep                              <span style="color: #3D7B7B; font-style: italic"># Search stdin</span>
+grep
+grep.c
+test_grep.c
+
+$ ls | ./grep NOPE ; <span style="color: #008000">echo</span> <span style="color: #19177C">$?</span>                  <span style="color: #3D7B7B; font-style: italic"># Exit code on failure</span>
+<span style="color: #666666">1</span>
+</code></pre></div>
+
+<div class="alert alert-warning">
+<p><strong>Note</strong>: Use the <a href="http://man7.org/linux/man-pages/man3/strstr.3.html">strstr</a> function to search for strings (you do not need to
+support <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>).</p>
+</div>
+<div class="alert alert-danger">
+<p><strong>Note</strong>: Make sure you return with an <strong>non-zero</strong> exit code if the
+<code>PATTERN</code> is not found in the input stream.</p>
+</div>
+<h4 id="makefile"><code>Makefile</code><a class="headerlink" href="#makefile" title="Permanent link">&para;</a></h4>
+<p>To build your programs, you need to update the provided <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading09/Makefile">Makefile</a> to include
+<a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a> or <strong>recipes</strong> for the <code>sort</code> and <code>grep</code> targets.  Be sure to use the
+<code>CC</code> and <code>CFLAGS</code> variables in your <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a>.</p>
+<p>Once you have a working <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading09/Makefile">Makefile</a>, you should be able to use the <a href="http://man7.org/linux/man-pages/man1/make.1.html">make</a>
+command to run your <strong>recipes</strong>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ make clean                                  <span style="color: #3D7B7B; font-style: italic"># Remove targets</span>
+rm -f sort grep
+
+$ make                                        <span style="color: #3D7B7B; font-style: italic"># Build targets</span>
+gcc -g -Wall -std<span style="color: #666666">=</span>gnu99 -o sort sort.c
+gcc -g -Wall -std<span style="color: #666666">=</span>gnu99 -o grep grep.c
+
+$ make <span style="color: #008000">test</span>                                   <span style="color: #3D7B7B; font-style: italic"># Test programs</span>
+Checking reading09 sort ...
+ sort <span style="color: #666666">1</span>                                   ... Success
+ sort <span style="color: #666666">1</span> <span style="color: #666666">10</span>                                ... Success
+ sort <span style="color: #666666">1</span> <span style="color: #666666">100</span>                               ... Success
+ sort <span style="color: #666666">1</span> <span style="color: #666666">1000</span>                              ... Success
+ sort <span style="color: #666666">1</span> <span style="color: #666666">1000</span> <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>                   ... Success
+
+   Score <span style="color: #666666">1</span>.00 / <span style="color: #666666">1</span>.00
+  Status Success
+
+Checking reading09 grep ...
+ grep usage <span style="color: #666666">(</span>-h<span style="color: #666666">)</span>                          ... Success
+ grep usage <span style="color: #666666">(</span>no arguments<span style="color: #666666">)</span>                ... Success
+ grep root /etc/passwd                    ... Success
+ grep root /etc/passwd <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>         ... Success
+ grep login /etc/passwd                   ... Success
+ grep login /etc/passwd <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>        ... Success
+ grep asdf /etc/passwd                    ... Success
+ grep asdf /etc/passwd <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>         ... Success
+
+   Score <span style="color: #666666">1</span>.00 / <span style="color: #666666">1</span>.00
+  Status Success
+</code></pre></div>
+
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit you work, follow the same process outlined in <a href="reading01.html">Reading 01</a>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">#--------------------------------------------------</span>
+<span style="color: #3D7B7B; font-style: italic"># BE SURE TO DO THE PREPARATION STEPS ABOVE</span>
+<span style="color: #3D7B7B; font-style: italic">#--------------------------------------------------</span>
+
+$ <span style="color: #008000">cd</span> reading09                        <span style="color: #3D7B7B; font-style: italic"># Go into reading09 folder</span>
+
+$ <span style="color: #19177C">$EDITOR</span> answers.json                <span style="color: #3D7B7B; font-style: italic"># Edit your answers.json file</span>
+
+$ ../.scripts/check.py                <span style="color: #3D7B7B; font-style: italic"># Check reading09 quiz</span>
+Checking reading09 quiz ...
+     Q01 <span style="color: #666666">0</span>.25
+     Q02 <span style="color: #666666">0</span>.25
+     Q03 <span style="color: #666666">0</span>.25
+     Q04 <span style="color: #666666">0</span>.25
+     Q05 <span style="color: #666666">0</span>.60
+     Q06 <span style="color: #666666">0</span>.20
+     Q07 <span style="color: #666666">0</span>.20
+   Score <span style="color: #666666">2</span>.00 / <span style="color: #666666">2</span>.00
+  Status Success
+
+$ git add answers.json                <span style="color: #3D7B7B; font-style: italic"># Add answers.json to staging area</span>
+$ git commit -m <span style="color: #BA2121">&quot;Reading 09: Quiz&quot;</span>    <span style="color: #3D7B7B; font-style: italic"># Commit work</span>
+
+$ <span style="color: #19177C">$EDITOR</span> Makefile                    <span style="color: #3D7B7B; font-style: italic"># Edit source code</span>
+$ <span style="color: #19177C">$EDITOR</span> sort.c                      <span style="color: #3D7B7B; font-style: italic"># Edit source code</span>
+$ <span style="color: #19177C">$EDITOR</span> grep.c                      <span style="color: #3D7B7B; font-style: italic"># Edit source code</span>
+
+$ make                                <span style="color: #3D7B7B; font-style: italic"># Build programs</span>
+
+$ make <span style="color: #008000">test</span>                           <span style="color: #3D7B7B; font-style: italic"># Run tests</span>
+
+$ git add Makefile                    <span style="color: #3D7B7B; font-style: italic"># Add Makefile to staging area</span>
+$ git add sort.c grep.c               <span style="color: #3D7B7B; font-style: italic"># Add source code to staging area</span>
+$ git commit -m <span style="color: #BA2121">&quot;Reading 09: Code&quot;</span>    <span style="color: #3D7B7B; font-style: italic"># Commit work</span>
+
+$ git push -u origin reading09        <span style="color: #3D7B7B; font-style: italic"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert alert-danger">
+<h4 id="pull-request"><i class="fa fa-github"></i> Pull Request<a class="headerlink" href="#pull-request" title="Permanent link">&para;</a></h4>
+<p>Remember to create a <strong>Pull Request</strong> and assign the appropriate TA from the
+<a href="reading09_tas.html">Reading 09 TA List</a>.</p>
+<p><strong>DO NOT MERGE</strong> your own <strong>Pull Request</strong>.  The TAs use open <strong>Pull
+Requests</strong> to keep track of which assignments to grade.  Closing them
+yourself will cause a delay in grading and confuse the TAs.</p>
+</div>
+
+
+	    <div class="row">
+		<hr/>
+
+		<footer class="text-center">
+		    <p class="text-muted">
+		    <small>
+		    Built using
+		    <a href="https://getbootstrap.com/">Bootstrap</a>,
+		    <a href="https://fontawesome.com/">Font Awesome</a>, and
+		    <a href="http://www.python.org/">Python</a>.
+		    <br/>
+		    &copy; 2024 <a href="http://www.nd.edu">University of Notre Dame</a>
+		    </small>
+		    </p>
+		</footer>
+	    </div>
+
+	</div> <!-- /container -->
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	
+    </body>
+</html>
+
