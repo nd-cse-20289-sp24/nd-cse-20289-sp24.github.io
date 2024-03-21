@@ -1,0 +1,70 @@
+{
+    "q01": {
+        "type": "single",
+        "question": "\n<p>Inside the <tt>read_numbers</tt> function of <tt>sum.c</tt>, there is an\nerror on the following line of code:</p>\n\n<pre>\nwhile (i < n && scanf(\"%d\", numbers[i]) != EOF)\n</pre>\n\n<p>Which of the following options fixes the problem with this line of\ncode?</p>\n",
+        "responses": {
+            "a": "<tt>while (i < n && scanf(\"%d\", numbers[i]) == EOF)</tt>",
+            "b": "<tt>while (i <= n && scanf(\"%d\", numbers[i]) != EOF)</tt>",
+            "c": "<tt>while (i < n || scanf(\"%d\", numbers[i]) != EOF)</tt>",
+            "d": "<tt>while (i < n && scanf(\"%d\", &numbers[i]) != EOF)</tt>",
+            "e": "<tt>while (i < n && scanf(\"%d\", (int *)numbers[i]) != EOF)</tt>",
+            "f": "<tt>while (i < n && scanf(\"%d\", *numbers[i]) != EOF)</tt>"
+        }
+    },
+    "q02": {
+        "type": "single",
+        "question": "\n<p>The <tt>sum_numbers</tt> function in <tt>sum.c</tt> contains a common\nerror regarding <b>arrays</b> and <b>pointers</b>. Which of the following\noptions explains this error and fixes it?</p>\n",
+        "responses": {
+            "a": "You can't pass a statically allocated array to a function; dynamically allocate it first using <tt>malloc</tt>.",
+            "b": "You can't declare an array argument using <tt>int numbers[]</tt>; instead you should declare it as <tt>int *numbers</tt>.",
+            "c": "To use <tt>sizeof</tt> on an array, you must deference it first; so do <tt>sizeof(*numbers)</tt>.",
+            "d": "To use <tt>sizeof</tt> on an array, you must deference it first; so do <tt>sizeof(&numbers)</tt>.",
+            "e": "You shouldn't use <tt>sizeof</tt> to get the size of an array; pass the size of the array in as an additional argument.",
+            "f": "You shouldn't use <tt>sizeof</tt> to get the size of an array; use <tt>len(array)</tt> instead."
+        }
+    },
+    "q03": {
+        "type": "single",
+        "question": "\n<p>Inside the <tt>main</tt> function of <tt>sum.c</tt>, there is an error\non the following line of code:</p>\n\n<pre>\nprintf(\"{}\\n\", total);\n</pre>\n\n<p>Which of the following options fixes the problem with this line of\n",
+        "responses": {
+            "a": "<tt>printf(total + \"\\n\");</tt>",
+            "b": "<tt>printf(\"{}\\n\", &total);</tt>",
+            "c": "<tt>printf(\"{}\\n\", (char *)total);</tt>",
+            "d": "<tt>printf(\"%s\\n\", total);</tt>",
+            "e": "<tt>printf(\"%d\\n\", total);</tt>",
+            "f": "<tt>printf(\"%s\\n\", (char *)total);</tt>"
+        }
+    },
+    "q04": {
+        "type": "single",
+        "question": "\n<p>After fixing the errors above in <tt>sum.c</tt>, suppose we modify the\n<tt>MAX_NUMBERS</tt> constant to be the value <tt>1<<30</tt>.  Which of the\nfollowing most accurately explains what is displayed when we run the\nprogram with <tt>seq 1 10 | ./sum</tt>?</p>\n",
+        "responses": {
+            "a": "<tt>55</tt>, which is the sum of <tt>1 - 10</tt>",
+            "b": "Nothing is printed because no command line arguments are passed the the program.",
+            "c": "Segmentation fault because we didn't read the input from the pipe.",
+            "d": "Segmentation fault because the computer does not have enough memory.",
+            "e": "Segmentation fault because our array is declared on the stack and is too big.",
+            "f": "Segmentation fault because our array is declared on the heap and is too big."
+        }
+    },
+    "q05": {
+        "type": "order",
+        "question": "\n<p>Fill in the blanks for <tt>cat.c</tt> by ordering the following\nfunctions:</p>\n",
+        "responses": {
+            "fprintf": "<tt>fprintf</tt>",
+            "argv": "<tt>argv[0]</tt>",
+            "fputs": "<tt>fputs</tt>",
+            "strlen": "<tt>strlen</tt>",
+            "fgets": "<tt>fgets</tt>",
+            "exit": "<tt>exit</tt>"
+        }
+    },
+    "q06": {
+        "type": "blank",
+        "question": "\n<p>In <tt>sum.c</tt> and <tt>cat.c</tt>, we read the input from\n<tt>stdin</tt>.  If we wanted to read data from a file on the file system,\nwe would first need to call ____ to get a file handle or stream.  We can\nthen use the same functions we used to read <tt>stdin</tt> and write to\n<tt>stdout</tt> (or even <tt>stderr</tt>) on the newly created file handle.\nOnce we are all done with the stream, we need to call <tt>____</tt>.\n"
+    },
+    "q07": {
+        "type": "blank",
+        "question": "\n<p>Instead of using a <tt>switch</tt> statement to check command line\narguments (as shown in <tt>cat.c</tt>), we can use a series of <tt>if</tt>,\n<tt>else if</tt> statements:</p>\n\n<pre>\nwhile (argind < argc && strlen(argv[argind]) > 1 && argv[argind][0] == '-') {\n    char *arg = argv[argind++];\n    if (____(arg, \"-h\") == ____) {\n        usage(0);\n    } else {\n        usage(1);\n    }\n}\n</pre>\n"
+    }
+}
