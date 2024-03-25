@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Reading 10: Memory Management</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="static/css/blugold.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<style>
+	body {
+	    padding: 10px;
+	}
+	</style>
+    </head>
+    <body>
+	<div class="container">
+
+	    <div class="row">
+		<div class="page-header">
+		    <ul class="nav nav-pills pull-right">
+			
+		    </ul>
+		    <h1><i class="fa fa-book"></i> Reading 10: Memory Management</h1>
+		</div>
+	    </div>
+
+            
+<p><strong>Everyone</strong>:</p>
+<p>Next week, we will delve deeper into <a href="https://en.wikipedia.org/wiki/Memory_management">memory management</a> and <a href="https://en.wikipedia.org/wiki/Data_structure">data
+structures</a> in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a>.  In particular, we will discuss how a typical <a href="https://en.wikipedia.org/wiki/Address_space">address
+space</a> is laid out, how to dynamically allocate memory using <a href="http://man7.org/linux/man-pages/man3/malloc.3.html">malloc</a> (and
+how to release it with <a href="http://man7.org/linux/man-pages/man3/malloc.3.html">free</a>), and how to create <a href="https://en.wikipedia.org/wiki/Data_structure">data structures</a> with
+<a href="https://en.wikipedia.org/wiki/Record_(computer_science)">structs</a> and <a href="https://en.wikipedia.org/wiki/Union_type">unions</a>.</p>
+<div class="alert alert-info">
+<h4 id="tldr"><i class="fa fa-search"></i> TL;DR<a class="headerlink" href="#tldr" title="Permanent link">&para;</a></h4>
+<p>The focus of this reading is to explore <a href="https://en.wikipedia.org/wiki/Memory_management">memory management</a> and <a href="https://en.wikipedia.org/wiki/Data_structure">data
+structures</a> in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> and learn how to use <a href="http://valgrind.org/">valgrind</a> and <a href="https://www.gnu.org/software/gdb/">gdb</a>.</p>
+</div>
+<p><img src="static/img/c.png" class="pull-right"></p>
+<h2 id="readings">Readings<a class="headerlink" href="#readings" title="Permanent link">&para;</a></h2>
+<p>The readings for this week are:</p>
+<ol>
+<li>
+<p><a href="https://beej.us/guide/bgc/html/index-wide.html">Beej's Guide to C Programming</a></p>
+<ul>
+<li><a href="https://beej.us/guide/bgc/html/index-wide.html#structs">Chapter 8. Structs</a></li>
+<li><a href="https://beej.us/guide/bgc/html/index-wide.html#typedef-making-new-types">Chapter 10. typedef</a></li>
+<li><a href="https://beej.us/guide/bgc/html/index-wide.html#manual-memory-allocation">Chapter 12. Manual Memory Allocation</a></li>
+<li><p><a href="https://beej.us/guide/bgc/html/index-wide.html#unions">Section 20.8 Unions</a></p></li>
+</ul>
+</li>
+<li>
+<p><a href="http://pages.cs.wisc.edu/~remzi/OSTEP/">Operating Systems: Three Easy Pieces</a></p>
+<ul>
+<li><p><a href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-api.pdf">Memory API</a></p></li>
+</ul>
+</li>
+<li>
+<p><a href="https://www.geeksforgeeks.org/memory-layout-of-c-program/">Memory Layout of C Programs</a></p>
+</li>
+</ol>
+<h3 id="optional-references">Optional References<a class="headerlink" href="#optional-references" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><a href="https://beej.us/guide/bggdb/">Beej's Quick Guide to GDB</a></p>
+</li>
+<li>
+<p><a href="http://valgrind.org/docs/manual/quick-start.html">Valgrind Quick Start Guide</a></p>
+</li>
+<li>
+<p><a href="https://github.com/angrave/SystemProgramming/wiki">System Programming Wiki</a></p>
+<ul>
+<li><p><a href="https://github.com/angrave/SystemProgramming/wiki/C-Programming%2C-Part-3%3A-Common-Gotchas#memory-mistakes">Memory Mistakes</a></p></li>
+</ul>
+</li>
+<li>
+<p><a href="https://jvns.ca/">Julia Evans</a></p>
+<div class="row">
+<p><div class="col-md-6">
+<a href="https://drawings.jvns.ca/stack/" class="thumbnail">
+<img src="https://drawings.jvns.ca/drawings/stack.svg" class="img-responsive">
+</a>
+</div></p>
+<p><div class="col-md-6">
+<a href="https://drawings.jvns.ca/malloc/" class="thumbnail">
+<img src="https://drawings.jvns.ca/drawings/malloc.svg" class="img-responsive">
+</a>
+</div></p>
+</div>
+</li>
+</ol>
+<h2 id="quiz">Quiz<a class="headerlink" href="#quiz" title="Permanent link">&para;</a></h2>
+<p>This week, the reading is split into two sections: the first part is a
+<a href="https://dredd.h4x0r.space">dredd</a> quiz, while the second part involves one <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program: <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading10/str_rev.c">str_rev.c</a>.</p>
+<p>To test the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program, you will need to download the <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading10/Makefile">Makefile</a> and test
+scripts:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ git switch master                   <span style="color: #3D7B7B; font-style: italic"># Make sure we are in master branch</span>
+$ git pull --rebase                   <span style="color: #3D7B7B; font-style: italic"># Make sure we are up-to-date with GitHub</span>
+
+$ git checkout -b reading10           <span style="color: #3D7B7B; font-style: italic"># Create reading10 branch and check it out</span>
+
+$ <span style="color: #008000">cd</span> reading10                        <span style="color: #3D7B7B; font-style: italic"># Go into reading10 folder</span>
+
+<span style="color: #3D7B7B; font-style: italic"># Download Reading 10 Makefile</span>
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading10/Makefile
+
+<span style="color: #3D7B7B; font-style: italic"># Download, build, and execute tests</span>
+$ make <span style="color: #008000">test</span>
+</code></pre></div>
+
+<h3 id="questions">Questions<a class="headerlink" href="#questions" title="Permanent link">&para;</a></h3>
+<p>Given the following <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program, <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading10/allocations.c">allocations.c</a>, which simply declares a
+series of variables:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/* allocations.c */</span><span style="color: #bbbbbb"></span>
+
+<span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdio.h&gt;</span><span style="color: #9C6500"></span>
+<span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdlib.h&gt;</span><span style="color: #9C6500"></span>
+
+<span style="color: #008000; font-weight: bold">typedef</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>x;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>y;<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"> </span>Point;<span style="color: #bbbbbb"></span>
+
+<span style="color: #008000; font-weight: bold">typedef</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">union</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">char</span><span style="color: #bbbbbb">   </span>c;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb">    </span>i;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">float</span><span style="color: #bbbbbb">  </span>f;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>d;<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"> </span>Block;<span style="color: #bbbbbb"></span>
+
+<span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>GD<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">3.14</span>;<span style="color: #bbbbbb"></span>
+
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">main</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>argc,<span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>argv[])<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb">    </span>a[]<span style="color: #bbbbbb">  </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #666666">5</span>,<span style="color: #bbbbbb"> </span><span style="color: #666666">7</span>,<span style="color: #bbbbbb"> </span><span style="color: #666666">4</span>};<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">char</span><span style="color: #bbbbbb">  </span><span style="color: #666666">*</span>sp<span style="color: #bbbbbb">   </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;Video Games&quot;</span>;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">char</span><span style="color: #bbbbbb">   </span>sa[]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;Runescape&quot;</span>;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>Block<span style="color: #bbbbbb">  </span>b<span style="color: #bbbbbb">    </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #666666">0</span>};<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span>Point<span style="color: #bbbbbb">   </span>p0<span style="color: #bbbbbb">  </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #666666">0</span>,<span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>};<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>Point<span style="color: #bbbbbb">  </span><span style="color: #666666">*</span>p1<span style="color: #bbbbbb">  </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #008000">NULL</span>;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>Point<span style="color: #bbbbbb">  </span><span style="color: #666666">*</span>p2<span style="color: #bbbbbb">  </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>malloc(<span style="color: #008000; font-weight: bold">sizeof</span>(Point));<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>Point<span style="color: #bbbbbb">  </span><span style="color: #666666">*</span>p3<span style="color: #bbbbbb">  </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>malloc(<span style="color: #666666">5*</span><span style="color: #008000; font-weight: bold">sizeof</span>(Point));<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>Point<span style="color: #bbbbbb"> </span><span style="color: #666666">**</span>p4<span style="color: #bbbbbb">  </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>malloc(<span style="color: #666666">5*</span><span style="color: #008000; font-weight: bold">sizeof</span>(Point<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>));<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<p>And the following <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program, <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading10/str_rev.c">str_rev.c</a>, which reverses the characters of
+each command-line argument:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/* str_rev: Reverse all characters in string */</span><span style="color: #bbbbbb"></span>
+
+<span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;ctype.h&gt;</span><span style="color: #9C6500"></span>
+<span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdio.h&gt;</span><span style="color: #9C6500"></span>
+<span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdlib.h&gt;</span><span style="color: #9C6500"></span>
+<span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;string.h&gt;</span><span style="color: #9C6500"></span>
+
+<span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #0000FF">str_rev</span>(<span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>s)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>t<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>malloc(strlen(s));<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>strncpy(t,<span style="color: #bbbbbb"> </span>s,<span style="color: #bbbbbb"> </span>strlen(s));<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>r<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>s<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span>strlen(s)<span style="color: #bbbbbb"> </span><span style="color: #666666">-</span><span style="color: #bbbbbb"> </span><span style="color: #666666">1</span>;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>w<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>t;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">while</span><span style="color: #bbbbbb"> </span>(r<span style="color: #bbbbbb"> </span><span style="color: #666666">&gt;=</span><span style="color: #bbbbbb"> </span>s)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span><span style="color: #666666">*</span>w<span style="color: #666666">++</span><span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>r<span style="color: #666666">--</span>;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>}<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>t;<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span>
+
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">main</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>argc,<span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>argv[])<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">for</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">1</span>;<span style="color: #bbbbbb"> </span>i<span style="color: #bbbbbb"> </span><span style="color: #666666">&lt;=</span><span style="color: #bbbbbb"> </span>argc;<span style="color: #bbbbbb"> </span>i<span style="color: #666666">++</span>)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>t<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>str_rev(argv[i]);<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>puts(t);<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>}<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<p>Record the answers to the following <a href="static/json/reading10.json">Reading 10 Quiz</a> questions in your
+<code>reading10</code> branch:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+
+<script>
+loadQuiz('static/json/reading10.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<h3 id="programs">Programs<a class="headerlink" href="#programs" title="Permanent link">&para;</a></h3>
+<p>Given the provided <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading10/str_rev.c">str_rev.c</a> and <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading10/Makefile">Makefile</a>, you are to do the following:</p>
+<ol>
+<li>
+<p>Modify <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading10/Makefile">Makefile</a> to include a <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rule</a> for the <code>str_rev</code> program.  Be
+sure to use the <code>CC</code> and <code>CFLAGS</code> variables in your <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rule</a>.</p>
+<p><div class="alert alert-success" markdown="1">
+<strong>Note</strong>: Consider the use of <a href="https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html">automatic variables</a>.
+</div></p>
+</li>
+<li>
+<p>Modify <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading10/str_rev.c">str_rev.c</a> so that it no longer has any uninitialized memory
+accesses, memory leaks, invalid memory acceses, or logical errors.</p>
+<p><div class="alert alert-success" markdown="1">
+<strong>Note</strong>: The <code>str_rev</code> must not modify the original string (hence the
+<code>const char *</code>).  Consider the use of <a href="http://man7.org/linux/man-pages/man3/strdup.3.html">strdup</a>.
+</div></p>
+</li>
+</ol>
+<div class="alert alert-warning">
+<h4 id="debugging"><i class="fa fa-bug"></i> Debugging<a class="headerlink" href="#debugging" title="Permanent link">&para;</a></h4>
+<p>Use this as an opportunity to utilize <a href="http://valgrind.org/">valgrind</a> and <a href="https://www.gnu.org/software/gdb/">gdb</a> to debug <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading10/str_rev.c">str_rev.c</a>.</p>
+</div>
+<p>Once you have a working <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading10/Makefile">Makefile</a>, you should be able to use the <a href="http://man7.org/linux/man-pages/man1/make.1.html">make</a>
+command to run your <strong>recipes</strong>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ make clean                                  <span style="color: #3D7B7B; font-style: italic"># Remove targets</span>
+rm -f str_rev
+
+$ make                                        <span style="color: #3D7B7B; font-style: italic"># Build targets</span>
+gcc -Wall -g -std<span style="color: #666666">=</span>gnu99 -o str_rev str_rev.c
+
+$ ./str_rev old school                        <span style="color: #3D7B7B; font-style: italic"># Test manually</span>
+dlo
+loohcs
+
+$ make <span style="color: #008000">test</span>                                   <span style="color: #3D7B7B; font-style: italic"># Test scripts</span>
+</code></pre></div>
+
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit you work, follow the same process outlined in <a href="reading01.html">Reading 01</a>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">#--------------------------------------------------</span>
+<span style="color: #3D7B7B; font-style: italic"># BE SURE TO DO THE PREPARATION STEPS ABOVE</span>
+<span style="color: #3D7B7B; font-style: italic">#--------------------------------------------------</span>
+
+$ <span style="color: #008000">cd</span> reading10                        <span style="color: #3D7B7B; font-style: italic"># Go into reading10 folder</span>
+
+$ <span style="color: #19177C">$EDITOR</span> answers.json                <span style="color: #3D7B7B; font-style: italic"># Edit your answers.json file</span>
+
+$ ../.scripts/check.py                <span style="color: #3D7B7B; font-style: italic"># Check reading10 quiz</span>
+Checking reading10 quiz ...
+     Q1 <span style="color: #666666">1</span>.50
+     Q2 <span style="color: #666666">0</span>.25
+     Q3 <span style="color: #666666">0</span>.25
+  Score <span style="color: #666666">2</span>.00 / <span style="color: #666666">2</span>.00
+ Status Success
+
+$ git add answers.json                <span style="color: #3D7B7B; font-style: italic"># Add answers.json to staging area</span>
+$ git commit -m <span style="color: #BA2121">&quot;Reading 10: Quiz&quot;</span>    <span style="color: #3D7B7B; font-style: italic"># Commit work</span>
+
+$ <span style="color: #19177C">$EDITOR</span> str_rev.c                   <span style="color: #3D7B7B; font-style: italic"># Edit source code</span>
+
+$ make <span style="color: #008000">test</span>                           <span style="color: #3D7B7B; font-style: italic"># Build and Run tests</span>
+Checking reading10 str_rev ...
+ str_rev <span style="color: #666666">(</span>no arguments<span style="color: #666666">)</span>                   ... Success
+ str_rev <span style="color: #666666">(</span>no arguments<span style="color: #666666">)</span> <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>        ... Success
+ str_rev old school                       ... Success
+ str_rev old school <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>            ... Success
+ str_rev <span style="color: #BA2121">&#39;old school&#39;</span>                     ... Success
+ str_rev <span style="color: #BA2121">&#39;old school&#39;</span> <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>          ... Success
+
+   Score <span style="color: #666666">2</span>.00 / <span style="color: #666666">2</span>.00
+  Status Success
+
+$ git add Makefile                    <span style="color: #3D7B7B; font-style: italic"># Add Makefile to staging area</span>
+$ git add str_rev.c                   <span style="color: #3D7B7B; font-style: italic"># Add source code to staging area</span>
+$ git commit -m <span style="color: #BA2121">&quot;Reading 10: Code&quot;</span>    <span style="color: #3D7B7B; font-style: italic"># Commit work</span>
+
+$ git push -u origin reading10        <span style="color: #3D7B7B; font-style: italic"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert alert-danger">
+<h4 id="pull-request"><i class="fa fa-github"></i> Pull Request<a class="headerlink" href="#pull-request" title="Permanent link">&para;</a></h4>
+<p>Remember to create a <strong>Pull Request</strong> and assign the appropriate TA from the
+<a href="reading10_tas.html">Reading 10 TA List</a>.</p>
+<p><strong>DO NOT MERGE</strong> your own <strong>Pull Request</strong>.  The TAs use open <strong>Pull Requests</strong>
+to keep track of which assignments to grade.  Closing them yourself will
+cause a delay in grading and confuse the TAs.</p>
+</div>
+
+
+	    <div class="row">
+		<hr/>
+
+		<footer class="text-center">
+		    <p class="text-muted">
+		    <small>
+		    Built using
+		    <a href="https://getbootstrap.com/">Bootstrap</a>,
+		    <a href="https://fontawesome.com/">Font Awesome</a>, and
+		    <a href="http://www.python.org/">Python</a>.
+		    <br/>
+		    &copy; 2024 <a href="http://www.nd.edu">University of Notre Dame</a>
+		    </small>
+		    </p>
+		</footer>
+	    </div>
+
+	</div> <!-- /container -->
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	
+    </body>
+</html>
+
