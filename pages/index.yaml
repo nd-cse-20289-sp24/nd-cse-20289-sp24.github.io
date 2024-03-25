@@ -217,7 +217,7 @@ body:       |
                 {% end %}
                     <td class="text-center text-strong"><tt>{{ day['date'] }}</tt></td>
                     <td class="text-strong">
-                    {% if 'Easter' in day.get('topics', '') or 'Break' in day.get('topics', '') or 'Day' in day.get('topics', '') or day.get('assignment', '').startswith('Homework') %}
+                    {% if 'Easter' in day.get('topics', '') or 'Break' in day.get('topics', '') or 'Day' in day.get('topics', '') or day.get('assignment', '').startswith('Homework') or 'Eclipse' in day.get('topics', '') %}
                     <i class="text-muted">{{ day.get('topics', '') }}</i>
                     {% else %}
                     {{ day.get('topics', '') }}
