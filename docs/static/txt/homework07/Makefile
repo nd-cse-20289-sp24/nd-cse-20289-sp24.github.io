@@ -1,5 +1,5 @@
 CC=		gcc
-CFLAGS=		-Wall -g -std=gnu99
+CFLAGS=		-Wall -g -std=gnu99 -fPIC
 LD=		gcc
 LDFLAGS=	-L.
 LIBS=		-lstr

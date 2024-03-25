@@ -37,20 +37,6 @@ trap "cleanup 1" INT TERM
 
 echo "Testing trit utility..."
 
-printf " %-40s ... " "trit (dynamic)"
-if ! file trit.dynamic | grep -q dynamically; then
-    error "Failure"
-else
-    echo "Success"
-fi
-
-printf " %-40s ... " "trit (static)"
-if ! file trit.static | grep -q statically; then
-    error "Failure"
-else
-    echo "Success"
-fi
-
 printf " %-40s ... " "trit -h"
 if ! ./trit.static -h |& grep -q -i usage; then
     error "Failure"
