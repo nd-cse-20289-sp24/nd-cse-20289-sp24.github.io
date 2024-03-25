@@ -1,0 +1,315 @@
+title:      "Reading 10: Memory Management"
+icon:       fa-book
+navigation: []
+internal:
+external:
+body:       |
+
+  **Everyone**:
+
+  Next week, we will delve deeper into [memory management] and [data
+  structures] in [C].  In particular, we will discuss how a typical [address
+  space] is laid out, how to dynamically allocate memory using [malloc] (and
+  how to release it with [free]), and how to create [data structures] with
+  [structs] and [unions].
+
+  <div class="alert alert-info" markdown="1">
+  #### <i class="fa fa-search"></i> TL;DR
+
+  The focus of this reading is to explore [memory management] and [data
+  structures] in [C] and learn how to use [valgrind] and [gdb].
+
+  </div>
+
+  <img src="static/img/c.png" class="pull-right">
+
+  ## Readings
+
+  The readings for this week are:
+
+  1. [Beej's Guide to C Programming]
+
+      - [Chapter 8. Structs](https://beej.us/guide/bgc/html/index-wide.html#structs)
+      - [Chapter 10. typedef](https://beej.us/guide/bgc/html/index-wide.html#typedef-making-new-types)
+      - [Chapter 12. Manual Memory Allocation](https://beej.us/guide/bgc/html/index-wide.html#manual-memory-allocation)
+      - <p>[Section 20.8 Unions](https://beej.us/guide/bgc/html/index-wide.html#unions)</p>
+
+  2. [Operating Systems: Three Easy Pieces](http://pages.cs.wisc.edu/~remzi/OSTEP/)
+
+      - <p>[Memory API](http://pages.cs.wisc.edu/~remzi/OSTEP/vm-api.pdf)</p>
+
+  3. [Memory Layout of C Programs](https://www.geeksforgeeks.org/memory-layout-of-c-program/)
+
+  ### Optional References
+
+  1. [Beej's Quick Guide to GDB](https://beej.us/guide/bggdb/)
+
+  2. [Valgrind Quick Start Guide](http://valgrind.org/docs/manual/quick-start.html)
+
+  3. [System Programming Wiki](https://github.com/angrave/SystemProgramming/wiki)
+
+      - <p>[Memory Mistakes](https://github.com/angrave/SystemProgramming/wiki/C-Programming%2C-Part-3%3A-Common-Gotchas#memory-mistakes)</p>
+
+  4. [Julia Evans](https://jvns.ca/)
+
+      <div class="row">
+
+      <div class="col-md-6">
+      <a href="https://drawings.jvns.ca/stack/" class="thumbnail">
+      <img src="https://drawings.jvns.ca/drawings/stack.svg" class="img-responsive">
+      </a>
+      </div>
+
+      <div class="col-md-6">
+      <a href="https://drawings.jvns.ca/malloc/" class="thumbnail">
+      <img src="https://drawings.jvns.ca/drawings/malloc.svg" class="img-responsive">
+      </a>
+      </div>
+
+      </div>
+
+  [Unix]:           https://en.wikipedia.org/wiki/Unix
+  [Bourne Shell]:   https://en.wikipedia.org/wiki/Bourne_shell
+  [Python]:         https://www.python.org/
+  [C]:              https://en.wikipedia.org/wiki/C_(programming_language)
+  [arrays]:         https://en.wikipedia.org/wiki/C_(programming_language)#Arrays
+  [pointers]:       https://en.wikipedia.org/wiki/C_(programming_language)#Pointers
+  [strings]:        https://en.wikipedia.org/wiki/C_string_handling
+  [unix philosophy]: https://en.wikipedia.org/wiki/Unix_philosophy
+  [system calls]:   https://en.wikipedia.org/wiki/System_call
+  [gdb]:            https://www.gnu.org/software/gdb/
+  [valgrind]:       http://valgrind.org/
+  [C99]:            https://en.wikipedia.org/wiki/C_(programming_language)#C99
+  [gcc]:            https://gcc.gnu.org/
+  [memory management]: https://en.wikipedia.org/wiki/Memory_management
+  [data structures]: https://en.wikipedia.org/wiki/Data_structure
+  [structs]:        https://en.wikipedia.org/wiki/Record_(computer_science)
+  [malloc]:         http://man7.org/linux/man-pages/man3/malloc.3.html
+  [free]:           http://man7.org/linux/man-pages/man3/malloc.3.html
+  [address space]:  https://en.wikipedia.org/wiki/Address_space
+  [unions]:         https://en.wikipedia.org/wiki/Union_type
+
+  [Beej's Guide to C Programming]: https://beej.us/guide/bgc/html/index-wide.html
+
+  ## Quiz
+
+  This week, the reading is split into two sections: the first part is a
+  [dredd] quiz, while the second part involves one [C] program: [str_rev.c].
+
+  To test the [C] program, you will need to download the [Makefile] and test
+  scripts:
+
+      :::bash
+      $ git switch master                   # Make sure we are in master branch
+      $ git pull --rebase                   # Make sure we are up-to-date with GitHub
+
+      $ git checkout -b reading10           # Create reading10 branch and check it out
+
+      $ cd reading10                        # Go into reading10 folder
+
+      # Download Reading 10 Makefile
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading10/Makefile
+
+      # Download, build, and execute tests
+      $ make test
+
+  [Makefile]: https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading10/Makefile
+
+  ### Questions
+
+  Given the following [C] program, [allocations.c], which simply declares a
+  series of variables:
+
+      :::c
+      /* allocations.c */
+
+      #include <stdio.h>
+      #include <stdlib.h>
+
+      typedef struct {
+          double x;
+          double y;
+      } Point;
+
+      typedef union {
+          char   c;
+          int    i;
+          float  f;
+          double d;
+      } Block;
+
+      double GD = 3.14;
+
+      int main(int argc, char *argv[]) {
+          int    a[]	= {5, 7, 4};
+          char  *sp   = "Video Games";
+          char   sa[]	= "Runescape";
+          Block  b    = {0};
+
+          Point   p0	= {0, 0};
+          Point  *p1	= NULL;
+          Point  *p2	= malloc(sizeof(Point));
+          Point  *p3	= malloc(5*sizeof(Point));
+          Point **p4	= malloc(5*sizeof(Point *));
+
+          return 0;
+      }
+
+  And the following [C] program, [str_rev.c], which reverses the characters of
+  each command-line argument:
+
+      :::c
+      /* str_rev: Reverse all characters in string */
+
+      #include <ctype.h>
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <string.h>
+
+      char *str_rev(const char *s) {
+          char *t = malloc(strlen(s));
+          strncpy(t, s, strlen(s));
+
+          const char *r = s + strlen(s) - 1;
+          char *w = t;
+          while (r >= s) {
+              *w++ = *r--;
+          }
+          return t;
+      }
+
+      int main(int argc, char *argv[]) {
+          for (int i = 1; i <= argc; i++) {
+              char *t = str_rev(argv[i]);
+              puts(t);
+          }
+          return 0;
+      }
+
+  Record the answers to the following [Reading 10 Quiz] questions in your
+  `reading10` branch:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+
+  <script>
+  loadQuiz('static/json/reading10.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  ### Programs
+
+  Given the provided [str_rev.c] and [Makefile], you are to do the following:
+
+  1. Modify [Makefile] to include a [rule] for the `str_rev` program.  Be
+  sure to use the `CC` and `CFLAGS` variables in your [rule].
+
+      <div class="alert alert-success" markdown="1">
+      **Note**: Consider the use of [automatic variables].
+      </div>
+
+  2. Modify [str_rev.c] so that it no longer has any uninitialized memory
+  accesses, memory leaks, invalid memory acceses, or logical errors.
+
+      <div class="alert alert-success" markdown="1">
+      **Note**: The `str_rev` must not modify the original string (hence the
+      `const char *`).  Consider the use of [strdup].
+      </div>
+
+  <div class="alert alert-warning" markdown="1">
+  #### <i class="fa fa-bug"></i> Debugging
+
+  Use this as an opportunity to utilize [valgrind] and [gdb] to debug [str_rev.c].
+  </div>
+
+  Once you have a working [Makefile], you should be able to use the [make]
+  command to run your **recipes**:
+
+      :::bash
+      $ make clean                                  # Remove targets
+      rm -f str_rev
+
+      $ make                                        # Build targets
+      gcc -Wall -g -std=gnu99 -o str_rev str_rev.c
+
+      $ ./str_rev old school                        # Test manually
+      dlo
+      loohcs
+
+      $ make test                                   # Test scripts
+
+  [rule]:   https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example
+  [make]:   http://man7.org/linux/man-pages/man1/make.1.html
+  [DAG]:    https://en.wikipedia.org/wiki/Directed_acyclic_graph
+  [allocations.c]: https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading10/allocations.c
+  [str_rev.c]: https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading10/str_rev.c
+  [strdup]: http://man7.org/linux/man-pages/man3/strdup.3.html
+  [automatic variables]: https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html
+
+  ## Submission
+
+  To submit you work, follow the same process outlined in [Reading 01]:
+
+      :::bash
+      #--------------------------------------------------
+      # BE SURE TO DO THE PREPARATION STEPS ABOVE
+      #--------------------------------------------------
+
+      $ cd reading10                        # Go into reading10 folder
+
+      $ $EDITOR answers.json                # Edit your answers.json file
+
+      $ ../.scripts/check.py                # Check reading10 quiz
+      Checking reading10 quiz ...
+           Q1 1.50
+           Q2 0.25
+           Q3 0.25
+        Score 2.00 / 2.00
+       Status Success
+
+      $ git add answers.json                # Add answers.json to staging area
+      $ git commit -m "Reading 10: Quiz"    # Commit work
+
+      $ $EDITOR str_rev.c                   # Edit source code
+
+      $ make test                           # Build and Run tests
+      Checking reading10 str_rev ...
+       str_rev (no arguments)                   ... Success
+       str_rev (no arguments) (valgrind)        ... Success
+       str_rev old school                       ... Success
+       str_rev old school (valgrind)            ... Success
+       str_rev 'old school'                     ... Success
+       str_rev 'old school' (valgrind)          ... Success
+
+         Score 2.00 / 2.00
+        Status Success
+
+      $ git add Makefile                    # Add Makefile to staging area
+      $ git add str_rev.c                   # Add source code to staging area
+      $ git commit -m "Reading 10: Code"    # Commit work
+
+      $ git push -u origin reading10        # Push branch to GitHub
+
+  <div class="alert alert-danger" markdown="1">
+  #### <i class="fa fa-github"></i> Pull Request
+  Remember to create a **Pull Request** and assign the appropriate TA from the
+  [Reading 10 TA List].
+
+  **DO NOT MERGE** your own **Pull Request**.  The TAs use open **Pull Requests**
+  to keep track of which assignments to grade.  Closing them yourself will
+  cause a delay in grading and confuse the TAs.
+  </div>
+
+  [git]:                https://git-scm.com/
+  [clone]:              https://git-scm.com/docs/git-clone
+  [commit]:             https://git-scm.com/docs/git-commit
+  [push]:               https://git-scm.com/docs/git-push
+  [GitHub]:             https://github.com
+  [Reading 01]:         reading01.html
+  [Reading 10 TA List]: reading10_tas.html
+  [dredd]:              https://dredd.h4x0r.space
+  [Reading 10 Quiz]:    static/json/reading10.json
