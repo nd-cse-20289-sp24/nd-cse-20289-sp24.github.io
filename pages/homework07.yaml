@@ -176,7 +176,7 @@ body:       |
 
       :::make
       CC=		    gcc
-      CFLAGS=		-Wall -g -std=gnu99
+      CFLAGS=		-Wall -g -std=gnu99 -fPIC
       LD=		    gcc
       LDFLAGS=	-L.
       LIBS=		  -lstr
@@ -237,7 +237,7 @@ body:       |
       :::bash
       # Build all TARGETS
       $ make
-      gcc -Wall -g -std=gnu99 -c -o str.o str.c
+      gcc -Wall -g -std=gnu99 -fPIC -c -o str.o str.c
       gcc -L. -shared -o libstr.so str.o
       ar rcs libstr.a str.o
 
@@ -554,10 +554,10 @@ body:       |
       :::bash
       # Build all TARGETS
       $ make
-      gcc -Wall -g -std=gnu99 -c -o str.o str.c
+      gcc -Wall -g -std=gnu99 -fPIC -c -o str.o str.c
       gcc -L. -shared -o libstr.so str.o
       ar rcs libstr.a str.o
-      gcc -Wall -g -std=gnu99 -c -o trit.o trit.c
+      gcc -Wall -g -std=gnu99 -fPIC -c -o trit.o trit.c
       gcc -L. -o trit.dynamic trit.o -lstr
       gcc -L. -static -o trit.static trit.o -lstr
 
@@ -590,8 +590,6 @@ body:       |
         Status Success
 
       Testing trit utility...
-       trit (dynamic)                           ... Success
-       trit (static)                            ... Success
        trit -h                                  ... Success
        trit -h (valgrind)                       ... Success
        trit                                     ... Success
@@ -730,8 +728,6 @@ body:       |
       # Run test script manually
       $ ./trit.test.sh
       Testing trit utility...
-       trit (dynamic)                           ... Success
-       trit (static)                            ... Success
        trit -h                                  ... Success
        trit -h (valgrind)                       ... Success
        trit                                     ... Success
