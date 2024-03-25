@@ -1,0 +1,36 @@
+{
+    "q1": {
+        "type": "blank",
+        "question": "\n<p>Given <tt>allocations.c</tt>, fill in the table below to identify how\nmuch memory (in bytes) is allocated in each memory segment (ie.\n<b>stack</b>, <b>heap</b>, <b>data</b>) for the corresponding variable\ndeclaration:</p>\n\n<table class=\"table table-striped\">\n  <thead>\n    <th>Code</th>\n    <th>Data</th>\n    <th>Heap</th>\n    <th>Stack</th>\n  </thead>\n  <tbody>\n    <tr>\n      <td><tt>double GD = 3.14;</tt></td>\n      <td><tt>____ ( 1)</tt></td>\n      <td><tt>____ ( 2)</tt></td>\n      <td><tt>____ ( 3)</tt></td>\n    </tr>\n    <tr>\n      <td><tt>int a[] = {5, 7, 4};</tt></td>\n      <td><tt>____ ( 4)</tt></td>\n      <td><tt>____ ( 5)</tt></td>\n      <td><tt>____ ( 6)</tt></td>\n    </tr>\n\n    <tr>\n      <td><tt>char *sp = \"Video Games\";</tt></td>\n      <td><tt>____ ( 7)</tt></td>\n      <td><tt>____ ( 8)</tt></td>\n      <td><tt>____ ( 9)</tt></td>\n    </tr>\n\n    <tr>\n      <td><tt>char sa[] = \"Runescape\";</tt></td>\n      <td><tt>____ (10)</tt></td>\n      <td><tt>____ (11)</tt></td>\n      <td><tt>____ (12)</tt></td>\n    </tr>\n\n    <tr>\n      <td><tt>Block b = {0};</tt></td>\n      <td><tt>____ (13)</tt></td>\n      <td><tt>____ (14)</tt></td>\n      <td><tt>____ (15)</tt></td>\n    </tr>\n\n    <tr>\n      <td><tt>Point p0 = {0, 0};</tt></td>\n      <td><tt>____ (16)</tt></td>\n      <td><tt>____ (17)</tt></td>\n      <td><tt>____ (18)</tt></td>\n    </tr>\n\n    <tr>\n      <td><tt>Point *p1 = NULL;</tt></td>\n      <td><tt>____ (19)</tt></td>\n      <td><tt>____ (20)</tt></td>\n      <td><tt>____ (21)</tt></td>\n    </tr>\n\n    <tr>\n      <td><tt>Point *p2 = malloc(sizeof(Point));</tt></td>\n      <td><tt>____ (22)</tt></td>\n      <td><tt>____ (23)</tt></td>\n      <td><tt>____ (24)</tt></td>\n    </tr>\n\n    <tr>\n      <td><tt>Point *p3 = malloc(5*sizeof(Point));</tt></td>\n      <td><tt>____ (25)</tt></td>\n      <td><tt>____ (26)</tt></td>\n      <td><tt>____ (27)</tt></td>\n    </tr>\n\n    <tr>\n      <td><tt>Point **p4 = malloc(5*sizeof(Point *));</tt></td>\n      <td><tt>____ (28)</tt></td>\n      <td><tt>____ (29)</tt></td>\n      <td><tt>____ (30)</tt></td>\n    </tr>\n\n  </tbody>\n</table>\n\n<p>Assume this program is compiled on a 64-bit Linux machine (ie. the\n<b>student</b> machines).</p>\n"
+    },
+    "q2": {
+        "type": "multiple",
+        "question": "\n<p>Build <tt>str_rev.c</tt> with the appropriate compiler flags and then\nrun it using <tt>gdb</tt>:</p>\n\n<pre>\n$ gcc -Wall -g -std=gnu99 -o str_rev str_rev.c\n\n$ gdb ./str_rev\n...\n(gdb) run old school\n...\nProgram received signal SIGSEGV, Segmentation fault.\n(gdb) bt\n...\n</pre>\n\n<p>Which of the following statements are true (select all that apply)?</p>\n",
+        "responses": {
+            "puts": "The program <b>segfaults</b> on the line <tt>puts(t)</tt>.",
+            "copy": "The program <b>segfaults</b> on the line <tt>*w++ = *r--</tt>.",
+            "strcpy": "The program <b>segfaults</b> on the line <tt>strncpy(t, s, strlen(s))</tt>.",
+            "strlen": "The program <b>segfaults</b> on the line <tt>char *t = malloc(strlen(s))</tt>.",
+            "nulls": "The program <b>segfaults</b> because <tt>s</tt> is <tt>NULL</tt>.",
+            "nullt": "The program <b>segfaults</b> because <tt>t</tt> is <tt>NULL</tt>.",
+            "longs": "The program <b>segfaults</b> because <tt>s</tt> is too long.",
+            "longt": "The program <b>segfaults</b> because <tt>t</tt> is too long.",
+            "frees": "To fix the segfault, we must call <tt>free(s)</tt>.",
+            "freet": "To fix the segfault, we must call <tt>free(t)</tt>.",
+            "inti": "To fix the segfault, we must set <tt>int i = 0</tt> in the <tt>for</tt> loop.",
+            "argc": "To fix the segfault, we must check <tt>i < argc</tt> in the <tt>for</tt> loop."
+        }
+    },
+    "q3": {
+        "type": "multiple",
+        "question": "\n<p>Fix the segmentation fault in <b>Q2</b>, rebuild the program, and then\nuse <tt>valgrind</tt> to run the program:</p>\n\n<pre>\n$ valgrind --leak-check=full ./str_rev old school\n</pre>\n\n<p>Which of the following statements are true (select all that apply)?</p>\n",
+        "responses": {
+            "nouninits": "There are no uninitialized memory accesses.",
+            "uninits": "There are uninitialized memory accesses.",
+            "noleaks": "There are no memory leaks.",
+            "leaks": "There is a memory leak.",
+            "noinvalids": "There are no invalid memory accesses.",
+            "invalids": "There are invalid memory accesses."
+        }
+    }
+}
