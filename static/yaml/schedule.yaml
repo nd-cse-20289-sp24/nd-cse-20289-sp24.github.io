@@ -266,14 +266,16 @@
 - name:     "Pointers, Arrays, Strings"
   days:
       - date:           Mon 03/25
-        topics:         Libraries, Pointers, Arrays
+        topics:         Libraries, Pointers
         assignment:     Reading 09
         items:
           - name:       Slides 18
             link:       https://docs.google.com/presentation/d/1cwSN1hV66ksYO-1ZC9-HdQUYQTDwWghEhGnDjqyquQs/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=9bd18859-5b4d-4b3d-be8b-b13e012ee0e9
 
       - date:           Wed 03/27
-        topics:         Strings, Debugging (GDB, Valgrind)
+        topics:         Arrays, Strings, Debugging (GDB, Valgrind)
         items:
           - name:       Slides 19
             link:       https://docs.google.com/presentation/d/1Qi1CX3UbQkgWcunHHL3qEM9GM0Td9qA-EVbf9O-qzxI/edit?usp=sharing
