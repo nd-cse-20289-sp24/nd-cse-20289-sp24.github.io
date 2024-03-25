@@ -1,0 +1,50 @@
+{
+    "q01": {
+        "type": "multiple",
+        "question": "\n<p>Which of the following statements regarding <tt>Makefiles</tt> are true\n(select all that apply)?</p>\n",
+        "responses": {
+            "graph": "<tt>Makefile</tt> rules specify the nodes in a directed acyclic graph.",
+            "clean": "A <tt>clean</tt> target is automatically provided by <tt>make</tt>.",
+            "cflags": "The <tt>CFLAGS</tt> variable is typically used during compilation.",
+            "ldflags": "The <tt>LDFLAGS</tt> variable is typically used during linking.",
+            "at": "The <tt>$@</tt> variable refers to the target.",
+            "less": "The <tt>$<</tt> variable refers to all of the sources."
+        }
+    },
+    "q02": {
+        "type": "multiple",
+        "question": "\n<p>Which of the following statements regarding the <b>shared library</b>\n(<tt>libstr.so</tt>) and the <b>static library</b> (<tt>libstr.a</tt>) is\ntrue (select all that apply)?</p>\n",
+        "responses": {
+            "objects_same": "The shared and static libraries had the same object files.",
+            "objects_diff": "The shared and static libraries had different object files.",
+            "shared_smaller": "The shared library was smaller than static library.",
+            "static_smaller": "The static library was smaller than shared library.",
+            "linker_same": "The shared and static libraries used the same linker.",
+            "linker_diff": "The shared and static libraries used different linkers."
+        }
+    },
+    "q03": {
+        "type": "multiple",
+        "question": "\n<p>Which of the following statements regarding the <b>dynamic\nexecutable</b> (<tt>trit.dynamic</tt>) and the <b>static executable</b>\n(<tt>trit.static</tt>) is true (select all that apply)?</p>\n",
+        "responses": {
+            "dyn_link_shared": "The dynamic executable requires the shared library during linking.",
+            "sta_link_shared": "The static executable requires the shared library during linking.",
+            "dyn_link_static": "The dynamic executable requires the static library during linking.",
+            "sta_link_static": "The static executable requires the static library during linking.",
+            "dyn_run_shared": "The dynamic executable requires the shared library at run-time.",
+            "sta_run_shared": "The static executable requires the shared library at run-time.",
+            "dyn_run_static": "The dynamic executable requires the static library at run-time.",
+            "sta_run_static": "The static executable requires the static library at run-time.",
+            "dyn_larger": "The dynamic executable is larger than static executable.",
+            "sta_larger": "The static executable is larger than dynamic executable."
+        }
+    },
+    "q04": {
+        "type": "blank",
+        "question": "\n<p>To execute the <b>dynamic executable</b> (<tt>trit.dynamic</tt>), we\nneed to set the ____ environmental variable to include the folder that\ncontains the ____ library.</p>\n"
+    },
+    "q05": {
+        "type": "blank",
+        "question": "\n<p>In <tt>C</tt>, a ____ is a variable that holds the location or address\nof data stored in memory. To get the value referenced by this variable, we\nuse ____ in front of the variable name.</p>\n\n<p>In <tt>C</tt>, an ____ is a fixed-size block of contiguous memory used\nto store data of the same type. The index operator <tt>[]</tt> for this\ntype is just <i>syntactic sugar</i> for a pointer ____ operation.</p>\n\n<p>In <tt>C</tt>, a <b>string</b> is an array of ____ terminated by the ____\ncharacter.  As such we often pass the name of the <b>string</b> as a ____\nto functions, since the name <i>decays</i> to this type.</p>\n"
+    }
+}

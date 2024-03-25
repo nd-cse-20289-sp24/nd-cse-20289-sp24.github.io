@@ -281,36 +281,36 @@
       - date:           Fri 03/29
         topics:         Easter
 
-- name:     "I/O and Files"
+- name:     "Memory Management"
   days:
       - date:           Mon 04/01
         topics:         Easter
 
       - date:           Wed 04/03
-        topics:         I/O
+        topics:         Bitsets, Memory Allocation
         assignment:     Reading 10
 
       - date:           Fri 04/05
-        topics:         Files, Directories
+        topics:         Structs, Linked Lists
 
       - date:           Sat 04/06
-        topics:         Tr
+        topics:         Trit
         assignment:     Homework 07
 
-- name:     "Memory Management"
+- name:     "Filesystem, I/O"
   days:
       - date:           Mon 04/08
-        topics:         Memory Allocation
-        assignment:     Reading 11
+        topics:         Eclipse
 
       - date:           Wed 04/10
-        topics:         Structs, Unions
+        assignment:     Reading 11
+        topics:         Filesystem
 
       - date:           Fri 04/12
-        topics:         Linked Data Structures
+        topics:         I/O
 
       - date:           Sat 04/13
-        topics:         Find
+        topics:         Lsit
         assignment:     Homework 08
 
 - name:     "Processes"
@@ -326,7 +326,7 @@
         topics:         TCP/IP, URLs, Sockets
 
       - date:           Sat 04/20
-        topics:         Xargs
+        topics:         Moveit, Timeit
         assignment:     Homework 09
 
 - name:     "Sockets"
