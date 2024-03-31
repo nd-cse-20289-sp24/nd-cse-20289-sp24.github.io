@@ -379,7 +379,7 @@ $ make test-libstr
 </ol>
 <p>You can run each manually:</p>
 <div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Run Python unit test script manually</span>
-$ ./str.unit.py -v
+$ ./str.test.py -v
 Testing libstr.so ...
 test_00_str_lower <span style="color: #666666">(</span>__main__.StrTestCase<span style="color: #666666">)</span> ... ok
 test_01_str_upper <span style="color: #666666">(</span>__main__.StrTestCase<span style="color: #666666">)</span> ... ok
@@ -460,6 +460,7 @@ Post Translation filters:
 
    -l      Convert to lowercase
    -u      Convert to uppercase
+   -t      Convert to titlecase
    -s      Strip trailing whitespace
    -d      Delete letters <span style="color: #008000; font-weight: bold">in</span> SOURCE
 
@@ -835,7 +836,7 @@ $ git push -u origin homework07           <span style="color: #3D7B7B; font-styl
 <div class="alert alert-danger">
 <h4 id="pull-request"><i class="fa fa-github"></i> Pull Request<a class="headerlink" href="#pull-request" title="Permanent link">&para;</a></h4>
 <p>Remember to create a <strong>Pull Request</strong> and assign the appropriate TA from the
-<a href="reading010_tas.html">Reading 10 TA List</a>.</p>
+<a href="reading10_tas.html">Reading 10 TA List</a>.</p>
 <p><strong>DO NOT MERGE</strong> your own <strong>Pull Request</strong>.  The TAs use open <strong>Pull Requests</strong>
 to keep track of which assignments to grade.  Closing them yourself will
 cause a delay in grading and confuse the TAs.</p>
