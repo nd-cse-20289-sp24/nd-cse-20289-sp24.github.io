@@ -416,7 +416,7 @@ body:       |
 
       :::bash
       # Run Python unit test script manually
-      $ ./str.unit.py -v
+      $ ./str.test.py -v
       Testing libstr.so ...
       test_00_str_lower (__main__.StrTestCase) ... ok
       test_01_str_upper (__main__.StrTestCase) ... ok
@@ -508,6 +508,7 @@ body:       |
 
          -l      Convert to lowercase
          -u      Convert to uppercase
+         -t      Convert to titlecase
          -s      Strip trailing whitespace
          -d      Delete letters in SOURCE
 
@@ -944,5 +945,5 @@ body:       |
   [GitHub]: https://github.com
   [Reading 01]: reading01.html
   [Reading 10 ]: reading10.html
-  [Reading 10 TA List]: reading010_tas.html
+  [Reading 10 TA List]: reading10_tas.html
   [Homework 07]: homework07.html
