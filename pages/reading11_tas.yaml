@@ -1,0 +1,45 @@
+title:      Reading 11 - TA Assignment
+icon:       fa-balance-scale
+navigation:
+  - name: "Home"
+    link: "index.html"
+    icon: "fa-linux"
+internal:
+external:
+    mapping:  static/yaml/reading11.yaml
+body:       |
+    <table class="table condensed table-striped">
+      <thead>
+        <tr>
+          <th width="50%">Student</th>
+          <th width="50%">Grader</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for student, grader in page.external['mapping'] %}
+        <tr>
+          <td>{{ student }}</td>
+          <td>{{ grader  }}</td>
+        </tr>
+      {% end %}
+      </tbody>
+    </table>
+
+    <hr>
+
+    <table class="table condensed table-striped">
+      <thead>
+        <tr>
+          <th width="50%">Grader</th>
+          <th width="50%">Student</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for student, grader in sorted(page.external['mapping'], key=lambda p: p[1].lower()) %}
+        <tr>
+          <td>{{ grader  }}</td>
+          <td>{{ student }}</td>
+        </tr>
+      {% end %}
+      </tbody>
+    </table>

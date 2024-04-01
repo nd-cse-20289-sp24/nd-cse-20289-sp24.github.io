@@ -1,0 +1,268 @@
+title:      "Reading 11: File System"
+icon:       fa-book
+navigation: []
+internal:
+external:
+body:       |
+
+  **Everyone**:
+
+  Next week, we will descending further down the system stack and introduce
+  [system calls], which are services or operations performed by the operating
+  system [kernel] on our behalf.  In particular, we will explore [system calls]
+  related to [I/O], [files], and [directories] and discuss how many of the
+  utilities we use every day are implemented.
+
+  <div class="alert alert-info" markdown="1">
+  #### <i class="fa fa-search"></i> TL;DR
+
+  The focus of this reading is to explore [system calls] related to [I/O],
+  [files], and [directories] in [C].
+
+  </div>
+
+  <img src="static/img/ostep.jpg" class="pull-right">
+
+  ## Readings
+
+  The readings for this week are:
+
+  1. [Operating Systems: Three Easy Pieces](http://pages.cs.wisc.edu/~remzi/OSTEP/)
+
+      - <p>[Files and Directories](http://pages.cs.wisc.edu/~remzi/OSTEP/file-intro.pdf)
+
+  ### Optional References
+
+  1. [System Programming Wiki](https://github.com/angrave/SystemProgramming/wiki)
+
+      - <p>[Filesystems](https://github.com/angrave/SystemProgramming/wiki#9-file-systems)</p>
+
+  2. [Linux Programming Interface](http://man7.org/tlpi/)
+
+      - <p>[File I/O: The Universal I/O Model](http://man7.org/tlpi/download/TLPI-04-File_IO_The_Universal_IO_Model.pdf)</p>
+
+  3. [Julia Evans](https://jvns.ca/)
+
+      <div class="row">
+
+      <div class="col-md-4">
+      <a href="https://drawings.jvns.ca/file-descriptors/" class="thumbnail">
+      <img src="https://drawings.jvns.ca/drawings/filedescriptors.jpeg" class="img-responsive">
+      </a>
+      </div>
+
+      <div class="col-md-4">
+      <a href="https://drawings.jvns.ca/inodes/" class="thumbnail">
+      <img src="https://drawings.jvns.ca/drawings/inodes.png" class="img-responsive">
+      </a>
+      </div>
+
+      <div class="col-md-4">
+      <a href="https://drawings.jvns.ca/directories/" class="thumbnail">
+      <img src="https://drawings.jvns.ca/drawings/directories.png" class="img-responsive">
+      </a>
+      </div>
+
+      </div>
+
+
+  [system calls]:   https://en.wikipedia.org/wiki/System_call
+  [files]:          https://en.wikipedia.org/wiki/Computer_file
+  [directories]:    https://en.wikipedia.org/wiki/Directory_(computing)
+  [kernel]:         https://en.wikipedia.org/wiki/Kernel_(operating_system)
+  [C]:              https://en.wikipedia.org/wiki/C_(programming_language)
+  [i/o]:            https://en.wikipedia.org/wiki/Input/output
+
+  ## Quiz
+
+  This week, the reading is split into two sections: the first part is a
+  [dredd] quiz, while the second part involves one [C] program: [walk.c].
+
+  To test the [C] program, you will need to download the [Makefile] and test
+  scripts:
+
+      :::bash
+      $ git switch master                   # Make sure we are in master branch
+      $ git pull --rebase                   # Make sure we are up-to-date with GitHub
+
+      $ git checkout -b reading11           # Create reading11 branch and check it out
+
+      $ cd reading11                        # Go into reading11 folder
+
+      # Download Reading 11 Makefile
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading11/Makefile
+
+      # Download Reading 11 walk.c
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading11/walk.c
+
+      # Download, build, and execute tests
+      $ make test
+
+  [Makefile]: https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading11/Makefile
+  [walk.c]: https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading11/walk.c
+
+  ### Questions
+
+  Record the answers to the following [Reading 11 Quiz] questions in your
+  `reading11` branch:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+
+  <script>
+  loadQuiz('static/json/reading11.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  [opendir]:    http://man7.org/linux/man-pages/man3/opendir.3.html
+  [readdir]:    http://man7.org/linux/man-pages/man3/readdir.3.html
+  [stat]:       http://man7.org/linux/man-pages/man2/stat.2.html
+  [closedir]:   http://man7.org/linux/man-pages/man3/closedir.3.html
+
+  ### Programs
+
+   Given the provided [Makefile] and [walk.c], you are to do the following:
+
+  1. Modify [Makefile] to include a [rule] for the `walk` program.  Be sure to
+  use the `CC` and `CFLAGS` variables in your [rule].
+
+      <div class="alert alert-success" markdown="1">
+      **Note**: Consider the use of [automatic variables].
+      </div>
+
+      Once you have a working [Makefile], you should be able to use the [make]
+      command to run your **recipes**:
+
+          :::bash
+          $ make clean                                  # Remove targets
+          rm -f walk
+
+          $ make                                        # Build targets
+          gcc -Wall -g -std=gnu99 -o walk walk.c
+
+  2. Modify [walk.c] so that it uses [system calls] in [C] to implement the
+  equivalent [Python] script:
+
+          :::python
+          import os
+          import sys
+
+          root = sys.argv[1] if len(sys.argv) > 1 else '.'
+
+          for name in os.listdir(root):
+              path = os.path.join(root, name)
+              if os.path.isfile(path) and not os.path.islink(path):
+                  print(name, os.path.getsize(path))
+
+      That is, given a `root` command-line argument (default is "." if nothing
+      is specified), the program should iterate through the contents of that
+      `root` directory and print out the name and size of each *regular file*.
+
+      <div class="alert alert-success" markdown="1">
+      #### <i class="fa fa-code"></i> Fill in the Blanks
+
+      The code has a few `____` placeholders.  You will need to replace these
+      placeholders with the appropriate **functions** and **variables** to
+      complete the program.
+
+      Here is a list of some possible **functions** and **variables** you may wish to use:
+
+      - [opendir](https://man7.org/linux/man-pages/man3/opendir.3.html)
+      - [readdir](https://man7.org/linux/man-pages/man3/readdir.3.html)
+      - [closedir](https://man7.org/linux/man-pages/man3/closedir.3.html)
+      - [strerror](https://man7.org/linux/man-pages/man3/strerror.3.html)
+      - [sprintf](https://man7.org/linux/man-pages/man3/printf.3.html)
+      - [stat](https://man7.org/linux/man-pages/man2/lstat.2.html)
+      - `e->d_type`
+      - `e->d_name`
+      - `s.st_size`
+      </div>
+
+      Once you have a working `walk.c`, you should be able to build and run it:
+
+          $ ./walk        # No arguments (current directory)
+          Makefile 446
+          walk 24864
+          README.md 13
+          answers.json 303
+          test_walk.sh 1824
+          walk.c 1000
+
+          $ ./walk ..     # Parent directory
+          Makefile 385
+          README.md 2654
+          .gitignore 34
+          Dockerfile 499
+
+  [rule]: https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example
+  [automatic variables]: https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html
+  [make]: http://man7.org/linux/man-pages/man1/make.1.html
+
+  ## Submission
+
+  To submit you work, follow the same process outlined in [Reading 01]:
+
+      :::bash
+      #--------------------------------------------------
+      # BE SURE TO DO THE PREPARATION STEPS ABOVE
+      #--------------------------------------------------
+
+      $ cd reading11                        # Go into reading11 folder
+
+      $ $EDITOR answers.json                # Edit your answers.json file
+
+      $ ../.scripts/check.py                # Check reading11 quiz
+      Checking reading11 quiz ...
+           Q01 0.50
+           Q02 0.50
+           Q03 1.00
+         Score 2.00 / 2.00
+        Status Success
+
+      $ git add answers.json                # Add answers.json to staging area
+      $ git commit -m "Reading 11: Quiz"    # Commit work
+
+      $ $EDITOR walk.c                      # Edit source code
+
+      $ make test                           # Build and Run tests
+      Checking reading11 walk ...
+        walk (no arguments)                      ... Success
+        walk .                                   ... Success
+        walk ..                                  ... Success
+        walk ~                                   ... Success
+        walk /etc                                ... Success
+        walk asdf                                ... Success
+
+          Score 2.00 / 2.00
+         Status Success
+
+      $ git add Makefile                    # Add Makefile to staging area
+      $ git add walk.c                      # Add source code to staging area
+      $ git commit -m "Reading 11: Code"    # Commit work
+
+      $ git push -u origin reading11        # Push branch to GitHub
+
+  <div class="alert alert-danger" markdown="1">
+  #### <i class="fa fa-github"></i> Pull Request
+  Remember to create a **Pull Request** and assign the appropriate TA from the
+  [Reading 11 TA List].
+
+  **DO NOT MERGE** your own **Pull Request**.  The TAs use open **Pull Requests**
+  to keep track of which assignments to grade.  Closing them yourself will
+  cause a delay in grading and confuse the TAs.
+  </div>
+
+  [git]:                https://git-scm.com/
+  [clone]:              https://git-scm.com/docs/git-clone
+  [commit]:             https://git-scm.com/docs/git-commit
+  [push]:               https://git-scm.com/docs/git-push
+  [GitHub]:             https://github.com
+  [Reading 01]:         reading01.html
+  [Reading 11 TA List]: reading11_tas.html
+  [dredd]:              https://dredd.h4x0r.space
+  [Reading 11 Quiz]:    static/json/reading11.json
+  [Python]:             https://www.python.org
