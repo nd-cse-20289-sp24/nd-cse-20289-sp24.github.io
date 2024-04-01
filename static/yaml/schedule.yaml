@@ -291,11 +291,20 @@
         topics:         Easter
 
       - date:           Wed 04/03
-        topics:         Bitsets, Memory Allocation
+        topics:         Memory Allocation, Structs, Unions
         assignment:     Reading 10
+        items:
+          - name:       Slides 20
+            link:       https://docs.google.com/presentation/d/1AhHYO2skwJlTHX8C9AfUpN0q6ZRXQp7W6JgbBiyR-_g/edit?usp=sharing
+          - name:       Slides 21
+            link:       https://docs.google.com/presentation/d/1Blx_PeuHF2cvIrQrF6snDvWilJtTwWoCJ4XWPYZ93pY/edit?usp=sharing
+
 
       - date:           Fri 04/05
-        topics:         Structs, Linked Lists
+        topics:         Bitsets, Linked Lists
+        items:
+          - name:       Slides 22
+            link:       https://docs.google.com/presentation/d/1vlRUjV_u65_4OpbfVlzzmogzTLSGy2JfUeWo-SVCAgM/edit?usp=sharing
 
       - date:           Sat 04/06
         topics:         Trit
