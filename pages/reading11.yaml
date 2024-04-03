@@ -233,7 +233,6 @@ body:       |
         walk (no arguments)                      ... Success
         walk .                                   ... Success
         walk ..                                  ... Success
-        walk ~                                   ... Success
         walk /etc                                ... Success
         walk asdf                                ... Success
 
