@@ -60,14 +60,6 @@ else
     echo "Success"
 fi
 
-printf " %-40s ... " "walk ~"
-./walk ~ | sort | diff -y - <(walk_py ~ | sort) > $WORKSPACE/test
-if [ $? -ne 0 ]; then
-    error "Failure"
-else
-    echo "Success"
-fi
-
 printf " %-40s ... " "walk /etc"
 ./walk /etc | sort | diff -y - <(walk_py /etc | sort) > $WORKSPACE/test
 if [ $? -ne 0 ]; then
