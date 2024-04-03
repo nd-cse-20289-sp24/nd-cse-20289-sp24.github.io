@@ -348,7 +348,7 @@ body:       |
       <div class="alert alert-success" markdown="1">
 
       **Hint**: Construct and use a **lookup** table to efficiently determine
-        if a character should substituted for another charachter while copying
+        if a character should substituted for another character while copying
         from `s` to `w`.
 
       </div>

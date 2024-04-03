@@ -149,7 +149,7 @@ else
 fi
 
 printf " %-40s ... " "trit -s swift snake"
-input | ./trit.static -s swift snake | diff -y - <(input | tr swift snake | sed -E 's/\s+$//') &> $WORKSPACE/test
+input | ./trit.static -s swift snake | diff -y - <(input | tr swift snake | sed -E 's/[ \t\r\n]+$//') &> $WORKSPACE/test
 if [ $? -ne 0 ]; then
     error "Failure"
 else
@@ -197,7 +197,7 @@ else
 fi
 
 printf " %-40s ... " "trit -l -s aeio 4310"
-input | ./trit.static -l -s aeio 4310 | diff -y - <(input | tr aeio 4310 | tr A-Z a-z | sed -E 's/\s+$//') &> $WORKSPACE/test
+input | ./trit.static -l -s aeio 4310 | diff -y - <(input | tr aeio 4310 | tr A-Z a-z | sed -E 's/[ \t\r\n]+$//') &> $WORKSPACE/test
 if [ $? -ne 0 ]; then
     error "Failure"
 else
