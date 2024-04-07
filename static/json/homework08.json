@@ -1,0 +1,30 @@
+{
+    "q01": {
+        "type": "multiple",
+        "question": "\n<p>In <tt>findit.c</tt>, you could have (<i>really, should have</i>) used\n<tt>strdup</tt> when adding paths to your <tt>files</tt> lists.  Which of\nthe following statements regarding <tt>strdup</tt> is true (select all that\napply)?</p>\n",
+        "responses": {
+            "stack": "<tt>strdup</tt> <b>allocates</b> a new string on the <b>stack</b>.",
+            "heap": "<tt>strdup</tt> <b>allocates</b> a new string on the <b>heap</b>.",
+            "copy": "<tt>strdup</tt> <b>copies</b> the specified string into the allocated space.",
+            "clear": "<tt>strdup</tt> <b>clears</b> the specified string from the allocated space."
+        }
+    },
+    "q02": {
+        "type": "blank",
+        "question": "\n<p>Given the following statements (inside a <tt>main</tt> function), fill\nin the table below to identify how much memory (in bytes) is allocated in\neach memory segment (ie. <b>stack</b>, <b>heap</b>, <b>data</b>) for the\ncorresponding variable declaration:</p>\n\n<table class=\"table table-striped\">\n  <thead>\n    <th>Code</th>\n    <th>Data</th>\n    <th>Heap</th>\n    <th>Stack</th>\n  </thead>\n  <tbody>\n    <tr>\n      <td><tt>char *s = \"Solar Eclipse\";</tt></td>\n      <td><tt>____ ( 1)</tt></td>\n      <td><tt>____ ( 2)</tt></td>\n      <td><tt>____ ( 3)</tt></td>\n    </tr>\n    <tr>\n      <td><tt>Data d = {.string=s};</tt></td>\n      <td><tt>____ ( 4)</tt></td>\n      <td><tt>____ ( 5)</tt></td>\n      <td><tt>____ ( 6)</tt></td>\n    </tr>\n    <tr>\n      <td><tt>char *c = strdup(d.string);</tt></td>\n      <td><tt>____ ( 7)</tt></td>\n      <td><tt>____ ( 8)</tt></td>\n      <td><tt>____ ( 9)</tt></td>\n    </tr>\n    <tr>\n      <td><tt>Node *n = node_create((Data)strdup(d.string), NULL);</tt></td>\n      <td><tt>____ (10)</tt></td>\n      <td><tt>____ (11)</tt></td>\n      <td><tt>____ (12)</tt></td>\n    </tr>\n  </tbody>\n</table>\n\n<p>Assume this program is compiled on a 64-bit Linux machine (ie. the\n<b>student</b> machines).</p>\n"
+    },
+    "q03": {
+        "type": "multiple",
+        "question": "\n<p>In each of the <tt>Filters</tt>, the function receives an <tt>options</tt>\nargument.  Which of the following are valid ways to check the\n<tt>type</tt> attribute of the <tt>options</tt> (select all that\napply)?</p>\n",
+        "responses": {
+            "a": "<tt>options.type</tt>",
+            "b": "<tt>options->type</tt>",
+            "c": "<tt>(*options).type</tt>",
+            "d": "<tt>(*options)->type</tt>"
+        }
+    },
+    "q04": {
+        "type": "blank",
+        "question": "\n<p>On the <b>student machines</b>, run <tt>strace -e access,lstat,write -c\n./findit /etc -type f -name '*.conf' -readable</tt> a few times and answer\nthe following questions:</p>\n\n<ol>\n    <li>Which of the three system calls was called the most often? ____</li>\n    <li>Which of the three system calls was called the least often? ____</li>\n    <li>Which of the three system calls had the most errors? ____</li>\n    <li>Which of the three system calls used the most time? ____</li>\n</ol>\n"
+    }
+}
