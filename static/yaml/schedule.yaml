@@ -340,12 +340,22 @@
       - date:           Mon 04/15
         topics:         Processes
         assignment:     Reading 12
+        items:
+          - name:       Slides 24
+            link:       https://docs.google.com/presentation/d/1zN6bq3EEngFWMuPaox63QPmB68d_z-WtAHuAU9pt2is/edit?usp=sharing
 
       - date:           Wed 04/17
         topics:         Signals
+        items:
+          - name:       Slides 24
+            link:       https://docs.google.com/presentation/d/1zN6bq3EEngFWMuPaox63QPmB68d_z-WtAHuAU9pt2is/edit?usp=sharing
 
       - date:           Fri 04/19
         topics:         TCP/IP, URLs, Sockets
+        items:
+          - name:       Slides 25
+            link:       https://docs.google.com/presentation/d/1xUlZPRVmSbyxqqvcA9b3oFIrxnkquBcIAF7ji9L-Hno/edit?usp=sharing
+
 
       - date:           Sat 04/20
         topics:         Moveit, Timeit
@@ -356,12 +366,21 @@
       - date:           Mon 04/22
         assignment:     Reading 13
         topics:         HTTP Client
+        items:
+          - name:       Slides 25
+            link:       https://docs.google.com/presentation/d/1xUlZPRVmSbyxqqvcA9b3oFIrxnkquBcIAF7ji9L-Hno/edit?usp=sharing
 
       - date:           Wed 04/24
         topics:         HTTP Server
+        items:
+          - name:       Slides 25
+            link:       https://docs.google.com/presentation/d/1xUlZPRVmSbyxqqvcA9b3oFIrxnkquBcIAF7ji9L-Hno/edit?usp=sharing
 
       - date:           Fri 04/26
         topics:         VPS / HTTP Server
+        items:
+          - name:       Slides 26
+            link:       https://docs.google.com/presentation/d/10LZcyKM6PiDcUC9xSsb_mPwoP38CHY3S2FbWa-Ti_Nw/edit?usp=sharing
 
       - date:           Sat 04/27
         topics:         Gwen
@@ -374,7 +393,7 @@
           - name:       Checklist 03
 
       - date:           Wed 05/01
-        topics:         TBD
+        topics:         OSRS
 
       - date:           Mon 05/06
         items:
