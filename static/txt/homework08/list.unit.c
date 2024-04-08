@@ -189,6 +189,7 @@ int test_04_list_output() {
         assert(streq(buffer, curr->data.string));
         curr = curr->next;
     }
+    assert(!curr);
 
     node_delete(l.head, false, true);
     return EXIT_SUCCESS;

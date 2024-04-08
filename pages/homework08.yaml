@@ -523,8 +523,9 @@ body:       |
 
   </div>
 
-  [iterative development]:  https://en.wikipedia.org/wiki/Iterative_and_incremental_development
-  [unit tests]:             https://en.wikipedia.org/wiki/Unit_testing
+  [iterative development]: https://en.wikipedia.org/wiki/Iterative_and_incremental_development
+  [unit tests]: https://en.wikipedia.org/wiki/Unit_testing
+  [valgrind]: https://valgrind.org/
 
   ## Activity 2: Filters (3 Points)
 
