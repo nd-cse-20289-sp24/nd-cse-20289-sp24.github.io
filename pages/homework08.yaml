@@ -589,7 +589,7 @@ body:       |
 
   [lstat]: https://man7.org/linux/man-pages/man2/stat.2.html
   [S_IFMT]: https://man7.org/linux/man-pages/man2/stat.2.html
-  [fnmatch]: https://man7.org/linux/man-pages/man2/stat.2.html
+  [fnmatch]: https://man7.org/linux/man-pages/man3/fnmatch.3.html
   [access]: https://man7.org/linux/man-pages/man2/access.2.html
 
   ### Task 2: Testing
@@ -693,7 +693,7 @@ body:       |
       <div class="alert alert-success" markdown="1">
 
       **Hint**: Consider using [opendir], [readdir], and [closedir] as you did
-        for `walk` in [Reading 10].  When recursing on a **directory**, make
+        for `walk` in [Reading 11].  When recursing on a **directory**, make
         sure to use the **full path**.
 
         When adding the **full path** to the `List` of `files`, consider using
@@ -737,7 +737,6 @@ body:       |
   [readdir]: https://man7.org/linux/man-pages/man3/readdir.3.html
   [closedir]: https://man7.org/linux/man-pages/man3/closedir.3.html
   [strdup]: https://man7.org/linux/man-pages/man3/strdup.3.html
-  [Reading 10]: reading10.html
 
   ### Task 2: Testing
 
