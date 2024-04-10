@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Reading 12: Processes</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="static/css/blugold.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<style>
+	body {
+	    padding: 10px;
+	}
+	</style>
+    </head>
+    <body>
+	<div class="container">
+
+	    <div class="row">
+		<div class="page-header">
+		    <ul class="nav nav-pills pull-right">
+			
+		    </ul>
+		    <h1><i class="fa fa-book"></i> Reading 12: Processes</h1>
+		</div>
+	    </div>
+
+            
+<p><strong>Everyone</strong>:</p>
+<p>Next week, we will discuss <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> involving <a href="https://en.wikipedia.org/wiki/Process_(computing)">processes</a> and
+<a href="http://man7.org/linux/man-pages/man2/signal.2.html">signals</a>.  We will discover the wonders of the <a href="https://en.wikipedia.org/wiki/Fork_bomb">fork bomb</a> and examine how
+something like the <code>TROLL</code> from <a href="homework01.html">Homework 01</a> works.</p>
+<div class="alert alert-info">
+<h4 id="tldr"><i class="fa fa-search"></i> TL;DR<a class="headerlink" href="#tldr" title="Permanent link">&para;</a></h4>
+<p>The focus of this reading is to explore <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> related to <a href="https://en.wikipedia.org/wiki/Process_(computing)">processes</a>
+and <a href="http://man7.org/linux/man-pages/man2/signal.2.html">signals</a> in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a>.</p>
+</div>
+<p><img src="static/img/ostep.jpg" class="pull-right"></p>
+<h2 id="readings">Readings<a class="headerlink" href="#readings" title="Permanent link">&para;</a></h2>
+<p>The readings for this week are:</p>
+<ol>
+<li>
+<p><a href="http://pages.cs.wisc.edu/~remzi/OSTEP/">Operating Systems: Three Easy Pieces</a></p>
+<ul>
+<li><p><a href="http://pages.cs.wisc.edu/~remzi/OSTEP/cpu-api.pdf">Processes</a></li>
+</ul>
+</li>
+</ol>
+<h3 id="optional-references">Optional References<a class="headerlink" href="#optional-references" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><a href="https://github.com/angrave/SystemProgramming/wiki">System Programming Wiki</a></p>
+<ul>
+<li><p><a href="https://github.com/angrave/SystemProgramming/wiki#2-processes">Processes</a></p></li>
+</ul>
+</li>
+<li>
+<p><a href="http://beej.us/guide/bgipc/html/multi/index.html">Beej's Guide to Unix IPC</a></p>
+<ul>
+<li>
+<p><a href="https://beej.us/guide/bgipc/html/index.html#fork">A fork() Primer</a></p>
+</li>
+<li>
+<p><a href="https://beej.us/guide/bgipc/html/index.html#signals">Signals</a></p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="quiz">Quiz<a class="headerlink" href="#quiz" title="Permanent link">&para;</a></h2>
+<p>This week, the reading is split into two sections: the first part is a
+<a href="https://dredd.h4x0r.space">dredd</a> quiz, while the second part involves one <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program: <code>doit.c</code>.</p>
+<p>To test the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> program, you will need to download the <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading12/Makefile">Makefile</a> and test
+scripts:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ git switch master                   <span style="color: #3D7B7B; font-style: italic"># Make sure we are in master branch</span>
+$ git pull --rebase                   <span style="color: #3D7B7B; font-style: italic"># Make sure we are up-to-date with GitHub</span>
+
+$ git checkout -b reading12           <span style="color: #3D7B7B; font-style: italic"># Create reading12 branch and check it out</span>
+
+$ <span style="color: #008000">cd</span> reading12                        <span style="color: #3D7B7B; font-style: italic"># Go into reading12 folder</span>
+
+<span style="color: #3D7B7B; font-style: italic"># Download Makefile</span>
+$ curl -sLO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading12/Makefile
+
+<span style="color: #3D7B7B; font-style: italic"># Download Starter code</span>
+$ curl -sLO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading12/doit.c
+
+<span style="color: #3D7B7B; font-style: italic"># Download, build, and execute tests</span>
+$ make <span style="color: #008000">test</span>
+</code></pre></div>
+
+<h3 id="questions">Questions<a class="headerlink" href="#questions" title="Permanent link">&para;</a></h3>
+<p>Record the answers to the following <a href="static/json/reading12.json">Reading 12 Quiz</a> questions in your
+<code>reading12</code> branch:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+
+<script>
+loadQuiz('static/json/reading12.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<h3 id="programs">Programs<a class="headerlink" href="#programs" title="Permanent link">&para;</a></h3>
+<p>Given the provided <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading12/Makefile">Makefile</a> and <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading12/doit.c">doit.c</a>, you are to do the following:</p>
+<ol>
+<li>
+<p>Modify <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading12/Makefile">Makefile</a> to include a rule for the <code>doit</code> program. Be sure to use
+the <code>CC</code> and <code>CFLAGS</code> variables in your rule.</p>
+<p>Once you have a working <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading12/Makefile">Makefile</a>, you should be able to use the <a href="http://man7.org/linux/man-pages/man1/make.1.html">make</a>
+command to run your <strong>recipes</strong>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ make clean                                <span style="color: #3D7B7B; font-style: italic"># Remove targets</span>
+rm -f doit
+
+$ make                                      <span style="color: #3D7B7B; font-style: italic"># Build targets</span>
+gcc -Wall -g -std<span style="color: #666666">=</span>gnu99 -o doit doit.c
+</code></pre></div>
+
+</li>
+<li>
+<p>Modify <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading12/doit.c">doit.c</a> so that it uses <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> to implement your
+own version of the <a href="http://man7.org/linux/man-pages/man3/system.3.html">system</a> function called <code>doit</code>.</p>
+<p>The <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> standard library provides a <a href="http://man7.org/linux/man-pages/man3/system.3.html">system</a> function that can be used to
+execute another command as an external <a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a>.  Internally, it uses
+<a href="http://man7.org/linux/man-pages/man2/fork.2.html">fork</a>, <a href="http://man7.org/linux/man-pages/man3/exec.3.html">exec</a>, and <a href="http://man7.org/linux/man-pages/man2/wait.2.html">wait</a>.  For this assignment, you are to implement your
+own version of the <a href="http://man7.org/linux/man-pages/man3/system.3.html">system</a> function called <code>doit</code> inside the <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading12/doit.c">doit.c</a>
+starter code:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/**</span>
+<span style="color: #3D7B7B; font-style: italic">* Run specified program with the bourne shell.</span>
+<span style="color: #3D7B7B; font-style: italic">* @param     command     Command to run.</span>
+<span style="color: #3D7B7B; font-style: italic">* @return    Exit status of child process.</span>
+<span style="color: #3D7B7B; font-style: italic">*/</span><span style="color: #bbbbbb"></span>
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">doit</span>(<span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>command);<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<blockquote>
+<p>This <code>doit</code> function <a href="http://man7.org/linux/man-pages/man2/fork.2.html">forks</a> a new <a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a>, <a href="http://man7.org/linux/man-pages/man3/exec.3.html">execs</a> the specified
+<code>command</code>, <a href="http://man7.org/linux/man-pages/man2/wait.2.html">waits</a> for the child <a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a> to complete, and then returns
+the <a href="http://man7.org/linux/man-pages/man3/exit.3.html">exit</a> status of the child <a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a>.</p>
+</blockquote>
+<p>Once you have this <code>doit</code> function, you are to utilize it in the <code>doit.c</code>
+program such that it executes the first command-line argument specified
+by the user via the function you wrote as shown below:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ make                <span style="color: #3D7B7B; font-style: italic"># Build doit walk program</span>
+gcc -Wall -g -std<span style="color: #666666">=</span>gnu99 -o doit doit.c
+
+$ ./doit              <span style="color: #3D7B7B; font-style: italic"># Usage</span>
+Usage: ./doit COMMAND
+
+$ ./doit ls           <span style="color: #3D7B7B; font-style: italic"># Run doit program with ls</span>
+doit  doit.c  Makefile  README.md  test_doit.sh
+
+$ make clean          <span style="color: #3D7B7B; font-style: italic"># Cleanup</span>
+rm -f doit
+</code></pre></div>
+
+</li>
+</ol>
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit you work, follow the same process outlined in <a href="reading01.html">Reading 01</a>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">#--------------------------------------------------</span>
+<span style="color: #3D7B7B; font-style: italic"># BE SURE TO DO THE PREPARATION STEPS ABOVE</span>
+<span style="color: #3D7B7B; font-style: italic">#--------------------------------------------------</span>
+
+$ <span style="color: #008000">cd</span> reading12                        <span style="color: #3D7B7B; font-style: italic"># Go into reading12 folder</span>
+
+$ <span style="color: #19177C">$EDITOR</span> answers.json                <span style="color: #3D7B7B; font-style: italic"># Edit your answers.json file</span>
+
+$ ../.scripts/check.py                <span style="color: #3D7B7B; font-style: italic"># Check reading12 quiz</span>
+Checking reading12 quiz ...
+      Q1 <span style="color: #666666">0</span>.60
+      Q2 <span style="color: #666666">0</span>.40
+   Score <span style="color: #666666">1</span>.00 / <span style="color: #666666">1</span>.00
+  Status Success
+
+$ git add answers.json                <span style="color: #3D7B7B; font-style: italic"># Add answers.json to staging area</span>
+$ git commit -m <span style="color: #BA2121">&quot;Reading 12: Quiz&quot;</span>    <span style="color: #3D7B7B; font-style: italic"># Commit work</span>
+
+$ <span style="color: #19177C">$EDITOR</span> doit.c                      <span style="color: #3D7B7B; font-style: italic"># Edit source code</span>
+
+$ make <span style="color: #008000">test</span>                           <span style="color: #3D7B7B; font-style: italic"># Build and Run tests</span>
+Checking reading12 doit ...
+ doit <span style="color: #666666">(</span>syscalls<span style="color: #666666">)</span>                                              ... Success
+ doit <span style="color: #666666">(</span>usage<span style="color: #666666">)</span>                                                 ... Success
+ doit <span style="color: #008000">true</span> <span style="color: #666666">(</span>status<span style="color: #666666">)</span>                                           ... Success
+ doit <span style="color: #008000">true</span> <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>                                         ... Success
+ doit <span style="color: #008000">false</span> <span style="color: #666666">(</span>status<span style="color: #666666">)</span>                                          ... Success
+ doit <span style="color: #008000">false</span> <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>                                        ... Success
+ doit NOPE <span style="color: #666666">(</span>status<span style="color: #666666">)</span>                                           ... Success
+ doit NOPE <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>                                         ... Success
+ doit ls <span style="color: #666666">(</span>output<span style="color: #666666">)</span>                                             ... Success
+ doit ls <span style="color: #666666">(</span>status<span style="color: #666666">)</span>                                             ... Success
+ doit ls <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>                                           ... Success
+ doit <span style="color: #BA2121">&#39;echo execution of all things&#39;</span> <span style="color: #666666">(</span>output<span style="color: #666666">)</span>                 ... Success
+ doit <span style="color: #BA2121">&#39;echo execution of all things&#39;</span> <span style="color: #666666">(</span>status<span style="color: #666666">)</span>                 ... Success
+ doit <span style="color: #BA2121">&#39;echo execution of all things&#39;</span> <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>               ... Success
+
+   Score <span style="color: #666666">3</span>.00 / <span style="color: #666666">3</span>.00
+  Status Success
+
+$ git add Makefile                    <span style="color: #3D7B7B; font-style: italic"># Add Makefile to staging area</span>
+$ git add doit.c                      <span style="color: #3D7B7B; font-style: italic"># Add source code to staging area</span>
+$ git commit -m <span style="color: #BA2121">&quot;Reading 12: Code&quot;</span>    <span style="color: #3D7B7B; font-style: italic"># Commit work</span>
+
+$ git push -u origin reading12        <span style="color: #3D7B7B; font-style: italic"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert alert-danger">
+<h4 id="pull-request"><i class="fa fa-github"></i> Pull Request<a class="headerlink" href="#pull-request" title="Permanent link">&para;</a></h4>
+<p>Remember to create a <strong>Pull Request</strong> and assign the appropriate TA from the
+<a href="reading12_tas.html">Reading 12 TA List</a>.</p>
+<p><strong>DO NOT MERGE</strong> your own <strong>Pull Request</strong>.  The TAs use open <strong>Pull
+Requests</strong> to keep track of which assignments to grade.  Closing them yourself
+will cause a delay in grading and confuse the TAs.</p>
+</div>
+
+
+	    <div class="row">
+		<hr/>
+
+		<footer class="text-center">
+		    <p class="text-muted">
+		    <small>
+		    Built using
+		    <a href="https://getbootstrap.com/">Bootstrap</a>,
+		    <a href="https://fontawesome.com/">Font Awesome</a>, and
+		    <a href="http://www.python.org/">Python</a>.
+		    <br/>
+		    &copy; 2024 <a href="http://www.nd.edu">University of Notre Dame</a>
+		    </small>
+		    </p>
+		</footer>
+	    </div>
+
+	</div> <!-- /container -->
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	
+    </body>
+</html>
+
