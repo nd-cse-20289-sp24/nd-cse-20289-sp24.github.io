@@ -1,0 +1,240 @@
+title:      "Reading 12: Processes"
+icon:       fa-book
+navigation: []
+internal:
+external:
+body:       |
+
+  **Everyone**:
+
+  Next week, we will discuss [system calls] involving [processes] and
+  [signals].  We will discover the wonders of the [fork bomb] and examine how
+  something like the `TROLL` from [Homework 01] works.
+
+  <div class="alert alert-info" markdown="1">
+  #### <i class="fa fa-search"></i> TL;DR
+
+  The focus of this reading is to explore [system calls] related to [processes]
+  and [signals] in [C].
+
+  </div>
+
+  <img src="static/img/ostep.jpg" class="pull-right">
+
+  ## Readings
+
+  The readings for this week are:
+
+  1. [Operating Systems: Three Easy Pieces](http://pages.cs.wisc.edu/~remzi/OSTEP/)
+
+      - <p>[Processes](http://pages.cs.wisc.edu/~remzi/OSTEP/cpu-api.pdf)
+
+  ### Optional References
+
+  1. [System Programming Wiki](https://github.com/angrave/SystemProgramming/wiki)
+
+      - <p>[Processes](https://github.com/angrave/SystemProgramming/wiki#2-processes)</p>
+
+  2. [Beej's Guide to Unix IPC](http://beej.us/guide/bgipc/html/multi/index.html)
+
+      - [A fork() Primer](https://beej.us/guide/bgipc/html/index.html#fork)
+
+      - [Signals](https://beej.us/guide/bgipc/html/index.html#signals)
+
+  [system calls]:   https://en.wikipedia.org/wiki/System_call
+  [files]:          https://en.wikipedia.org/wiki/Computer_file
+  [directories]:    https://en.wikipedia.org/wiki/Directory_(computing)
+  [kernel]:         https://en.wikipedia.org/wiki/Kernel_(operating_system)
+  [C]:              https://en.wikipedia.org/wiki/C_(programming_language)
+  [i/o]:            https://en.wikipedia.org/wiki/Input/output
+
+  ## Quiz
+
+  This week, the reading is split into two sections: the first part is a
+  [dredd] quiz, while the second part involves one [C] program: `doit.c`.
+
+  To test the [C] program, you will need to download the [Makefile] and test
+  scripts:
+
+      :::bash
+      $ git switch master                   # Make sure we are in master branch
+      $ git pull --rebase                   # Make sure we are up-to-date with GitHub
+
+      $ git checkout -b reading12           # Create reading12 branch and check it out
+
+      $ cd reading12                        # Go into reading12 folder
+
+      # Download Makefile
+      $ curl -sLO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading12/Makefile
+
+      # Download Starter code
+      $ curl -sLO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading12/doit.c
+
+      # Download, build, and execute tests
+      $ make test
+
+  [Makefile]: https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading12/Makefile
+
+  ### Questions
+
+  Record the answers to the following [Reading 12 Quiz] questions in your
+  `reading12` branch:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+
+  <script>
+  loadQuiz('static/json/reading12.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  ### Programs
+
+  Given the provided [Makefile] and [doit.c], you are to do the following:
+
+  1. Modify [Makefile] to include a rule for the `doit` program. Be sure to use
+  the `CC` and `CFLAGS` variables in your rule.
+
+      Once you have a working [Makefile], you should be able to use the [make]
+      command to run your **recipes**:
+
+          :::bash
+          $ make clean                                # Remove targets
+          rm -f doit
+
+          $ make                                      # Build targets
+          gcc -Wall -g -std=gnu99 -o doit doit.c
+
+  2. Modify [doit.c] so that it uses [system calls] in [C] to implement your
+  own version of the [system] function called `doit`.
+
+      The [C] standard library provides a [system] function that can be used to
+      execute another command as an external [process].  Internally, it uses
+      [fork], [exec], and [wait].  For this assignment, you are to implement your
+      own version of the [system] function called `doit` inside the [doit.c]
+      starter code:
+
+          :::c
+          /**
+          * Run specified program with the bourne shell.
+          * @param     command     Command to run.
+          * @return    Exit status of child process.
+          */
+          int doit(const char *command);
+
+      > This `doit` function [forks] a new [process], [execs] the specified
+      `command`, [waits] for the child [process] to complete, and then returns
+      the [exit] status of the child [process].
+
+      Once you have this `doit` function, you are to utilize it in the `doit.c`
+      program such that it executes the first command-line argument specified
+      by the user via the function you wrote as shown below:
+
+
+          :::bash
+          $ make                # Build doit walk program
+          gcc -Wall -g -std=gnu99 -o doit doit.c
+
+          $ ./doit              # Usage
+          Usage: ./doit COMMAND
+
+          $ ./doit ls           # Run doit program with ls
+          doit  doit.c  Makefile  README.md  test_doit.sh
+
+          $ make clean          # Cleanup
+          rm -f doit
+
+  [make]:       http://man7.org/linux/man-pages/man1/make.1.html
+
+  ## Submission
+
+  To submit you work, follow the same process outlined in [Reading 01]:
+
+      :::bash
+      #--------------------------------------------------
+      # BE SURE TO DO THE PREPARATION STEPS ABOVE
+      #--------------------------------------------------
+
+      $ cd reading12                        # Go into reading12 folder
+
+      $ $EDITOR answers.json                # Edit your answers.json file
+
+      $ ../.scripts/check.py                # Check reading12 quiz
+      Checking reading12 quiz ...
+            Q1 0.60
+            Q2 0.40
+         Score 1.00 / 1.00
+        Status Success
+
+      $ git add answers.json                # Add answers.json to staging area
+      $ git commit -m "Reading 12: Quiz"    # Commit work
+
+      $ $EDITOR doit.c                      # Edit source code
+
+      $ make test                           # Build and Run tests
+      Checking reading12 doit ...
+       doit (syscalls)                                              ... Success
+       doit (usage)                                                 ... Success
+       doit true (status)                                           ... Success
+       doit true (valgrind)                                         ... Success
+       doit false (status)                                          ... Success
+       doit false (valgrind)                                        ... Success
+       doit NOPE (status)                                           ... Success
+       doit NOPE (valgrind)                                         ... Success
+       doit ls (output)                                             ... Success
+       doit ls (status)                                             ... Success
+       doit ls (valgrind)                                           ... Success
+       doit 'echo execution of all things' (output)                 ... Success
+       doit 'echo execution of all things' (status)                 ... Success
+       doit 'echo execution of all things' (valgrind)               ... Success
+
+         Score 3.00 / 3.00
+        Status Success
+
+      $ git add Makefile                    # Add Makefile to staging area
+      $ git add doit.c                      # Add source code to staging area
+      $ git commit -m "Reading 12: Code"    # Commit work
+
+      $ git push -u origin reading12        # Push branch to GitHub
+
+  <div class="alert alert-danger" markdown="1">
+  #### <i class="fa fa-github"></i> Pull Request
+  Remember to create a **Pull Request** and assign the appropriate TA from the
+  [Reading 12 TA List].
+
+  **DO NOT MERGE** your own **Pull Request**.  The TAs use open **Pull
+  Requests** to keep track of which assignments to grade.  Closing them yourself
+  will cause a delay in grading and confuse the TAs.
+  </div>
+
+  [Markdown]:           https://daringfireball.net/projects/markdown/
+  [git]:                https://git-scm.com/
+  [clone]:              https://git-scm.com/docs/git-clone
+  [commit]:             https://git-scm.com/docs/git-commit
+  [push]:               https://git-scm.com/docs/git-push
+  [GitHub]:             https://github.com
+  [Reading 01]:         reading01.html
+  [Homework 01]:        homework01.html
+  [Reading 12 TA List]: reading12_tas.html
+  [dredd]:              https://dredd.h4x0r.space
+  [Reading 12 Quiz]:    static/json/reading12.json
+  [Python]:             https://www.python.org
+  [fork]:               http://man7.org/linux/man-pages/man2/fork.2.html
+  [forks]:              http://man7.org/linux/man-pages/man2/fork.2.html
+  [exec]:               http://man7.org/linux/man-pages/man3/exec.3.html
+  [execs]:              http://man7.org/linux/man-pages/man3/exec.3.html
+  [wait]:               http://man7.org/linux/man-pages/man2/wait.2.html
+  [waits]:              http://man7.org/linux/man-pages/man2/wait.2.html
+  [process]:            https://en.wikipedia.org/wiki/Process_(computing)
+  [processes]:          https://en.wikipedia.org/wiki/Process_(computing)
+  [signal]:             http://man7.org/linux/man-pages/man2/signal.2.html
+  [signals]:            http://man7.org/linux/man-pages/man2/signal.2.html
+  [fork bomb]:          https://en.wikipedia.org/wiki/Fork_bomb
+  [exit]:               http://man7.org/linux/man-pages/man3/exit.3.html
+  [WEXITSTATUS]:        http://man7.org/linux/man-pages/man2/wait.2.html
+  [system]:             http://man7.org/linux/man-pages/man3/system.3.html
+  [doit.c]:             https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading12/doit.c

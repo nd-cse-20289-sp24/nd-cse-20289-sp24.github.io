@@ -1,0 +1,30 @@
+{
+    "q1": {
+        "type": "order",
+        "question": "\n<p>Identify the <b>system call</b> you should use to accomplish the\nfollowing tasks:</p>\n\n<p>\n<ol>\n  <li>Send a signal to a process.</li>\n  <li>Create a new process.</li>\n  <li>Replace current process image with a new process image.</li>\n  <li>Retrieve the exit status of a child process.</li>\n  <li>Terminate current process.</li>\n</ol>\n</p>\n",
+        "responses": {
+            "fork": "fork()",
+            "exec": "exec()",
+            "wait": "wait()",
+            "exit": "exit()",
+            "kill": "kill()"
+        }
+    },
+    "q2": {
+        "type": "multiple",
+        "question": "\n<p>Which of the following statements regarding <tt>fork</tt> and\n<tt>exec</tt> are true (select all that apply)?</p>\n",
+        "responses": {
+            "parent": "After a <tt>fork()</tt>, the parent gets the <tt>PID</tt> of the child process.",
+            "child": "After a <tt>fork()</tt>, the child gets the <tt>PID</tt> of itself.",
+            "process": "After a <tt>fork()</tt>, the parent and child processes are nearly identical.",
+            "perror": "During a <tt>fork()</tt>, the parent is terminated if there is an error.",
+            "pfirst": "After a <tt>fork()</tt>, the parent is guaranteed to run first.",
+            "cfirst": "After a <tt>fork()</tt>, the child is guaranteed to run first.",
+            "scheduler": "After a <tt>fork()</tt>, the next process to run is determined by the scheduler.",
+            "create": "After an <tt>exec()</tt>, a new process is created.",
+            "load": "After an <tt>exec()</tt>, new program code is loaded.",
+            "before": "You must always call <tt>fork()</tt> before you call <tt>exec()</tt>.",
+            "after": "You must always call <tt>exec()</tt> after you call <tt>fork()</tt>."
+        }
+    }
+}
