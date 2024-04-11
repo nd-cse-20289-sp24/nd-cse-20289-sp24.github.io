@@ -1,0 +1,299 @@
+title:      "Reading 13: Networking"
+icon:       fa-book
+navigation: []
+internal:
+external:
+body:       |
+
+  **Everyone**:
+
+  Next week, we will discuss [system calls] involving [networking].  We will
+  explore using [sockets] to communicate between [clients] and [servers] and
+  eventually create our own [HTTP] client in the form of [gwen].
+
+  <div class="alert alert-info" markdown="1">
+  #### <i class="fa fa-search"></i> TL;DR
+
+  The focus of this reading is to explore [system calls] related to network
+  [sockets] in [C].
+
+  </div>
+
+  <img src="static/img/ostep.jpg" class="pull-right">
+
+  ## Readings
+
+  The readings for this week are:
+
+  1. [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/html/index-wide.html)
+
+      *You can skip the parts about datagram sockets and slightly advanced
+      techniques.*
+
+  2. [What is a URL?](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_URL)
+
+  ### Optional References
+
+  1. [System Programming Wiki](https://github.com/angrave/SystemProgramming/wiki)
+
+      This has basic coverage of
+      [networking](https://github.com/angrave/SystemProgramming/wiki#8-networking), along with
+      some information about remote procedure calls (RPC) that you can skip.
+
+  [system calls]:   https://en.wikipedia.org/wiki/System_call
+  [files]:          https://en.wikipedia.org/wiki/Computer_file
+  [directories]:    https://en.wikipedia.org/wiki/Directory_(computing)
+  [kernel]:         https://en.wikipedia.org/wiki/Kernel_(operating_system)
+  [C]:              https://en.wikipedia.org/wiki/C_(programming_language)
+  [i/o]:            https://en.wikipedia.org/wiki/Input/output
+
+  ## Quiz
+
+  This week, the reading is split into two sections: the first part is a
+  [dredd] quiz, while the second part involves one [C] program: `ncat.c`.
+
+  To test the [C] program, you will need to download the [Makefile] and test
+  scripts:
+
+      :::bash
+      $ git checkout master                 # Make sure we are in master branch
+      $ git pull --rebase                   # Make sure we are up-to-date with GitHub
+
+      $ git checkout -b reading13           # Create reading13 branch and check it out
+
+      $ mkdir reading13                     # Create reading13 folder
+
+      $ cd reading13                        # Go into reading13 folder
+
+      # Download Reading 13 Makefile
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading13/Makefile
+      
+      # Download Starter code
+      $ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading13/ncat.c
+
+      # Download, build, and execute tests
+      $ make test
+
+  [Makefile]: https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading13/Makefile
+
+  ### Questions
+
+  Record the answers to the following [Reading 13 Quiz] questions in your
+  `reading13` branch:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+
+  <script>
+  loadQuiz('static/json/reading13.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  ### Programs
+
+  Given the provided [Makefile] and [ncat.c], you are to do the following:
+
+  1. Modify [Makefile] to include a rule for the `ncat` program. Be sure to use
+  the `CC` and `CFLAGS` variables in your rule.
+
+      Once you have a working [Makefile], you should be able to use the [make]
+      command to run your **recipes**:
+
+
+          :::bash
+          $ make clean                                # Remove targets
+          rm -f ncat
+
+          $ make                                      # Build targets
+          gcc -Wall -g -std=gnu99 -o ncat ncat.c
+
+  2. Modify [ncat.c] so that it uses [system calls] in [C] to implement the
+  equivalent Python script:
+
+          :::python
+          #!/usr/bin/env python3
+
+          import socket
+          import sys
+
+          # Parse command line options
+          try:
+              HOST = sys.argv[1]
+              PORT = int(sys.argv[2])
+          except IndexError:
+              print("Usage: {} HOST PORT".format(sys.argv[0]), file=sys.stderr)
+              sys.exit(1)
+
+          # Create socket and connect to specified HOST and PORT
+          try:
+              csocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+              csocket.connect((HOST, PORT))
+              cstream = csocket.makefile('w')
+          except socket.error as e:
+              print('Socket Error: {}'.format(e))
+              sys.exit(1)
+
+          # Read from stdin and write to socket
+          for line in sys.stdin:
+              cstream.write(line)
+
+          # Cleanup
+          csocket.close()
+
+  This is basically a partial implementation of the [nc] command you have used
+  previously: given a `HOST` and `PORT`, the program creates a [socket],
+  connects to the server, and then sends data from [standard input] to the
+  remote server via the [socket] connection.
+
+  <div class="alert alert-success" markdown="1">
+  #### <i class="fa fa-code"></i> Fill in the Blanks
+
+  The code has a few `____` placeholders. You will need to replace these
+  placeholders with the appropriate **functions** and **variables** to complete
+  the program.
+
+  Here is a list of some possible **functions** and **variables** you may wish
+  to use:
+
+  - `AF_UNSPEC`
+  - `SOCK_STREAM`
+  - `socket_fd`
+  - `socket_file`
+  - [getaddrinfo]
+  - [gai_strerror]
+  - [socket]
+  - [close]
+  - [connect]
+  - [freeaddrinfo]
+  - [fdopen]
+  - [fclose]
+  - [fgets]
+  - [fputs]
+
+  </div>
+
+  Once you have a working `ncat.c`, you should be able to build and run it:
+
+      $ make                            # Build ncat program
+      gcc -Wall -g -std=gnu99 -o ncat ncat.c
+
+      $ ./ncat                          # Usage
+      Usage: ./ncat HOST PORT
+
+      $ nc -l 9123 &                    # Start netcat server in background
+      [1] 12532
+
+      $ date | ./ncat localhost 9123    # Send message to server
+      Connected to localhost:9123
+      Sun Apr 15 16:50:38 EDT 2024
+      [1]+  Done                    nc -l -p 9123
+
+      $ ./ncat fakehost 9999
+      Could not look up fakehost:9999: Name or service not known
+
+      $ ./ncat localhost 0
+      Unable to connect to localhost:0: Connection refused
+
+      $ make clean                      # Cleanup
+      rm -f ncat
+
+  [rule]:       https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example
+  [make]:       http://man7.org/linux/man-pages/man1/make.1.html
+
+  ## Submission
+
+  To submit you work, follow the same process outlined in [Reading 01]:
+
+      :::bash
+      #--------------------------------------------------
+      # BE SURE TO DO THE PREPARATION STEPS ABOVE
+      #--------------------------------------------------
+      
+      $ cd reading13                        # Go into reading13 folder
+
+      $ $EDITOR answers.json                # Edit your answers.json file
+
+      $ ../.scripts/check.py                # Check reading13 quiz
+      Checking reading13 quiz ...
+            Q1 0.25
+            Q2 0.75
+         Score 1.00 / 1.00
+        Status Success
+
+      $ git add answers.json                # Add answers.json to staging area
+      $ git commit -m "Reading 13: Quiz"    # Commit work
+
+      $ $EDITOR ncat.c                      # Edit source code
+
+      $ make test                           # Build and Run tests
+      Checking reading13 ncat ...
+       ncat (syscalls)                                              ... Success
+       ncat (usage, output)                                         ... Success
+       ncat (usage, valgrind)                                       ... Success
+       ncat (fakehost 9999, client)                                 ... Success
+       ncat (fakehost 9999, valgrind)                               ... Success
+       ncat (localhost 0, client)                                   ... Success
+       ncat (localhost 0, valgrind)                                 ... Success
+       ncat (localhost 9770, client)                                ... Success
+       ncat (localhost 9770, server)                                ... Success
+       ncat (localhost 9770, valgrind)                              ... Success
+       ncat (weasel.h4x0r.space 9910, client)                       ... Success
+       ncat (weasel.h4x0r.space 9910, server)                       ... Success
+       ncat (weasel.h4x0r.space 9910, valgrind)                     ... Success
+
+         Score 3.00 / 3.00
+        Status Success
+
+      $ git add Makefile                    # Add Makefile to staging area
+      $ git add ncat.c                      # Add source code to staging area
+      $ git commit -m "Reading 13: Code"    # Commit work
+
+      $ git push -u origin reading13        # Push branch to GitHub
+
+  <div class="alert alert-danger" markdown="1">
+  #### <i class="fa fa-github"></i> Pull Request
+  Remember to create a **Pull Request** and assign the appropriate TA from the
+  [Reading 13 TA List].
+
+  **DO NOT MERGE** your own **Pull Request**.  The TAs use open **Pull
+  Requests** to keep track of which assignments to grade.  Closing them yourself
+  will cause a delay in grading and confuse the TAs.
+  </div>
+
+  [Markdown]:           https://daringfireball.net/projects/markdown/
+  [git]:                https://git-scm.com/
+  [clone]:              https://git-scm.com/docs/git-clone
+  [commit]:             https://git-scm.com/docs/git-commit
+  [push]:               https://git-scm.com/docs/git-push
+  [GitHub]:             https://github.com
+  [Reading 01]:         reading01.html
+  [Homework 01]:        homework01.html
+  [Reading 13 TA List]: reading13_tas.html
+  [dredd]:              https://dredd.h4x0r.space
+  [Reading 13 Quiz]:    static/json/reading13.json
+  [Python]:             https://www.python.org
+  [networking]:         https://en.wikipedia.org/wiki/Computer_network
+  [sockets]:            https://en.wikipedia.org/wiki/Network_socket
+  [socket]:             http://man7.org/linux/man-pages/man2/socket.2.html
+  [getaddrinfo]:        http://man7.org/linux/man-pages/man3/getaddrinfo.3.html
+  [freeaddrinfo]:       http://man7.org/linux/man-pages/man3/getaddrinfo.3.html
+  [connect]:            http://man7.org/linux/man-pages/man2/connect.2.html
+  [HTTP]:               https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
+  [clients]:            https://en.wikipedia.org/wiki/Client_(computing)
+  [servers]:            https://en.wikipedia.org/wiki/Server_(computing)
+  [nc]:                 https://linux.die.net/man/1/nc
+  [ncat.c]:             https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/reading13/ncat.c
+  [standard input]:     https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin)
+  [gai_strerror]:       http://man7.org/linux/man-pages/man3/gai_strerror.3p.html
+  [connect]:            http://man7.org/linux/man-pages/man2/connect.2.html
+  [strerror]:           http://man7.org/linux/man-pages/man3/strerror.3.html
+  [fdopen]:             https://man7.org/linux/man-pages/man3/fopen.3.html
+  [fclose]:             https://man7.org/linux/man-pages/man3/fclose.3.html
+  [close]:              https://man7.org/linux/man-pages/man2/close.2.html
+  [fgets]:              https://man7.org/linux/man-pages/man3/fgetc.3.html
+  [fputs]:              https://man7.org/linux/man-pages/man3/puts.3.html
+  [gwen]:               homework10.html

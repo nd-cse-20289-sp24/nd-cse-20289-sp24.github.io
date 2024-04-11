@@ -1,0 +1,20 @@
+{
+    "q1": {
+        "type": "blank",
+        "question": "\n<p>Given the <b>URL</b>:\n  <tt>http://momo.ndlug.org:9414/script.py?friend=appa</tt>,\n  identify the following components:</p>\n\n<table class=\"table table-bordered\">\n<tbody>\n<tr><td class=\"text-right\">Protocol:</td><td width=\"50%\"><b>(1)</b> ____</td></tr>\n<tr><td class=\"text-right\">Domain Name:</td><td><b>(2)</b> ____</td></tr>\n<tr><td class=\"text-right\">Port Number:</td><td><b>(3)</b> ____</td></tr>\n<tr><td class=\"text-right\">Resource Path:</td><td><b>(4)</b> ____</td></tr>\n<tr><td class=\"text-right\">Query Parameter:</td><td><b>(5)</b> ____</td></tr>\n</table>\n"
+    },
+    "q2": {
+        "type": "order",
+        "question": "\n<p>Identify the networking <b>system call</b> or <b>standard library\nfunction</b>you should use to accomplish the following tasks:</p>\n\n<p>\n<ol>\n  <li>Create a file descriptor or endpoint for communicating over the network.</li>\n  <li>Convert network file descriptor into a file stream.</li>\n  <li>Lookup the address information for a particular machine or service.</li>\n  <li>Associate an address and service to a server network file descriptor (aka assign a name to a socket).</li>\n  <li>Translate the network address structure into corresponding host and service strings.</li>\n  <li>Establish a client network file descriptor to a specified address.</li>\n  <li>Mark network file descriptor as waiting for incoming connections.</li>\n  <li>Create a new network file descriptor based on a incoming connection.</li>\n</ol>\n</p>\n",
+        "responses": {
+            "fdopen": "<tt>fdopen()</tt>",
+            "socket": "<tt>socket()</tt>",
+            "connect": "<tt>connect()</tt>",
+            "listen": "<tt>listen()</tt>",
+            "bind": "<tt>bind()</tt>",
+            "accept": "<tt>accept()</tt>",
+            "getnameinfo": "<tt>getnameinfo()</tt>",
+            "getaddrinfo": "<tt>getaddrinfo()</tt>"
+        }
+    }
+}
