@@ -33,11 +33,10 @@ int  ChildPid = 0;
 
 /**
  * Display usage message and exit.
- * @param   progname    Program name.
  * @param   status      Exit status.
  **/
-void	usage(const char *progname, int status) {
-    fprintf(stderr, "Usage: %s [options] command...\n", progname);
+void	usage(int status) {
+    fprintf(stderr, "Usage: timeit [options] command...\n");
     fprintf(stderr, "Options:\n");
     fprintf(stderr, "    -t SECONDS  Timeout duration before killing command (default is %d)\n", Timeout);
     fprintf(stderr, "    -v          Display verbose debugging output\n");
