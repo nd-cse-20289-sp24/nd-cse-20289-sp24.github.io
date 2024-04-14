@@ -19,11 +19,10 @@
 
 /**
  * Display usage message and exit.
- * @param   progname    Program name.
  * @param   status      Exit status.
  **/
-void    usage(const char *progname, int status) {
-    fprintf(stderr, "Usage: %s files...\n", progname);
+void    usage(int status) {
+    fprintf(stderr, "Usage: moveit files...\n");
     exit(status);
 }
 
