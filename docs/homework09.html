@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Homework 09: moveit, timeit</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="static/css/blugold.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<style>
+	body {
+	    padding: 10px;
+	}
+	</style>
+    </head>
+    <body>
+	<div class="container">
+
+	    <div class="row">
+		<div class="page-header">
+		    <ul class="nav nav-pills pull-right">
+			
+			<li><a href="index.html"><i class="fa fa-linux"></i> <span class="visible-md-inline visible-lg-inline">Home</span></a></li>
+			
+		    </ul>
+		    <h1><i class="fa fa-code"></i> Homework 09: moveit, timeit</h1>
+		</div>
+	    </div>
+
+            
+<p>The goal of this homework assignment is to allow you to practice using
+<a href="https://en.wikipedia.org/wiki/System_call">system calls</a> involving <a href="https://en.wikipedia.org/wiki/Process_(computing)">processes</a> and <a href="https://en.wikipedia.org/wiki/Signal_(IPC)">signals</a> in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> by
+implementing two new <a href="https://en.wikipedia.org/wiki/Unix">Unix</a> utilities: <code>moveit</code> and <code>timeit</code>.</p>
+<ol>
+<li>
+<p><code>moveit</code>: The first utility allows users to interactively rename specified
+files using their favorite text <code>$EDITOR</code>.</p>
+</li>
+<li>
+<p><code>timeit</code>: The second utility allows users to compute the elapsed time of
+an application while also enforcing a timeout (or cut off time).</p>
+</li>
+</ol>
+<div class="alert alert-danger">
+<h4 id="set-us-up-the-bomb-no"><i class="fa fa-bomb"></i> Set us up the bomb (No!)<a class="headerlink" href="#set-us-up-the-bomb-no" title="Permanent link">&para;</a></h4>
+<p>Be careful with the <a href="http://man7.org/linux/man-pages/man2/fork.2.html">fork</a> system call.  To prevent a <a href="https://en.wikipedia.org/wiki/Fork_bomb">fork bomb</a>, start off
+by always putting a <a href="http://man7.org/linux/man-pages/man3/sleep.3.html">sleep</a> after a <a href="http://man7.org/linux/man-pages/man2/fork.2.html">fork</a>, that way you have time to kill
+the <a href="https://en.wikipedia.org/wiki/Process_(computing)">processes</a> (you should eventually remove this <a href="http://man7.org/linux/man-pages/man3/sleep.3.html">sleep</a> once you are
+confident your code is working).</p>
+<p>If you still manage to create a <a href="https://en.wikipedia.org/wiki/Fork_bomb">fork bomb</a>, <strong>do not</strong> simply go to another
+machine and run the same program.  Notify the
+<a href="mailto:csehelp@nd.edu">csehelp@nd.edu</a> and explain what happened.</p>
+</div>
+<p>For this assignment, record your source code and any responses to the
+following activities in the <code>homework09</code> folder of your <strong>assignments</strong>
+<a href="https://github.com">GitHub</a> repository and push your work by <strong>noon Saturday, April 20</strong>.</p>
+<div class="alert alert-info">
+<h4 id="frequently-asked-questions"><i class="fa fa-question"></i> Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permanent link">&para;</a></h4>
+<div class="text-center">
+<iframe allowfullscreen="true" frameborder="0" height="389" mozallowfullscreen="true" src="https://docs.google.com/presentation/d/e/2PACX-1vRcOqCuH92ZrKJVbvwg2JFVeOVpFSC_8yp_p1X8I1DKGVhvD4P0fAWFzX1jjT2lKwzr7w6W7VFBrHKZ/embed?start=false&amp;loop=false&amp;delayms=3000" webkitallowfullscreen="true" width="480"></iframe>
+</div>
+</div>
+<h2 id="activity-0-preparation">Activity 0: Preparation<a class="headerlink" href="#activity-0-preparation" title="Permanent link">&para;</a></h2>
+<p>Before starting this homework assignment, you should first perform a <code>git
+pull</code> to retrieve any changes in your remote <a href="https://github.com">GitHub</a> repository:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ <span style="color: #008000">cd</span> path/to/repository                   <span style="color: #3D7B7B; font-style: italic"># Go to assignments repository</span>
+
+$ git switch master                       <span style="color: #3D7B7B; font-style: italic"># Make sure we are in master branch</span>
+
+$ git pull --rebase                       <span style="color: #3D7B7B; font-style: italic"># Get any remote changes not present locally</span>
+</code></pre></div>
+
+<p>Next, create a new branch for this assignment:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ git checkout -b homework09              <span style="color: #3D7B7B; font-style: italic"># Create homework09 branch and check it out</span>
+</code></pre></div>
+
+<h3 id="task-1-skeleton-code">Task 1: Skeleton Code<a class="headerlink" href="#task-1-skeleton-code" title="Permanent link">&para;</a></h3>
+<p>To help you get started, the instructor has provided you with the following
+<strong>skeleton code</strong>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Go to homework09 folder</span>
+$ <span style="color: #008000">cd</span> homework09
+
+<span style="color: #3D7B7B; font-style: italic"># Download Makefile</span>
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework09/Makefile
+
+<span style="color: #3D7B7B; font-style: italic"># Download C skeleton code</span>
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework09/moveit.c
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework09/timeit.c
+</code></pre></div>
+
+<p>Once downloaded, you should see the following files in your <code>homework09</code>
+directory:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>homework09
+    <span style="color: #AA5D1F; font-weight: bold">\_</span> Makefile           <span style="color: #3D7B7B; font-style: italic"># This is the Makefile for building all the project artifacts</span>
+    <span style="color: #AA5D1F; font-weight: bold">\_</span> moveit.c           <span style="color: #3D7B7B; font-style: italic"># This is the moveit utility C source file</span>
+    <span style="color: #AA5D1F; font-weight: bold">\_</span> timeit.c           <span style="color: #3D7B7B; font-style: italic"># This is the timeit utility C source file</span>
+</code></pre></div>
+
+<h3 id="task-2-initial-import">Task 2: Initial Import<a class="headerlink" href="#task-2-initial-import" title="Permanent link">&para;</a></h3>
+<p>Now that the files are downloaded into the <code>homework09</code> folder, you can
+<strong>commit</strong> them to your <a href="https://git-scm.com/">git</a> repository:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ git add Makefile                            <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git add *.c
+$ git commit -m <span style="color: #BA2121">&quot;Homework 09: Initial Import&quot;</span> <span style="color: #3D7B7B; font-style: italic"># Record changes</span>
+</code></pre></div>
+
+<h3 id="task-3-functional-tests">Task 3: Functional Tests<a class="headerlink" href="#task-3-functional-tests" title="Permanent link">&para;</a></h3>
+<p>After downloading these files, you can run <code>make test</code> to run the tests.</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Run all tests (will trigger automatic download)</span>
+$ make <span style="color: #008000">test</span>
+</code></pre></div>
+
+<p>You will notice that the Makefile downloads these additional test data and scripts:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>homework09
+    <span style="color: #AA5D1F; font-weight: bold">\_</span> moveit.test.sh   <span style="color: #3D7B7B; font-style: italic"># This is the moveit utility test shell script</span>
+    <span style="color: #AA5D1F; font-weight: bold">\_</span> timeit.test.sh   <span style="color: #3D7B7B; font-style: italic"># This is the timeit utility test shell script</span>
+</code></pre></div>
+
+<p>You will be using these <a href="https://en.wikipedia.org/wiki/Functional_testing">functional tests</a> to verify the correctness and
+behavior of your code.</p>
+<div class="alert alert-info">
+<h4 id="automatic-downloads"><i class="fa fa-download"></i> Automatic Downloads<a class="headerlink" href="#automatic-downloads" title="Permanent link">&para;</a></h4>
+<p>The <code>test</code> scripts are automatically downloaded by the <code>Makefile</code>, so any
+modifications you do to them will be lost when you run <code>make</code> again. Likewise,
+because they are automatically downloaded, you do not need to <code>add</code> or <code>commit</code>
+them to your <a href="https://git-scm.com/">git</a> repository.</p>
+</div>
+<h3 id="task-4-makefile">Task 4: Makefile<a class="headerlink" href="#task-4-makefile" title="Permanent link">&para;</a></h3>
+<p>The <code>Makefile</code> contains all the <strong>rules</strong> or <strong>recipes</strong> for building the
+project artifacts (e.g. <code>moveit</code>, <code>timeit</code>):</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #19177C">CC</span><span style="color: #666666">=</span>       gcc
+<span style="color: #19177C">CFLAGS</span><span style="color: #666666">=</span>   -Wall -g -std<span style="color: #666666">=</span>gnu99
+<span style="color: #19177C">TARGETS</span><span style="color: #666666">=</span>  moveit timeit
+
+<span style="color: #0000FF">all</span><span style="color: #666666">:</span>    <span style="color: #008000; font-weight: bold">$(</span><span style="color: #19177C">TARGETS</span><span style="color: #008000; font-weight: bold">)</span>
+
+<span style="color: #3D7B7B; font-style: italic">#------------------------------------------------------------------------------</span>
+<span style="color: #3D7B7B; font-style: italic"># TODO: Rules for moveit, timeit</span>
+<span style="color: #3D7B7B; font-style: italic">#------------------------------------------------------------------------------</span>
+
+<span style="color: #0000FF">moveit</span><span style="color: #666666">:</span>
+
+<span style="color: #0000FF">timeit</span><span style="color: #666666">:</span>
+
+<span style="color: #3D7B7B; font-style: italic">#------------------------------------------------------------------------------</span>
+<span style="color: #3D7B7B; font-style: italic"># DO NOT MODIFY BELOW</span>
+<span style="color: #3D7B7B; font-style: italic">#------------------------------------------------------------------------------</span>
+
+<span style="border: 1px solid #FF0000">...</span><span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<p>For this task, you will need to add <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a> for building <code>moveit</code> and <code>timeit</code>
+<em>executables</em> (<em>you do not need to make any intermediate object files</em>).</p>
+<div class="alert alert-info">
+<h4 id="makefile-variables"><i class="fa fa-cogs"></i> Makefile Variables<a class="headerlink" href="#makefile-variables" title="Permanent link">&para;</a></h4>
+<p>You <strong>must</strong> use the <code>CC</code>, <code>CFLAGS</code> variables when appropriate in your
+<a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a>.  You <strong>should</strong> also consider using <a href="https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html">automatic variables</a> such as
+<code>$@</code> and <code>$&lt;</code> as well.</p>
+</div>
+<p>Once you have a working <code>Makefile</code>, you should be able to run the following commands:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Build all TARGETS</span>
+$ make
+gcc -Wall -g -std<span style="color: #666666">=</span>gnu99 -o moveit moveit.c
+gcc -Wall -g -std<span style="color: #666666">=</span>gnu99 -o timeit timeit.c
+
+<span style="color: #3D7B7B; font-style: italic"># Run all tests</span>
+$ make <span style="color: #008000">test</span>
+Testing moveit...
+...
+
+Testing timeit...
+...
+
+<span style="color: #3D7B7B; font-style: italic"># Remove generated artifacts</span>
+$ make clean
+</code></pre></div>
+
+<div class="alert alert-danger">
+<p><strong>Note</strong>: The tests will <strong>fail</strong> if you haven't implemented all the
+  necessary functions appropriately.</p>
+</div>
+<div class="alert alert-warning">
+<h4 id="warnings"><i class="fa fa-warning"></i> Warnings<a class="headerlink" href="#warnings" title="Permanent link">&para;</a></h4>
+<p>You must include the <code>-Wall</code> flag in your <code>CFLAGS</code> when you compile.  This
+also means that your code must <strong>compile without any warnings</strong>, otherwise
+points will be deducted.</p>
+</div>
+<h2 id="activity-1-moveit-5-points">Activity 1: <code>moveit</code> (5 Points)<a class="headerlink" href="#activity-1-moveit-5-points" title="Permanent link">&para;</a></h2>
+<p>For the first activity, write a program, <code>moveit</code>, that reads in filenames
+from the command line arguments, stores them to a temporary file, opens an
+<code>$EDITOR</code> on the temporary file, allows the user to modify the filenames, and
+then renames the files based on the information in the temporary file:</p>
+<div class="thumbnail">
+  <img src="static/img/homework09-moveit.png" class="img-responsive">
+</div>
+
+<p>The functionality of <code>moveit</code> is demonstrated below:</p>
+<div class="thumbnail text-center">
+  <script src="https://asciinema.org/a/WRfMzLBfSWaiwkBN3d6DrMvVa.js" id="asciicast-WRfMzLBfSWaiwkBN3d6DrMvVa" async="true"></script>
+</div>
+
+<div class="alert alert-warning">
+<p><strong>Note</strong>: Your program must remove the temporary file with the <a href="http://man7.org/linux/man-pages/man2/unlink.2.html">unlink</a> system call.</p>
+</div>
+<h3 id="task-1-moveitc">Task 1: <code>moveit.c</code><a class="headerlink" href="#task-1-moveitc" title="Permanent link">&para;</a></h3>
+<p>To implement the <code>moveit</code> utility, you are to complete the provided
+<code>moveit.c</code> source file which contains the following <a href="https://en.wikipedia.org/wiki/C_preprocessor#Macro_definition_and_expansion">macros</a> and
+<strong>functions</strong>:</p>
+<h4 id="macros">Macros<a class="headerlink" href="#macros" title="Permanent link">&para;</a></h4>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #9C6500">#define streq(a, b) (strcmp(a, b) == 0)</span>
+</code></pre></div>
+
+<blockquote>
+<p>The <code>streq</code> <a href="https://en.wikipedia.org/wiki/C_preprocessor#Macro_definition_and_expansion">macro</a> compares if two <a href="https://en.wikipedia.org/wiki/String_(computer_science)">strings</a> are equal.</p>
+</blockquote>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #9C6500">##define strchomp(s) (s)[strlen(s) - 1] = 0</span>
+</code></pre></div>
+
+<hr>
+
+<blockquote>
+<p>The <code>strchomp</code> <a href="https://en.wikipedia.org/wiki/C_preprocessor#Macro_definition_and_expansion">macro</a> removes the last character in a <a href="https://en.wikipedia.org/wiki/String_(computer_science)">string</a>.</p>
+</blockquote>
+<h4 id="functions">Functions<a class="headerlink" href="#functions" title="Permanent link">&para;</a></h4>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/**</span>
+<span style="color: #3D7B7B; font-style: italic"> * Display usage message and exit.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   progname    Program name.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   status      Exit status.</span>
+<span style="color: #3D7B7B; font-style: italic"> **/</span><span style="color: #bbbbbb"></span>
+<span style="color: #B00040">void</span><span style="color: #bbbbbb">    </span><span style="color: #0000FF">usage</span>(<span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>progname,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>status);<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<blockquote>
+<p>This provided <code>usage</code> function displays the help message and terminates the
+<a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a> with the specified <code>status</code> code.</p>
+</blockquote>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/**</span>
+<span style="color: #3D7B7B; font-style: italic"> * Save list of file paths to temporary file.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   files       Array of path strings.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   n           Number of path strings.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @return  Newly allocated path to temporary file.</span>
+<span style="color: #3D7B7B; font-style: italic"> **/</span><span style="color: #bbbbbb"></span>
+<span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb">  </span><span style="color: #0000FF">save_files</span>(<span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">**</span>files,<span style="color: #bbbbbb"> </span><span style="color: #B00040">size_t</span><span style="color: #bbbbbb"> </span>n);<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<blockquote>
+<p>This <code>save_files</code> function writes each of the files specified in the
+<code>files</code> array to a temporary file (one file per line) and returns the path of
+this temporary file.</p>
+</blockquote>
+<div class="alert alert-success">
+<p><strong>Hint</strong>: Use <a href="http://man7.org/linux/man-pages/man3/mkstemp.3.html">mkstemp</a> to create a temporary file and <a href="http://man7.org/linux/man-pages/man3/fdopen.3p.html">fdopen</a> to convert
+  the <a href="https://en.wikipedia.org/wiki/File_descriptor">file descriptor</a> into a stream.</p>
+</div>
+<hr>
+
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/**</span>
+<span style="color: #3D7B7B; font-style: italic"> * Run $EDITOR on specified path.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   path        Path to file to edit.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @return  Whether or not the $EDITOR process terminated successfully.</span>
+<span style="color: #3D7B7B; font-style: italic"> **/</span><span style="color: #bbbbbb"></span>
+<span style="color: #B00040">bool</span><span style="color: #bbbbbb">    </span><span style="color: #0000FF">edit_files</span>(<span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>path);<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<blockquote>
+<p>This <code>edit_files</code> function executes the users <code>$EDITOR</code> on the specified
+file and returns the exit status of the <code>$EDITOR</code> process.</p>
+</blockquote>
+<div class="alert alert-success">
+<p><strong>Hint</strong>: Use <a href="http://man7.org/linux/man-pages/man3/getenv.3.html">getenv</a> to read <code>$EDITOR</code> from your <a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a> environment
+  (fall back to <code>vim</code>, <code>nano</code>, or <code>emacs</code> if the environment variable does
+  not exist).</p>
+</div>
+<div class="alert alert-danger">
+<h4 id="fork-it"><i class="fa fa-code"></i> Fork It!<a class="headerlink" href="#fork-it" title="Permanent link">&para;</a></h4>
+<p>For this assignment, you must use low-level <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> for <a href="https://en.wikipedia.org/wiki/Process_(computing)">processes</a>
+such as <a href="http://man7.org/linux/man-pages/man2/fork.2.html">fork</a>, <a href="http://man7.org/linux/man-pages/man3/exec.3.html">exec</a>, <a href="http://man7.org/linux/man-pages/man2/wait.2.html">wait</a>, and <a href="http://man7.org/linux/man-pages/man2/kill.2.html">kill</a>.</p>
+<p>You may not use <a href="http://man7.org/linux/man-pages/man3/system.3.html">system</a> or <a href="http://man7.org/linux/man-pages/man3/popen.3.html">popen</a>.</p>
+</div>
+<hr>
+
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/**</span>
+<span style="color: #3D7B7B; font-style: italic"> * Rename files as specified in contents of path.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   files       Array of old path names.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   n           Number of old path names.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   path        Path to file with new names.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @return  Whether or not all rename operations were successful.</span>
+<span style="color: #3D7B7B; font-style: italic"> **/</span><span style="color: #bbbbbb"></span>
+<span style="color: #B00040">bool</span><span style="color: #bbbbbb">    </span><span style="color: #0000FF">move_files</span>(<span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">**</span>files,<span style="color: #bbbbbb"> </span><span style="color: #B00040">size_t</span><span style="color: #bbbbbb"> </span>n,<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>path);<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<blockquote>
+<p>This <code>move_files</code> function renames old files specified in the <code>files</code> array
+with the new names contained in the <code>path</code> file (ie. <code>files[0]</code> corresponds
+to the first line in <code>path</code>).</p>
+</blockquote>
+<div class="alert alert-success">
+<p><strong>Hint</strong>: Use <a href="http://man7.org/linux/man-pages/man2/rename.2.html">rename</a> to move files only if the names are different.</p>
+</div>
+<div class="alert alert-warning">
+<h4 id="failure-is-an-option"><i class="fa fa-warning"></i> Failure is an Option<a class="headerlink" href="#failure-is-an-option" title="Permanent link">&para;</a></h4>
+<p>You must check if the <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> you use fail and handle those situations
+appropriately.</p>
+</div>
+<h3 id="task-2-testing">Task 2: Testing<a class="headerlink" href="#task-2-testing" title="Permanent link">&para;</a></h3>
+<p>Once you have implemented <code>moveit</code>, you can test it by running the
+<code>test-moveit</code> target:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ make test-moveit
+Testing moveit...
+ system calls                                                             ... Success
+ usage                                                                    ... Success
+ usage (no arguments)                                                     ... Success
+ usage (valgrind)                                                         ... Success
+ deadpool spidey rogue -&gt; deadpool spidey rogue                           ... Success
+ deadpool spidey rogue -&gt; deadpool spidey rogue (valgrind)                ... Success
+ deadpool spidey rogue -&gt; deadpool spidey rogue (vim)                     ... Success
+ deadpool spidey rogue -&gt; deadpool spidey rogue (vim, valgrind)           ... Success
+ deadpool spidey rogue -&gt; deadpool spidey rogue (nano)                    ... Success
+ deadpool spidey rogue -&gt; deadpool spidey rogue (nano, valgrind)          ... Success
+ deadpool spidey rogue -&gt; deadpool spidey rogue (emacs)                   ... Success
+ deadpool spidey rogue -&gt; deadpool spidey rogue (emacs, valgrind)         ... Success
+ deadpool spidey rogue -&gt; deadpool spidey rogue (NOPE)                    ... Success
+ deadpool spidey rogue -&gt; deadpool spidey rogue (NOPE, valgrind)          ... Success
+ deadpool spidey rogue -&gt; batman superman wonderwoman                     ... Success
+ deadpool spidey rogue -&gt; batman superman wonderwoman (valgrind)          ... Success
+ deadpool spidey rogue -&gt; batman superman wonderwoman (NOPE)              ... Success
+ deadpool spidey rogue -&gt; batman superman wonderwoman (NOPE, valgrind)    ... Success
+ batman superman wonderwoman -&gt; deadpool batman rogue                     ... Success
+ batman superman wonderwoman -&gt; deadpool batman rogue (valgrind)          ... Success
+ batman superman wonderwoman -&gt; deadpool batman rogue (NOPE)              ... Success
+ batman superman wonderwoman -&gt; deadpool batman rogue (NOPE, valgrind)    ... Success
+ batman superman -&gt; deadpool spidey rogue                                 ... Success
+ batman superman -&gt; deadpool spidey rogue (valgrind)                      ... Success
+ batman superman -&gt; deadpool spidey rogue (NOPE)                          ... Success
+ batman superman -&gt; deadpool spidey rogue (NOPE, valgrind)                ... Success
+ deadpool spidey rogue -&gt; batman superman                                 ... Success
+ deadpool spidey rogue -&gt; batman superman (valgrind)                      ... Success
+ deadpool spidey rogue -&gt; batman superman (NOPE)                          ... Success
+ deadpool spidey rogue -&gt; batman superman (NOPE, valgrind)                ... Success
+ doom -&gt; thing                                                            ... Success
+ doom -&gt; thing (valgrind)                                                 ... Success
+ doom -&gt; thing (rm)                                                       ... Success
+ doom -&gt; thing (rm, valgrind)                                             ... Success
+ doom -&gt; thing (false)                                                    ... Success
+ doom -&gt; thing (false, valgrind)                                          ... Success
+
+   Score 5.00 / 5.00
+  Status Success
+</code></pre></div>
+
+<h2 id="activity-2-timeit-5-points">Activity 2: <code>timeit</code> (5 Points)<a class="headerlink" href="#activity-2-timeit-5-points" title="Permanent link">&para;</a></h2>
+<p>For the second activity, write a program, <code>timeit</code>, that executes the given
+command until a timeout is reached or the program terminates as show below:</p>
+<div class="thumbnail text-center">
+  <script src="https://asciinema.org/a/VEyE5vVCwFtCSAFm9rK5Bd5NG.js" id="asciicast-VEyE5vVCwFtCSAFm9rK5Bd5NG" async="true"></script>
+</div>
+
+<p>If the <code>verbose</code> mode is enabled, your <code>timeit</code> should display the following
+sort of <strong>debugging</strong> messages:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ ./timeit -v
+timeit.c:68:parse_options: Timeout = 10
+timeit.c:69:parse_options: Verbose = 1
+Usage: ./timeit [options] command...
+Options:
+    -t SECONDS  Timeout duration before killing command (default is 10)
+    -v          Display verbose debugging output
+
+$ ./timeit -t 5 -v sleep 1
+timeit.c:68:parse_options: Timeout = 5
+timeit.c:69:parse_options: Verbose = 1
+timeit.c:85:parse_options: Command = sleep 1
+timeit.c:116:main: Registering handlers...
+timeit.c:119:main: Grabbing start time...
+timeit.c:137:main: Sleeping for 5 seconds...
+timeit.c:139:main: Waiting for child 160815...
+timeit.c:131:main: Executing child...
+timeit.c:145:main: Child exit status: 0
+timeit.c:148:main: Grabbing end time...
+Time Elapsed: 1.0
+
+$ ./timeit -t 1 -v sleep 2
+timeit.c:68:parse_options: Timeout = 1
+timeit.c:69:parse_options: Verbose = 1
+timeit.c:85:parse_options: Command = sleep 2
+timeit.c:116:main: Registering handlers...
+timeit.c:119:main: Grabbing start time...
+timeit.c:137:main: Sleeping for 1 seconds...
+timeit.c:139:main: Waiting for child 160841...
+timeit.c:131:main: Executing child...
+timeit.c:101:handle_signal: Killing child 160841...
+timeit.c:145:main: Child exit status: 9
+timeit.c:148:main: Grabbing end time...
+Time Elapsed: 1.0
+</code></pre></div>
+
+<div class="alert alert-warning">
+<p><strong>Note</strong>: If the time limit is exceeded, the parent should <a href="http://man7.org/linux/man-pages/man2/kill.2.html">kill</a> the child
+and <a href="http://man7.org/linux/man-pages/man2/wait.2.html">wait</a> for it.  Moreover, the parent should always return the child's
+exit status as its own exit status.</p>
+</div>
+<h3 id="task-1-timeitc">Task 1: <code>timeit.c</code><a class="headerlink" href="#task-1-timeitc" title="Permanent link">&para;</a></h3>
+<p>To implement the <code>timeit</code> utility, you are to complete the provided
+<code>timeit.c</code> source file which contains the following <a href="https://en.wikipedia.org/wiki/C_preprocessor#Macro_definition_and_expansion">macros</a> and
+<strong>functions</strong>:</p>
+<h4 id="macros_1">Macros<a class="headerlink" href="#macros_1" title="Permanent link">&para;</a></h4>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #9C6500">#define debug(M, ...) \</span>
+<span style="color: #9C6500">    if (Verbose) { \</span>
+<span style="color: #9C6500">        fprintf(stderr, &quot;%s:%d:%s: &quot; M, __FILE__, __LINE__, __func__, ##__VA_ARGS__); \</span>
+<span style="color: #9C6500">}</span>
+</code></pre></div>
+
+<blockquote>
+<p>This <code>debug</code> <a href="https://en.wikipedia.org/wiki/C_preprocessor#Macro_definition_and_expansion">macro</a> displays the specified formatted message only if the
+<code>Verbose</code> global variable is <code>true</code>.  The message includes the name of the
+file, the line number, and the function at which the <a href="https://en.wikipedia.org/wiki/C_preprocessor#Macro_definition_and_expansion">macro</a> is called.</p>
+</blockquote>
+<h4 id="functions_1">Functions<a class="headerlink" href="#functions_1" title="Permanent link">&para;</a></h4>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/**</span>
+<span style="color: #3D7B7B; font-style: italic"> * Display usage message and exit.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   progname    Program name.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   status      Exit status.</span>
+<span style="color: #3D7B7B; font-style: italic"> **/</span><span style="color: #bbbbbb"></span>
+<span style="color: #B00040">void</span><span style="color: #bbbbbb">    </span><span style="color: #0000FF">usage</span>(<span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>progname,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>status);<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<blockquote>
+<p>This provided <code>usage</code> function displays the help message and terminates the
+<a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a> with the specified <code>status</code> code.</p>
+</blockquote>
+<hr>
+
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/**</span>
+<span style="color: #3D7B7B; font-style: italic"> * Parse command line options.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   argc        Number of command line arguments.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   argv        Array of command line argument strings.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @return  Array of strings representing command to execute.</span>
+<span style="color: #3D7B7B; font-style: italic"> **/</span><span style="color: #bbbbbb"></span>
+<span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">**</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">parse_options</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>argc,<span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">**</span>argv);<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<blockquote>
+<p>This <code>parse_options</code> function processes the command line arguments by
+setting the <code>Timeout</code> and <code>Verbose</code> global variables and by constructing an
+<a href="https://en.wikipedia.org/wiki/C_(programming_language)#Arrays">array</a> of <a href="https://en.wikipedia.org/wiki/String_(computer_science)">strings</a> to represent the specified <code>command</code>.</p>
+</blockquote>
+<div class="alert alert-success">
+<p><strong>Hint</strong>: Use <a href="http://man7.org/linux/man-pages/man3/realloc.3.html">calloc</a> to create an <a href="https://en.wikipedia.org/wiki/C_(programming_language)#Arrays">array</a> of <a href="https://en.wikipedia.org/wiki/String_(computer_science)">strings</a> that is <code>NULL</code>
+  terminated.</p>
+</div>
+<hr>
+
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/**</span>
+<span style="color: #3D7B7B; font-style: italic"> * Handle signal.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   signum      Signal number.</span>
+<span style="color: #3D7B7B; font-style: italic"> **/</span><span style="color: #bbbbbb"></span>
+<span style="color: #B00040">void</span><span style="color: #bbbbbb">    </span><span style="color: #0000FF">handle_signal</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>signum);<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<blockquote>
+<p>This provided <code>handle_signal</code> function kills the child <a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a> whenever a
+<code>SIGALRM</code> is invoked.</p>
+</blockquote>
+<h4 id="main-execution">Main Execution<a class="headerlink" href="#main-execution" title="Permanent link">&para;</a></h4>
+<p>The main logic for <code>timeit</code> will be in the <code>main</code> function.  While there are
+multiple approaches on how to accomplish the task of running a program with a
+time limit, the recommended method is shown below:</p>
+<div class="thumbnail text-center">
+  <img src="static/img/homework09-timeit.png" class="img-responsive">
+</div>
+
+<p>In this approach, the <code>main</code> function first registers the <code>signal_handle</code>
+function for <code>SIGALRM</code> using <a href="http://man7.org/linux/man-pages/man2/signal.2.html">signal</a>.  Then the parent <a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a> performs a
+<a href="http://man7.org/linux/man-pages/man2/fork.2.html">fork</a> and the child <a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a> executes the specified <code>command</code> using one of
+the <a href="http://man7.org/linux/man-pages/man3/exec.3.html">exec</a> variants.</p>
+<p>After the <a href="http://man7.org/linux/man-pages/man2/fork.2.html">fork</a>, the parent <a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a> sets an <a href="http://man7.org/linux/man-pages/man2/alarm.2.html">alarm</a> based on the specified
+<code>Timeout</code>.  It then simply calls <a href="http://man7.org/linux/man-pages/man2/wait.2.html">wait</a>.  If the <a href="http://man7.org/linux/man-pages/man2/alarm.2.html">alarm</a> triggers, then the
+handler should <a href="http://man7.org/linux/man-pages/man2/kill.2.html">kill</a> the child process.  Otherwise, if the child terminates
+before the <code>Timeout</code> then the parent cancels the <a href="http://man7.org/linux/man-pages/man2/alarm.2.html">alarm</a> and completes its
+<a href="http://man7.org/linux/man-pages/man2/wait.2.html">wait</a> to retrieve the child's exit status.</p>
+<p>To measure the elapsed time, you must use the <a href="http://man7.org/linux/man-pages/man2/clock_getres.2.html">clock_gettime</a> function with
+the <code>CLOCK_MONOTONIC</code> clock identifier.</p>
+<h3 id="task-2-testing_1">Task 2: Testing<a class="headerlink" href="#task-2-testing_1" title="Permanent link">&para;</a></h3>
+<p>Once you have implemented <code>timeit</code>, you can test it by running the
+<code>test-timeit</code> target:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ make test-timeit
+Testing timeit...
+ system calls                                                             ... Success
+ usage (-h)                                                               ... Success
+ usage (-h, valgrind)                                                     ... Success
+ usage (no arguments)                                                     ... Success
+ usage (no arguments, valgrind)                                           ... Success
+ usage (-v, no command)                                                   ... Success
+ usage (-v, no command, valgrind)                                         ... Success
+ usage (-t 5 -v, no command)                                              ... Success
+ usage (-t 5 -v, no command, valgrind)                                    ... Success
+ sleep                                                                    ... Success
+ sleep (valgrind)                                                         ... Success
+ sleep 1                                                                  ... Success
+ sleep 1 (output)                                                         ... Success
+ sleep 1 (valgrind)                                                       ... Success
+ -v sleep 1                                                               ... Success
+ -v sleep 1 (output)                                                      ... Success
+ -v sleep 1 (valgrind)                                                    ... Success
+ -t 5 -v sleep 1                                                          ... Success
+ -t 5 -v sleep 1 (output)                                                 ... Success
+ -t 5 -v sleep 1 (valgrind)                                               ... Success
+ sleep 5                                                                  ... Success
+ sleep 5 (output)                                                         ... Success
+ sleep 5 (valgrind)                                                       ... Success
+ -v sleep 5                                                               ... Success
+ -v sleep 5 (output)                                                      ... Success
+ -v sleep 5 (valgrind)                                                    ... Success
+ -t 1 sleep 5                                                             ... Success
+ -t 1 sleep 5 (output)                                                    ... Success
+ -t 1 sleep 5 (valgrind)                                                  ... Success
+ -t 1 -v sleep 5                                                          ... Success
+ -t 1 -v sleep 5 (output)                                                 ... Success
+ -t 1 -v sleep 5 (valgrind)                                               ... Success
+ -v find /etc -type f                                                     ... Success
+ -v find /etc -type f (output)                                            ... Success
+ -v find /etc -type f (valgrind)                                          ... Success
+
+   Score 5.00 / 5.00
+  Status Success
+</code></pre></div>
+
+<h2 id="activity-4-quiz-2-points">Activity 4: Quiz (2 Points)<a class="headerlink" href="#activity-4-quiz-2-points" title="Permanent link">&para;</a></h2>
+<p>Once you have completed all the activities above, you are to complete the
+following <strong>reflection quiz</strong>:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+<script>
+loadQuiz('static/json/homework09.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<p>As with <a href="reading05.html">Reading 01</a>, you will need to store your answers in a
+<code>homework09/answers.json</code> file.  You can use the form above to generate the
+contents of this file, or you can write the <a href="https://json.org">JSON</a> by hand.</p>
+<p>To test your quiz, you can use the <code>check.py</code> script:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ ../.scripts/check.py
+Checking homework09 quiz ...
+     Q01 <span style="color: #666666">0</span>.80
+     Q02 <span style="color: #666666">0</span>.20
+     Q03 <span style="color: #666666">0</span>.25
+     Q04 <span style="color: #666666">0</span>.25
+     Q05 <span style="color: #666666">0</span>.25
+     Q06 <span style="color: #666666">0</span>.25
+  Score <span style="color: #666666">2</span>.00 / <span style="color: #666666">2</span>.00
+ Status Success
+</code></pre></div>
+
+<h2 id="guru-point-troll-1-point">Guru Point: TROLL (1 Point)<a class="headerlink" href="#guru-point-troll-1-point" title="Permanent link">&para;</a></h2>
+<p>For extra credit, you are to use <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> and <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> to implement your own
+version of the <code>TROLL</code> from <a href="homework01.html">Homework 01</a>.  Recall, that the <code>TROLL</code> was a
+process that intercepted signals such as <code>SIGINT</code> and <code>SIGTERM</code> and taunted
+you when you tried to terminate it. Your version of the <code>TROLL</code> should do
+something similar (prevent easy termination)... but its taunts and other
+aesthetic details are up to you.</p>
+<div class="alert alert-info">
+<h4 id="verification"><i class="fa fa-check"></i> Verification<a class="headerlink" href="#verification" title="Permanent link">&para;</a></h4>
+<p>To get credit for this Guru Point, you must show a TA a demonstration of your
+<code>TROLL</code> in action (or attach a video / screenshot to your <strong>Pull Request</strong>).
+You have up until <strong>one week after</strong> this assignment is due to verify your
+Guru Point.</p>
+</div>
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit your assignment, please commit your work to the <code>homework09</code> folder
+of your <code>homework09</code> branch in your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.
+Your <code>homework09</code> folder should <strong>only</strong> contain the following files:</p>
+<ul>
+<li><code>Makefile</code></li>
+<li><code>answers.json</code></li>
+<li><code>moveit.c</code></li>
+<li><code>timeit.c</code></li>
+</ul>
+<div class="alert alert-warning">
+<p><strong>Note</strong>: You do not need to commit the test scripts because the <code>Makefile</code>
+automatically downloads them.</p>
+</div>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">#-----------------------------------------------------------------------</span>
+<span style="color: #3D7B7B; font-style: italic"># Make sure you have already completed Activity 0: Preparation</span>
+<span style="color: #3D7B7B; font-style: italic">#-----------------------------------------------------------------------</span>
+...
+$ git add Makefile                        <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git add moveit.c                        <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git commit -m <span style="color: #BA2121">&quot;homework09: Activity 1&quot;</span>  <span style="color: #3D7B7B; font-style: italic"># Record changes</span>
+...
+$ git add Makefile                        <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git add timeit.c                        <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git commit -m <span style="color: #BA2121">&quot;homework09: Activity 2&quot;</span>  <span style="color: #3D7B7B; font-style: italic"># Record changes</span>
+...
+$ git add answers.json                    <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git commit -m <span style="color: #BA2121">&quot;homework09: Activity 3&quot;</span>  <span style="color: #3D7B7B; font-style: italic"># Record changes</span>
+...
+$ git push -u origin homework09           <span style="color: #3D7B7B; font-style: italic"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert alert-danger">
+<h4 id="pull-request"><i class="fa fa-github"></i> Pull Request<a class="headerlink" href="#pull-request" title="Permanent link">&para;</a></h4>
+<p>Remember to create a <strong>Pull Request</strong> and assign the appropriate TA from the
+<a href="reading12_tas.html">Reading 12 TA List</a>.</p>
+<p><strong>DO NOT MERGE</strong> your own <strong>Pull Request</strong>.  The TAs use open <strong>Pull Requests</strong>
+to keep track of which assignments to grade.  Closing them yourself will
+cause a delay in grading and confuse the TAs.</p>
+</div>
+
+
+	    <div class="row">
+		<hr/>
+
+		<footer class="text-center">
+		    <p class="text-muted">
+		    <small>
+		    Built using
+		    <a href="https://getbootstrap.com/">Bootstrap</a>,
+		    <a href="https://fontawesome.com/">Font Awesome</a>, and
+		    <a href="http://www.python.org/">Python</a>.
+		    <br/>
+		    &copy; 2024 <a href="http://www.nd.edu">University of Notre Dame</a>
+		    </small>
+		    </p>
+		</footer>
+	    </div>
+
+	</div> <!-- /container -->
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	
+    </body>
+</html>
+
