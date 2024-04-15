@@ -347,6 +347,8 @@
         items:
           - name:       Slides 24
             link:       https://docs.google.com/presentation/d/1zN6bq3EEngFWMuPaox63QPmB68d_z-WtAHuAU9pt2is/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=ebddd848-a1dd-4f3c-b101-b153012ce50c
 
       - date:           Wed 04/17
         topics:         Signals
@@ -387,7 +389,7 @@
             link:       https://docs.google.com/presentation/d/10LZcyKM6PiDcUC9xSsb_mPwoP38CHY3S2FbWa-Ti_Nw/edit?usp=sharing
 
       - date:           Sat 04/27
-        topics:         Gwen
+        topics:         Nmapit, Curlit
         assignment:     Homework 10
 
 - name:     "Exam 03"
