@@ -830,6 +830,7 @@ body:       |
   <div class="row">
     <div class="col-md-6 thumbnail">
       <div class="embed-responsive embed-responsive-16by9">
+      <iframe src="https://drive.google.com/file/d/1YqdPHtzSCQfcQZvnr8-CcP1DW8a5dPRk/preview" width="640" height="480" allow="autoplay"></iframe>
       </div>
       <div style="padding: 5px;">
         <div class="btn-toolbar pull-right">
@@ -845,6 +846,7 @@ body:       |
 
     <div class="col-md-6 thumbnail">
       <div class="embed-responsive embed-responsive-16by9">
+      <iframe src="https://drive.google.com/file/d/1skJoXVsrOxnazs5gaQUkHvxUou7Zhd1b/preview" width="640" height="480" allow="autoplay"></iframe>
       </div>
       <div style="padding: 5px;">
         <div class="btn-toolbar pull-right">
@@ -860,6 +862,9 @@ body:       |
 
     <div class="col-md-6 thumbnail">
       <div class="embed-responsive embed-responsive-16by9">
+      <video width="800" controls>
+        <source src="https://bcaven.github.io/creativity-optional-vue/assets/intro-_Ull07do.mp4">
+      </video>
       </div>
       <div style="padding: 5px;">
         <div class="btn-toolbar pull-right">
@@ -875,6 +880,7 @@ body:       |
 
     <div class="col-md-6 thumbnail">
       <div class="embed-responsive embed-responsive-16by9">
+      <a target="_blank" href="https://www.loom.com/share/9257fe4c3af649bcaf4db4de1f352ba4?sid=a9e4d052-6f82-41a0-99af-bbddd0ed9f93"><img src="https://yld.me/raw/jb4w.png" class="img-responsive"></a>
       </div>
       <div style="padding: 5px;">
         <div class="btn-toolbar pull-right">
@@ -890,6 +896,7 @@ body:       |
 
     <div class="col-md-6 thumbnail">
       <div class="embed-responsive embed-responsive-16by9">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/DF1pXgGve08?si=lkJq8NS1f6sgru7B" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </div>
       <div style="padding: 5px;">
         <div class="btn-toolbar pull-right">
@@ -905,6 +912,7 @@ body:       |
 
     <div class="col-md-6 thumbnail">
       <div class="embed-responsive embed-responsive-16by9">
+      <iframe src="https://drive.google.com/file/d/11b9qYdtAMXQAjOfFL1jO5ubv3okZJK9-/preview" width="640" height="480" allow="autoplay"></iframe>
       </div>
       <div style="padding: 5px;">
         <div class="btn-toolbar pull-right">
@@ -920,6 +928,7 @@ body:       |
 
     <div class="col-md-6 thumbnail">
       <div class="embed-responsive embed-responsive-16by9">
+      <iframe src="https://drive.google.com/file/d/1qLprbD4yDrOxYuEkj6Wq2v0Gu1p9tk2y/preview" width="640" height="480" allow="autoplay"></iframe>
       </div>
       <div style="padding: 5px;">
         <div class="btn-toolbar pull-right">
@@ -935,6 +944,7 @@ body:       |
 
     <div class="col-md-6 thumbnail">
       <div class="embed-responsive embed-responsive-16by9">
+      <iframe src="https://drive.google.com/file/d/1FtoenVhhusKtcUZT8PuHO-nSV71fscEI/preview" width="640" height="480" allow="autoplay"></iframe>
       </div>
       <div style="padding: 5px;">
         <div class="btn-toolbar pull-right">
@@ -965,6 +975,7 @@ body:       |
 
     <div class="col-md-6 thumbnail">
       <div class="embed-responsive embed-responsive-16by9">
+      <iframe src="https://drive.google.com/file/d/1PcRWv9s9dnxqkcPcdFJjOW8Pste9gkJO/preview" width="640" height="480" allow="autoplay"></iframe>
       </div>
       <div style="padding: 5px;">
         <div class="btn-toolbar pull-right">
@@ -980,6 +991,7 @@ body:       |
 
     <div class="col-md-6 thumbnail">
       <div class="embed-responsive embed-responsive-16by9">
+      <iframe src="https://drive.google.com/file/d/1oGS7sot-Y6L9VKI8hHIZMlp4927BcJKj/preview" width="640" height="480" allow="autoplay"></iframe>
       </div>
       <div style="padding: 5px;">
         <div class="btn-toolbar pull-right">
