@@ -45,7 +45,7 @@
     },
     "q06": {
         "type": "single",
-        "question": "\n<p>A clever student proposes changing <tt>timeit</tt> such\n<tt>parse_options</tt> simply returns a pointer to the first command line\noption in <tt>argv</tt> that is not a flag:</p>\n\n<pre>\nint argind = 1;\n\nwhile (argind < argc && strlen(argv[argind]) > 1 && argv[argind][0] == '-') {\n    char *arg = argv[argind++];\n    ...\n}\n\n...\n\nreturn &argv[argind];\n</pre>\n\n<p>Would this work?</p>\n",
+        "question": "\n<p>A clever student proposes changing <tt>timeit</tt> such that\n<tt>parse_options</tt> simply returns a pointer to the first command line\noption in <tt>argv</tt> that is not a flag:</p>\n\n<pre>\nint argind = 1;\n\nwhile (argind < argc && strlen(argv[argind]) > 1 && argv[argind][0] == '-') {\n    char *arg = argv[argind++];\n    ...\n}\n\n...\n\nreturn &argv[argind];\n</pre>\n\n<p>Would this work?</p>\n",
         "responses": {
             "yeah": "Yeah, totally.",
             "nope_0": "Nope, you cannot use <tt>&amp;</tt> on an element in an array.",
