@@ -296,8 +296,6 @@ body:       |
 
     4. What are multiple ways to access an element of an [array] or [string]?
 
-    5. What is the difference between [little-endian] and [big-endian]?
-
     <div class="alert alert-success" markdown="1">
     #### <i class="fa fa-question"></i> Sample Question
 
@@ -311,7 +309,7 @@ body:       |
             return 0;                       // |       | 0xC     |       |
         }                                   // |       | 0xB     |       |
 
-    Assuming a **little-endian 16-bit machine** where each integer is 2 bytes,
+    Assuming an **16-bit machine** where each integer is 2 bytes,
     each character is 1 byte, and each pointer is 2 bytes, fill in the **stack
     frame** to the right by recording the location of the variables above and
     their values at the appropriate addresses.
@@ -458,8 +456,6 @@ body:       |
     [memory leaks]: https://en.wikipedia.org/wiki/Memory_leak
     [segmentation fault]:  https://en.wikipedia.org/wiki/Segmentation_fault
     [segmentation faults]:  https://en.wikipedia.org/wiki/Segmentation_fault
-    [little-endian]:    https://en.wikipedia.org/wiki/Endianness#Little
-    [big-endian]:       https://en.wikipedia.org/wiki/Endianness#Big
     [gdb]: https://man7.org/linux/man-pages/man1/gdb.1.html
     [valgrind]: https://man7.org/linux/man-pages/man1/valgrind.1.html
 
