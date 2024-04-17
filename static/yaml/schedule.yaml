@@ -355,6 +355,8 @@
         items:
           - name:       Slides 24
             link:       https://docs.google.com/presentation/d/1zN6bq3EEngFWMuPaox63QPmB68d_z-WtAHuAU9pt2is/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=042da66e-dabf-44ee-a7b8-b15501272955
 
       - date:           Fri 04/19
         topics:         TCP/IP, URLs, Sockets
