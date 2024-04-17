@@ -309,7 +309,7 @@ body:       |
             return 0;                       // |       | 0xC     |       |
         }                                   // |       | 0xB     |       |
 
-    Assuming an **16-bit machine** where each integer is 2 bytes,
+    Assuming a **16-bit machine** where each integer is 2 bytes,
     each character is 1 byte, and each pointer is 2 bytes, fill in the **stack
     frame** to the right by recording the location of the variables above and
     their values at the appropriate addresses.

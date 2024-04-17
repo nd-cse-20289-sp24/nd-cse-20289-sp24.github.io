@@ -397,6 +397,7 @@
       - date:           Mon 04/29
         items:
           - name:       Checklist 03
+            link:       checklist03.html
 
       - date:           Wed 05/01
         topics:         OSRS
