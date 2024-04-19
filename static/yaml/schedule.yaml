@@ -359,11 +359,12 @@
             link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=042da66e-dabf-44ee-a7b8-b15501272955
 
       - date:           Fri 04/19
-        topics:         TCP/IP, URLs, Sockets
+        topics:         Client/Server, URLs, Sockets
         items:
           - name:       Slides 25
             link:       https://docs.google.com/presentation/d/1xUlZPRVmSbyxqqvcA9b3oFIrxnkquBcIAF7ji9L-Hno/edit?usp=sharing
-
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=c0ae1e0f-e0f3-4dbb-b3ac-b157012b4603
 
       - date:           Sat 04/20
         topics:         Moveit, Timeit
