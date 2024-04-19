@@ -14,8 +14,8 @@
 int main(int argc, char *argv[]) {
     /* Parse command line options */
     if (argc != 3) {
-	fprintf(stderr, "Usage: %s HOST PORT\n", argv[0]);
-	return EXIT_FAILURE;
+        fprintf(stderr, "Usage: %s HOST PORT\n", argv[0]);
+        return EXIT_FAILURE;
     }
 
     char *host = argv[1];
@@ -29,33 +29,33 @@ int main(int argc, char *argv[]) {
     };
     int status;
     if ((status = ____(host, port, &hints, &results)) != 0) {
-    	fprintf(stderr, "getaddrinfo failed: %s\n", ____(status));
-	return EXIT_FAILURE;
+        fprintf(stderr, "getaddrinfo failed: %s\n", ____(status));
+        return EXIT_FAILURE;
     }
 
     /* For each server entry, allocate socket and try to connect */
     int socket_fd = -1;
     for (struct addrinfo *p = results; p != NULL && socket_fd < 0; p = p->ai_next) {
-	/* Allocate socket */
-	if ((socket_fd = ____(p->ai_family, p->ai_socktype, p->ai_protocol)) < 0) {
-	    fprintf(stderr, "Unable to make socket: %s\n", strerror(errno));
-	    continue;
-	}
+        /* Allocate socket */
+        if ((socket_fd = ____(p->ai_family, p->ai_socktype, p->ai_protocol)) < 0) {
+            fprintf(stderr, "Unable to make socket: %s\n", strerror(errno));
+            continue;
+        }
 
-	/* Establish connection to host */
-	if (____(socket_fd, p->ai_addr, p->ai_addrlen) < 0) {
-	    ____(socket_fd);
-	    socket_fd = -1;
-	    continue;
-	}
+        /* Establish connection to host */
+        if (____(socket_fd, p->ai_addr, p->ai_addrlen) < 0) {
+            ____(socket_fd);
+            socket_fd = -1;
+            continue;
+        }
     }
 
     /* Release allocate address information */
     ____(results);
 
     if (socket_fd < 0) {
-	fprintf(stderr, "Unable to connect to %s:%s: %s\n", host, port, strerror(errno));
-    	return EXIT_FAILURE;
+        fprintf(stderr, "Unable to connect to %s:%s: %s\n", host, port, strerror(errno));
+        return EXIT_FAILURE;
     }
 
     printf("Connected to %s:%s\n", host, port);
