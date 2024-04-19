@@ -38,7 +38,10 @@ make_editor() {
 	echo "echo $WORKSPACE/$file >> \$1" >> $WORKSPACE/editor
     done
     chmod +x $WORKSPACE/editor
+    ln -sf $WORKSPACE/editor $WORKSPACE/code
+    ln -sf $WORKSPACE/editor $WORKSPACE/vi
     ln -sf $WORKSPACE/editor $WORKSPACE/vim
+    ln -sf $WORKSPACE/editor $WORKSPACE/nvim
     ln -sf $WORKSPACE/editor $WORKSPACE/nano
     ln -sf $WORKSPACE/editor $WORKSPACE/emacs
 }
