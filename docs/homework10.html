@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Homework 10: nmapit, curlit</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="static/css/blugold.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<style>
+	body {
+	    padding: 10px;
+	}
+	</style>
+    </head>
+    <body>
+	<div class="container">
+
+	    <div class="row">
+		<div class="page-header">
+		    <ul class="nav nav-pills pull-right">
+			
+			<li><a href="index.html"><i class="fa fa-linux"></i> <span class="visible-md-inline visible-lg-inline">Home</span></a></li>
+			
+		    </ul>
+		    <h1><i class="fa fa-code"></i> Homework 10: nmapit, curlit</h1>
+		</div>
+	    </div>
+
+            
+<p>The goal of this homework assignment is to allow you to practice using
+<a href="https://en.wikipedia.org/wiki/System_call">system calls</a> involving <a href="https://en.wikipedia.org/wiki/Computer_network">networking</a> with <a href="https://en.wikipedia.org/wiki/Network_socket">sockets</a> in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> by implementing
+simplified versions of two familiar <a href="https://en.wikipedia.org/wiki/Unix">Unix</a> utilities:</p>
+<ol>
+<li>
+<p><code>nmapit</code>: The first utility implements a simple <a href="https://en.wikipedia.org/wiki/Port_scanner">port scanning</a> utility
+  similar to <a href="https://nmap.org/">nmap</a>.</p>
+</li>
+<li>
+<p><code>curlit</code>: The second utility implements a simple <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> client similar to
+  <a href="https://curl.se/">curl</a>.</p>
+</li>
+</ol>
+<p>For this assignment, record your source code and any responses to the
+following activities in the <code>homework10</code> folder of your <strong>assignments</strong>
+<a href="https://github.com">GitHub</a> repository and push your work by <strong>noon Saturday, April 27</strong>.</p>
+<div class="alert alert-info">
+<h4 id="frequently-asked-questions"><i class="fa fa-question"></i> Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permanent link">&para;</a></h4>
+<div class="text-center">
+<iframe allowfullscreen="true" frameborder="0" height="389" mozallowfullscreen="true" src="https://docs.google.com/presentation/d/e/2PACX-1vT9cD67iMU0pxE1X9VyzOxDKF1rhFG69VRkjjHOgMhM51XhBFGQ7S9k4ToA2XySQSwQBGvYCMQ9GI-k/embed?start=false&amp;loop=false&amp;delayms=3000" webkitallowfullscreen="true" width="480"></iframe>
+</div>
+</div>
+<h2 id="activity-0-preparation">Activity 0: Preparation<a class="headerlink" href="#activity-0-preparation" title="Permanent link">&para;</a></h2>
+<p>Before starting this homework assignment, you should first perform a <code>git
+pull</code> to retrieve any changes in your remote <a href="https://github.com">GitHub</a> repository:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ <span style="color: #008000">cd</span> path/to/repository                   <span style="color: #3D7B7B; font-style: italic"># Go to assignments repository</span>
+
+$ git switch master                       <span style="color: #3D7B7B; font-style: italic"># Make sure we are in master branch</span>
+
+$ git pull --rebase                       <span style="color: #3D7B7B; font-style: italic"># Get any remote changes not present locally</span>
+</code></pre></div>
+
+<p>Next, create a new branch for this assignment:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ git checkout -b homework10              <span style="color: #3D7B7B; font-style: italic"># Create homework10 branch and check it out</span>
+</code></pre></div>
+
+<h3 id="task-1-skeleton-code">Task 1: Skeleton Code<a class="headerlink" href="#task-1-skeleton-code" title="Permanent link">&para;</a></h3>
+<p>To help you get started, the instructor has provided you with the following
+<strong>skeleton code</strong>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Create homework10 folder</span>
+$ mkdir homework10
+
+<span style="color: #3D7B7B; font-style: italic"># Go to homework10 folder</span>
+$ <span style="color: #008000">cd</span> homework10
+
+<span style="color: #3D7B7B; font-style: italic"># Create README</span>
+$ <span style="color: #008000">echo</span> <span style="color: #BA2121">&quot;# Homework 10&quot;</span> &gt; README.md
+
+<span style="color: #3D7B7B; font-style: italic"># Download Makefile</span>
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework10/Makefile
+
+<span style="color: #3D7B7B; font-style: italic"># Download C skeleton code</span>
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework10/curlit.c
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework10/nmapit.c
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework10/socket.c
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework10/socket.h
+$ curl -LO https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework10/socket.unit.c
+</code></pre></div>
+
+<p>Once downloaded, you should see the following files in your <code>homework10</code>
+directory:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>homework10
+    <span style="color: #AA5D1F; font-weight: bold">\_</span> Makefile           <span style="color: #3D7B7B; font-style: italic"># This is the Makefile for building all the assignment artifacts</span>
+    <span style="color: #AA5D1F; font-weight: bold">\_</span> nmapit.c           <span style="color: #3D7B7B; font-style: italic"># This is the nmapit utility C source file</span>
+    <span style="color: #AA5D1F; font-weight: bold">\_</span> curlit.c           <span style="color: #3D7B7B; font-style: italic"># This is the curlit utility C source file</span>
+    <span style="color: #AA5D1F; font-weight: bold">\_</span> socket.c           <span style="color: #3D7B7B; font-style: italic"># This is the timeit library C source file</span>
+    <span style="color: #AA5D1F; font-weight: bold">\_</span> socket.h           <span style="color: #3D7B7B; font-style: italic"># This is the socket library C header file</span>
+    <span style="color: #AA5D1F; font-weight: bold">\_</span> socket.unit.c      <span style="color: #3D7B7B; font-style: italic"># This is the socket library C unit test source file</span>
+</code></pre></div>
+
+<h3 id="task-2-initial-import">Task 2: Initial Import<a class="headerlink" href="#task-2-initial-import" title="Permanent link">&para;</a></h3>
+<p>Now that the files are downloaded into the <code>homework10</code> folder, you can
+<strong>commit</strong> them to your <a href="https://git-scm.com/">git</a> repository:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ git add Makefile                            <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git add *.c *.h *.md
+$ git commit -m <span style="color: #BA2121">&quot;Homework 10: Initial Import&quot;</span> <span style="color: #3D7B7B; font-style: italic"># Record changes</span>
+</code></pre></div>
+
+<h3 id="task-3-unit-and-functional-tests">Task 3: Unit and Functional Tests<a class="headerlink" href="#task-3-unit-and-functional-tests" title="Permanent link">&para;</a></h3>
+<p>After downloading these files, you can run <code>make test</code> to run the tests.</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Run all tests (will trigger automatic download)</span>
+$ make <span style="color: #008000">test</span>
+</code></pre></div>
+
+<p>You will notice that the Makefile downloads these additional test data and scripts:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>homework10
+    <span style="color: #AA5D1F; font-weight: bold">\_</span> curlit.test.sh   <span style="color: #3D7B7B; font-style: italic"># This is the curlit utility test shell script</span>
+    <span style="color: #AA5D1F; font-weight: bold">\_</span> nmapit.test.sh   <span style="color: #3D7B7B; font-style: italic"># This is the nmapit utility test shell script</span>
+    <span style="color: #AA5D1F; font-weight: bold">\_</span> socket.unit.sh   <span style="color: #3D7B7B; font-style: italic"># This is the socket library unit test shell script</span>
+</code></pre></div>
+
+<p>You will be using these <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a> and <a href="https://en.wikipedia.org/wiki/Functional_testing">functional tests</a> to verify the
+correctness and behavior of your code.</p>
+<div class="alert alert-info">
+<h4 id="automatic-downloads"><i class="fa fa-download"></i> Automatic Downloads<a class="headerlink" href="#automatic-downloads" title="Permanent link">&para;</a></h4>
+<p>The <code>test</code> scripts are automatically downloaded by the <code>Makefile</code>, so any
+modifications you do to them will be lost when you run <code>make</code> again. Likewise,
+because they are automatically downloaded, you do not need to <code>add</code> or <code>commit</code>
+them to your <a href="https://git-scm.com/">git</a> repository.</p>
+</div>
+<h3 id="task-4-makefile">Task 4: Makefile<a class="headerlink" href="#task-4-makefile" title="Permanent link">&para;</a></h3>
+<p>The <code>Makefile</code> contains all the <strong>rules</strong> or <strong>recipes</strong> for building the
+project artifacts (e.g. <code>moveit</code>, <code>timeit</code>):</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #19177C">CC</span><span style="color: #666666">=</span>       gcc
+<span style="color: #19177C">CFLAGS</span><span style="color: #666666">=</span>   -Wall -g -std<span style="color: #666666">=</span>gnu99
+<span style="color: #19177C">LD</span><span style="color: #666666">=</span>       gcc
+<span style="color: #19177C">LDFLAGS</span><span style="color: #666666">=</span>  -L.
+<span style="color: #19177C">TARGETS</span><span style="color: #666666">=</span>  nmapit curlit
+
+<span style="color: #0000FF">all</span><span style="color: #666666">:</span>    <span style="color: #008000; font-weight: bold">$(</span><span style="color: #19177C">TARGETS</span><span style="color: #008000; font-weight: bold">)</span>
+
+<span style="color: #3D7B7B; font-style: italic">#------------------------------------------------------------------------------</span>
+<span style="color: #3D7B7B; font-style: italic"># TODO: Rules for object files and executables</span>
+<span style="color: #3D7B7B; font-style: italic">#------------------------------------------------------------------------------</span>
+
+<span style="color: #0000FF">socket.o</span><span style="color: #666666">:</span>
+
+<span style="color: #0000FF">nmapit.o</span><span style="color: #666666">:</span>
+
+<span style="color: #0000FF">curlit.o</span><span style="color: #666666">:</span>
+
+<span style="color: #0000FF">nmapit</span><span style="color: #666666">:</span>
+
+<span style="color: #0000FF">curlit</span><span style="color: #666666">:</span>
+
+<span style="color: #3D7B7B; font-style: italic">#------------------------------------------------------------------------------</span>
+<span style="color: #3D7B7B; font-style: italic"># DO NOT MODIFY BELOW</span>
+<span style="color: #3D7B7B; font-style: italic">#------------------------------------------------------------------------------</span>
+
+<span style="border: 1px solid #FF0000">...</span><span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<p>For this task, you will need to add <a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a> for building the <em>intermediate</em>
+<a href="https://en.wikipedia.org/wiki/Object_file">object</a> files, and the <code>nmapit</code> and <code>curlit</code> <em>executables</em> with the
+appropriate dependencies as shown in the <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">DAG</a> below:</p>
+<div class="thumbnail">
+  <img src="static/img/homework10-makefile.png" class="img-responsive">
+</div>
+
+<div class="alert alert-info">
+<h4 id="makefile-variables"><i class="fa fa-cogs"></i> Makefile Variables<a class="headerlink" href="#makefile-variables" title="Permanent link">&para;</a></h4>
+<p>You <strong>must</strong> use the <code>CC</code>, <code>CFLAGS</code> variables when appropriate in your
+<a href="https://www.gnu.org/software/make/manual/html_node/Rule-Example.html#Rule-Example">rules</a>.  You <strong>should</strong> also consider using <a href="https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html">automatic variables</a> such as
+<code>$@</code> and <code>$&lt;</code> as well.</p>
+</div>
+<p>Once you have a working <code>Makefile</code>, you should be able to run the following commands:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Build all TARGETS</span>
+$ make
+gcc -Wall -g -std<span style="color: #666666">=</span>gnu99 -c -o nmapit.o nmapit.c
+gcc -Wall -g -std<span style="color: #666666">=</span>gnu99 -c -o socket.o socket.c
+gcc -L. -o nmapit nmapit.o socket.o
+gcc -Wall -g -std<span style="color: #666666">=</span>gnu99 -c -o curlit.o curlit.c
+gcc -L. -o curlit curlit.o socket.o
+
+<span style="color: #3D7B7B; font-style: italic"># Run all tests</span>
+$ make <span style="color: #008000">test</span>
+Testing socket ...
+...
+
+Testing nmapit utility...
+...
+
+Testing curlit utility...
+...
+
+<span style="color: #3D7B7B; font-style: italic"># Remove generated artifacts</span>
+$ make clean
+</code></pre></div>
+
+<div class="alert alert-danger">
+<p><strong>Note</strong>: The tests will <strong>fail</strong> if you haven't implemented all the
+  necessary functions appropriately.</p>
+</div>
+<div class="alert alert-warning">
+<h4 id="warnings"><i class="fa fa-warning"></i> Warnings<a class="headerlink" href="#warnings" title="Permanent link">&para;</a></h4>
+<p>You must include the <code>-Wall</code> flag in your <code>CFLAGS</code> when you compile.  This
+also means that your code must <strong>compile without any warnings</strong>, otherwise
+points will be deducted.</p>
+</div>
+<h2 id="activity-1-socket-1-point">Activity 1: <code>socket</code> (1 Point)<a class="headerlink" href="#activity-1-socket-1-point" title="Permanent link">&para;</a></h2>
+<p>Both <code>nmapit</code> and <code>curlit</code> will require using <a href="https://en.wikipedia.org/wiki/Network_socket">sockets</a> in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> to communicate
+with a remote <strong>host</strong>.  To simplify the process of establishing a
+connection, you are to make consolidate all the code for connecting to a
+remote <strong>host</strong> into a single <code>socket_dial</code> function.</p>
+<h3 id="task-1-socketc">Task 1: <code>socket.c</code><a class="headerlink" href="#task-1-socketc" title="Permanent link">&para;</a></h3>
+<p>To implement the <code>socket</code> library, you are to complete the provided
+<code>socket.c</code> source file which contains the following <strong>function</strong>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/**</span>
+<span style="color: #3D7B7B; font-style: italic"> * Create socket connection to specified host and port.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   host        Host string to connect to.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   port        Port string to connect to.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @return  Socket file stream of connection if successful, otherwise NULL.</span>
+<span style="color: #3D7B7B; font-style: italic"> **/</span><span style="color: #bbbbbb"></span>
+<span style="color: #B00040">FILE</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>socket_dial(<span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>host,<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>port)<span style="border: 1px solid #FF0000">`</span><span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<blockquote>
+<p>This function uses <a href="http://man7.org/linux/man-pages/man2/socket.2.html">socket</a> to connect to the given <code>host</code> and <code>port</code> using
+<a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol">TCP</a> and returns a <strong>read/writable</strong> <code>FILE</code> stream corresponding to the
+<a href="http://man7.org/linux/man-pages/man2/socket.2.html">socket</a> connection.</p>
+</blockquote>
+<div class="alert alert-success">
+<p><strong>Hints</strong>:</p>
+<ul>
+<li>
+<p>You must check if any of the <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> fail.</p>
+</li>
+<li>
+<p>You should use <a href="http://man7.org/linux/man-pages/man3/getaddrinfo.3.html">getaddrinfo</a>, <a href="http://man7.org/linux/man-pages/man2/socket.2.html">socket</a>, <a href="http://man7.org/linux/man-pages/man2/connect.2.html">connect</a>, <a href="http://man7.org/linux/man-pages/man3/getaddrinfo.3.html">freeaddrinfo</a>, and <a href="http://man7.org/linux/man-pages/man3/fdopen.3p.html">fdopen</a>.</p>
+</li>
+</ul>
+</div>
+<h3 id="task-2-testing">Task 2: Testing<a class="headerlink" href="#task-2-testing" title="Permanent link">&para;</a></h3>
+<p>As you implement the functions in <code>socket.c</code>, you should use the
+<code>socket.unit</code> executable with the <code>socket.unit.sh</code> script to test each of
+your functions:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Build test artifacts and run test scripts</span>
+$ make test-socket
+Testing socket ...
+ socket_dial_success                                          ... Success
+ socket_dial_failure                                          ... Success
+ socket_dial_mode                                             ... Success
+
+   Score <span style="color: #666666">1</span>.00 / <span style="color: #666666">1</span>.00
+  Status Success
+</code></pre></div>
+
+<p>You can also run the testing script manually:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Run shell unit test script manually</span>
+$ ./socket.unit.sh
+...
+</code></pre></div>
+
+<p>To debug your <a href="http://man7.org/linux/man-pages/man2/socket.2.html">socket</a> functions, you can use <a href="https://www.sourceware.org/gdb/">gdb</a> on the socket.unit
+executable:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Start gdb on socket.unit</span>
+$ gdb ./socket.unit
+<span style="color: #666666">(</span>gdb<span style="color: #666666">)</span> run <span style="color: #666666">0</span>     <span style="color: #3D7B7B; font-style: italic"># Run socket.unit with the &quot;0&quot; command line argument (ie. socket_dial_success)</span>
+...
+</code></pre></div>
+
+<p>You can also use valgrind to check for memory errors:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Check for memory errors on first test case</span>
+<span style="color: #3D7B7B; font-style: italic"># $ valgrind --leak-check=full ./socket.unit 0</span>
+</code></pre></div>
+
+<h2 id="activity-2-nmapit-3-points">Activity 2: <code>nmapit</code> (3 Points)<a class="headerlink" href="#activity-2-nmapit-3-points" title="Permanent link">&para;</a></h2>
+<p>Once you have the <code>socket_dial</code> function implemented, you can complete the
+<code>nmapit</code> utility, which <em>scans</em> a range of <strong>ports</strong> on a remote <strong>host</strong> and
+reports which ones are <em>active</em> (ie. establish a connection) as shown below:</p>
+<div class="thumbnail">
+  <img src="static/img/homework10-nmapit.png" class="img-responsive">
+</div>
+
+<p>Because some <strong>hosts</strong> have <a href="https://en.wikipedia.org/wiki/Firewall_(computing)">firewalls</a> which can cause <a href="http://man7.org/linux/man-pages/man2/connect.2.html">connect</a> to hang for
+long periods of time, you will use a one second <a href="http://man7.org/linux/man-pages/man2/alarm.2.html">alarm</a> to interrupt
+<code>socket_dial</code>.  This interruption will cause <code>socket_dial</code> to fail, which
+means the <strong>port</strong> is considered <em>inactive</em>.</p>
+<p>Here are some examples of <code>nmapit</code> in action:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Display usage message</span>
+$ ./nmapit -h
+Usage: nmapit <span style="color: #666666">[</span>-p START-END<span style="color: #666666">]</span> HOST
+Options:
+    -p START-END    Specifies the range of port numbers to scan
+
+<span style="color: #3D7B7B; font-style: italic"># Scan student05.cse.nd.edu with default ports (1-1023)</span>
+$ ./nmapit student05.cse.nd.edu
+<span style="color: #666666">22</span>
+<span style="color: #666666">80</span>
+<span style="color: #666666">111</span>
+
+<span style="color: #3D7B7B; font-style: italic"># Return success if at least one port is found</span>
+$ <span style="color: #008000">echo</span> <span style="color: #19177C">$?</span>
+<span style="color: #666666">0</span>
+
+<span style="color: #3D7B7B; font-style: italic"># Scan student05.cse.nd.edu with ports 9000-9999</span>
+$ ./nmapit -p <span style="color: #666666">9000</span>-9999 student05.cse.nd.edu
+
+<span style="color: #3D7B7B; font-style: italic"># Return failure if no active ports are found</span>
+$ <span style="color: #008000">echo</span> <span style="color: #19177C">$?</span>
+<span style="color: #666666">1</span>
+</code></pre></div>
+
+<p>By default, <code>nmapit</code> will scan ports <code>1</code> through <code>1023</code> on the remote
+<strong>host</strong>.  The user may specify a range of ports via the <code>-p START-END</code> flag.
+If any port is found during the scan, then <code>nmap</code> will return <strong>success</strong>.
+Otherwise, if no port is found, then it will return <strong>failure</strong>.</p>
+<h3 id="task-1-nmapitc">Task 1: <code>nmapit.c</code><a class="headerlink" href="#task-1-nmapitc" title="Permanent link">&para;</a></h3>
+<p>To implement the <code>nmapit</code> utility, you are to complete the provided
+<code>nmapit.c</code> source file which contains the following <strong>functions</strong>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/**</span>
+<span style="color: #3D7B7B; font-style: italic"> * Display usage message and exit.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   status      Exit status</span>
+<span style="color: #3D7B7B; font-style: italic"> **/</span><span style="color: #bbbbbb"></span>
+<span style="color: #B00040">void</span><span style="color: #bbbbbb">    </span><span style="color: #0000FF">usage</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>status);<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<blockquote>
+<p>This provided <code>usage</code> function displays the help message and terminates the
+process with the specified <code>status</code> code.</p>
+</blockquote>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/**</span>
+<span style="color: #3D7B7B; font-style: italic"> * Handle alarm signal.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   signum      Signal number</span>
+<span style="color: #3D7B7B; font-style: italic"> **/</span><span style="color: #bbbbbb"></span>
+<span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">sigalrm_handler</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>signum);<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<blockquote>
+<p>This function is called whenever a <code>SIGALRM</code> is delivered to the <a href="https://en.wikipedia.org/wiki/Process_(computing)">process</a>.
+When this happens, the current <a href="http://man7.org/linux/man-pages/man2/alarm.2.html">alarm</a> should be cancelled.</p>
+</blockquote>
+<div class="alert alert-success">
+<p><strong>Hint</strong>: Use <a href="http://man7.org/linux/man-pages/man2/alarm.2.html">alarm</a>.</p>
+</div>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/**</span>
+<span style="color: #3D7B7B; font-style: italic"> * Parse port range string into start and end port integers.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   range       Port range string (ie. START-END)</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   start       Pointer to starting port integer</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   end         Pointer to ending port integer</span>
+<span style="color: #3D7B7B; font-style: italic"> * @return  true if parsing both start and end were successful, otherwise false</span>
+<span style="color: #3D7B7B; font-style: italic"> **/</span><span style="color: #bbbbbb"></span>
+<span style="color: #B00040">bool</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">parse_ports</span>(<span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>range,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>start,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>end);<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<blockquote>
+<p>This function parses the <code>range</code> string (ie. <code>"START-END"</code>) into individual
+<code>start</code> and <code>end</code> integers.  It returns <code>true</code> if parsing both the <code>start</code>
+and <code>end</code> integers from the <code>range</code> string is successful, otherwise it
+returns <code>false</code>.</p>
+</blockquote>
+<div class="alert alert-success">
+<p><strong>Hint</strong>: Use <a href="https://man7.org/linux/man-pages/man3/strtok.3.html">strtok</a> and <a href="https://man7.org/linux/man-pages/man3/atoi.3.html">atoi</a>.  Make sure to check for failures.</p>
+</div>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/**</span>
+<span style="color: #3D7B7B; font-style: italic"> * Scan ports at specified host from starting and ending port numbers</span>
+<span style="color: #3D7B7B; font-style: italic"> * (inclusive).</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   host        Host to scan</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   start       Starting port number</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   end         Ending port number</span>
+<span style="color: #3D7B7B; font-style: italic"> * @return  true if any port is found, otherwise false</span>
+<span style="color: #3D7B7B; font-style: italic"> **/</span><span style="color: #bbbbbb"></span>
+<span style="color: #B00040">bool</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">scan_ports</span>(<span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span>host,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>start,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>end);<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<blockquote>
+<p>This function scans the <code>host</code> from the <code>start</code> port through the <code>end</code>
+port.  As it scans the ports, it will print the number if the port is
+<em>active</em> on the <code>host</code>.  If any ports are found, then the function returns
+<code>true</code>.  Otherwise, it returns <code>false</code> if no <em>active</em> ports are found.</p>
+</blockquote>
+<div class="alert alert-success">
+<p><strong>Hints</strong>:</p>
+<ul>
+<li>
+<p>Use <a href="https://man7.org/linux/man-pages/man2/sigaction.2.html">sigaction</a> to register <code>sigalrm_handler</code> for <code>SIGALRM</code>.</p>
+</li>
+<li>
+<p>Set an <a href="http://man7.org/linux/man-pages/man2/alarm.2.html">alarm</a> before attempting <code>socket_dial</code>.</p>
+</li>
+<li>
+<p>Cancel <a href="http://man7.org/linux/man-pages/man2/alarm.2.html">alarm</a> if a connection is established and cleanup.</p>
+</li>
+</ul>
+</div>
+<h3 id="task-2-testing_1">Task 2: Testing<a class="headerlink" href="#task-2-testing_1" title="Permanent link">&para;</a></h3>
+<p>Once you have implemented <code>nmapit</code>, you can test it by running the
+<code>test-nmapit</code> target:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ make test-nmapit
+Testing nmapit utility...
+ nmapit                                                       ... Success
+ nmapit <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>                                            ... Success
+ nmapit -h                                                    ... Success
+ nmapit -h <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>                                         ... Success
+ nmapit -p <span style="color: #666666">9000</span>                                               ... Success
+ nmapit -p <span style="color: #666666">9000</span> <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>                                    ... Success
+ nmapit -p <span style="color: #666666">9000</span>-                                              ... Success
+ nmapit -p <span style="color: #666666">9000</span>- <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>                                   ... Success
+ nmapit -p -9000                                              ... Success
+ nmapit -p -9000 <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>                                   ... Success
+ nmapit xavier.h4x0r.space                                    ... Success
+ nmapit xavier.h4x0r.space <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>                         ... Success
+ nmapit -p <span style="color: #666666">9000</span>-9999 xavier.h4x0r.space                       ... Success
+ nmapit -p <span style="color: #666666">9000</span>-9999 xavier.h4x0r.space <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>            ... Success
+ nmapit -p <span style="color: #666666">9005</span>-9010 weasel.h4x0r.space                       ... Success
+ nmapit -p <span style="color: #666666">9005</span>-9010 weasel.h4x0r.space <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>            ... Success
+ nmapit -p <span style="color: #666666">9895</span>-9900 weasel.h4x0r.space                       ... Success
+ nmapit -p <span style="color: #666666">9895</span>-9900 weasel.h4x0r.space <span style="color: #666666">(</span>valgrind<span style="color: #666666">)</span>            ... Success
+
+   Score <span style="color: #666666">3</span>.00 / <span style="color: #666666">3</span>.00
+  Status Success
+</code></pre></div>
+
+<h2 id="activity-3-curlit-6-points">Activity 3: <code>curlit</code> (6 Points)<a class="headerlink" href="#activity-3-curlit-6-points" title="Permanent link">&para;</a></h2>
+<p>Once you have the <code>socket_dial</code> function implemented, you can complete the
+<code>curlit</code> utility, which performs a <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> request at the specified <a href="https://en.wikipedia.org/wiki/URL">URL</a>.</p>
+<div class="thumbnail">
+  <img src="static/img/homework10-curlit.png" class="img-responsive">
+</div>
+
+<p>Here are some examples of <code>curlit</code> in action:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic"># Display usage message</span>
+$ ./curlit -h
+Usage: curlit <span style="color: #666666">[</span>-h <span style="color: #666666">]</span> URL
+
+<span style="color: #3D7B7B; font-style: italic"># Make HTTP request to http://example.com</span>
+$ ./curlit http://example.com
+&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Example Domain&lt;/title&gt;
+
+    &lt;meta <span style="color: #19177C">charset</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;utf-8&quot;</span> /&gt;
+    &lt;meta http-equiv<span style="color: #666666">=</span><span style="color: #BA2121">&quot;Content-type&quot;</span> <span style="color: #19177C">content</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;text/html; charset=utf-8&quot;</span> /&gt;
+    &lt;meta <span style="color: #19177C">name</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;viewport&quot;</span> <span style="color: #19177C">content</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;width=device-width, initial-scale=1&quot;</span> /&gt;
+    ...
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;div&gt;
+    &lt;h1&gt;Example Domain&lt;/h1&gt;
+    &lt;p&gt;This domain is <span style="color: #008000; font-weight: bold">for</span> use <span style="color: #008000; font-weight: bold">in</span> illustrative examples <span style="color: #008000; font-weight: bold">in</span> documents. You may use this
+    domain <span style="color: #008000; font-weight: bold">in</span> literature without prior coordination or asking <span style="color: #008000; font-weight: bold">for</span> permission.&lt;/p&gt;
+    &lt;p&gt;&lt;a <span style="color: #19177C">href</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;https://www.iana.org/domains/example&quot;</span>&gt;More information...&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+Elapsed Time: <span style="color: #666666">0</span>.03 s
+Bandwidth:    <span style="color: #666666">0</span>.05 MB/s
+
+<span style="color: #3D7B7B; font-style: italic"># Return success if status was 200 OK</span>
+$ <span style="color: #008000">echo</span> <span style="color: #19177C">$?</span>
+<span style="color: #666666">0</span>
+
+<span style="color: #3D7B7B; font-style: italic"># Make HTTP request to google.com</span>
+$ ./curlit google.com
+&lt;HTML&gt;&lt;HEAD&gt;&lt;meta http-equiv<span style="color: #666666">=</span><span style="color: #BA2121">&quot;content-type&quot;</span> <span style="color: #19177C">content</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;text/html;charset=utf-8&quot;</span>&gt;
+&lt;TITLE&gt;301 Moved&lt;/TITLE&gt;&lt;/HEAD&gt;&lt;BODY&gt;
+&lt;H1&gt;301 Moved&lt;/H1&gt;
+The document has moved
+&lt;A <span style="color: #19177C">HREF</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;http://www.google.com/&quot;</span>&gt;here&lt;/A&gt;.
+&lt;/BODY&gt;&lt;/HTML&gt;
+Elapsed Time: <span style="color: #666666">0</span>.07 s
+Bandwidth:    <span style="color: #666666">0</span>.00 MB/s
+
+<span style="color: #3D7B7B; font-style: italic"># Return failure if status was not 200 OK</span>
+$ <span style="color: #008000">echo</span> <span style="color: #19177C">$?</span>
+<span style="color: #666666">1</span>
+</code></pre></div>
+
+<div class="alert alert-warning">
+<h4 id="missing-url-components"><i class="fa fa-link"></i> Missing URL Components<a class="headerlink" href="#missing-url-components" title="Permanent link">&para;</a></h4>
+<p><strong>Note</strong>: Not all <a href="https://en.wikipedia.org/wiki/URL">URL</a>s will specify every component explicitly.  Some may
+  be missing the <strong>protocol</strong> or the <strong>port</strong> or even the <strong>path</strong> (the
+  <strong>host</strong> must always be given).</p>
+<p>For instance, here are some valid <a href="https://en.wikipedia.org/wiki/URL">URL</a>s you will need to support:</p>
+<ul>
+<li><code>example.com</code></li>
+<li><code>http://example.com</code></li>
+<li><code>http://example.com:8888</code></li>
+<li><code>http://example.com/data</code></li>
+<li><code>example.com:9999/data</code></li>
+</ul>
+<p>If the <strong>port</strong> is not specified, then you are to assume the default <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a>
+port: <code>80</code>.  If a <strong>path</strong> is not specified, then you can assume an empty
+path: <code>""</code>.</p>
+</div>
+<h3 id="task-1-curlitc">Task 1: <code>curlit.c</code><a class="headerlink" href="#task-1-curlitc" title="Permanent link">&para;</a></h3>
+<p>To implement the <code>curlit</code> utility, you are to complete the provided
+<code>curlit.c</code> source file which contains the following <strong>functions</strong>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/**</span>
+<span style="color: #3D7B7B; font-style: italic"> * Display usage message and exit.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   status      Exit status</span>
+<span style="color: #3D7B7B; font-style: italic"> **/</span><span style="color: #bbbbbb"></span>
+<span style="color: #B00040">void</span><span style="color: #bbbbbb">    </span><span style="color: #0000FF">usage</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>status);<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<blockquote>
+<p>This provided <code>usage</code> function displays the help message and terminates the
+process with the specified <code>status</code> code.</p>
+</blockquote>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/**</span>
+<span style="color: #3D7B7B; font-style: italic"> * Parse URL string into URL structure.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   s       URL string</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   url     Pointer to URL structure</span>
+<span style="color: #3D7B7B; font-style: italic"> **/</span><span style="color: #bbbbbb"></span>
+<span style="color: #B00040">void</span><span style="color: #bbbbbb">    </span><span style="color: #0000FF">parse_url</span>(<span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>s,<span style="color: #bbbbbb"> </span>URL<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>url);<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<blockquote>
+<p>This function parses the <code>s</code> <a href="https://en.wikipedia.org/wiki/URL">URL</a> string to extract the <code>host</code>, <code>port</code>,
+and <code>path</code> components and copies them into the corresponding attributes of
+the <code>URL</code> structure.</p>
+</blockquote>
+<div class="alert alert-success">
+<p><strong>Hints</strong>:</p>
+<ul>
+<li>
+<p>Copy the <a href="https://en.wikipedia.org/wiki/URL">URL</a> <code>s</code> string to a local <strong>buffer</strong> that you can manipulate.</p>
+</li>
+<li>
+<p>Use <a href="https://man7.org/linux/man-pages/man3/strstr.3.html">strstr</a> and <a href="https://man7.org/linux/man-pages/man3/strchr.3.html">strchr</a> to search the local <strong>buffer</strong> for the appropriate
+  delimiters (e.g. <code>HOST_DELIMITER</code>, <code>PATH_DELIMITER</code>, and <code>PORT_DELIMITER</code>) and
+  split the string into different components.</p>
+</li>
+<li>
+<p>Use <a href="https://man7.org/linux/man-pages/man3/strcpy.3.html">strcpy</a> to copy the found components to the <code>URL</code> structure.</p>
+</li>
+</ul>
+</div>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">/**</span>
+<span style="color: #3D7B7B; font-style: italic"> * Fetch contents of URL and print to standard out.</span>
+<span style="color: #3D7B7B; font-style: italic"> *</span>
+<span style="color: #3D7B7B; font-style: italic"> * Print elapsed time and bandwidth to standard error.</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   s       URL string</span>
+<span style="color: #3D7B7B; font-style: italic"> * @param   url     Pointer to URL structure</span>
+<span style="color: #3D7B7B; font-style: italic"> * @return  true if client is able to read all of the content (or if the</span>
+<span style="color: #3D7B7B; font-style: italic"> * content length is unset), otherwise false</span>
+<span style="color: #3D7B7B; font-style: italic"> **/</span><span style="color: #bbbbbb"></span>
+<span style="color: #B00040">bool</span><span style="color: #bbbbbb">    </span><span style="color: #0000FF">fetch_url</span>(URL<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>url);<span style="color: #bbbbbb"></span>
+</code></pre></div>
+
+<blockquote>
+<p>This function performs a <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> request with the given <code>URL</code> by using
+<code>socket_dial</code> to form a <a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol">TCP</a> connection.  It writes the response <strong>body</strong> or
+<strong>contents</strong> to <strong>standard out</strong>, and the <strong>elapsed time</strong> and <strong>bandwidth</strong>
+metrics to <strong>standard error</strong>.  It returns <code>false</code> if any error was
+experienced during the <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> transaction or if the server response was not
+<code>200 OK</code>.</p>
+</blockquote>
+<div class="alert alert-success">
+<p><strong>Hints</strong>:</p>
+<ul>
+<li>
+<p>You must check if any of the <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> fail.</p>
+</li>
+<li>
+<p>You will want to follow the <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> transaction steps described above
+  and outlined below:</p>
+<ol>
+<li>Connect to remote host and port.</li>
+<li>Send <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> request to remote server.</li>
+<li>Read response status and verify success.</li>
+<li>Read response headers (until there is an empty line).</li>
+<li>Read response body and copy to <code>stream</code>.</li>
+<li>Close connection.</li>
+<li><p>Return number of bytes written to <code>stream</code>.</p></li>
+</ol>
+</li>
+<li>
+<p>Remember that <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> uses <a href="https://en.wikipedia.org/wiki/Newline#Representation">DOS line endings</a> and terminates each line
+  with <code>\r\n</code>.</p>
+</li>
+<li>
+<p>Use <a href="https://man7.org/linux/man-pages/man3/strstr.3.html">strstr</a> to check the response status.</p>
+</li>
+<li>
+<p>Use <a href="https://man7.org/linux/man-pages/man3/scanf.3.html">sscanf</a> to parse the response headers for the value of
+  <code>Content-Length</code>.</p>
+</li>
+<li>
+<p>Use <a href="https://man7.org/linux/man-pages/man3/fgetc.3.html">fgets</a> to read the response status and headers.</p>
+</li>
+<li>
+<p>Use <a href="https://man7.org/linux/man-pages/man3/fread.3.html">fread</a> and <a href="https://man7.org/linux/man-pages/man3/fread.3.html">fwrite</a> to read the response body since it may contain
+  binary data.</p>
+</li>
+<li>
+<p>If the server provides a <code>Content-Length</code> and the number of bytes
+  written to <code>steam</code> does not match, then the function should return <code>-1</code>
+  to indicate an error.  Otherwise, if there is no <code>Content-Length</code> or
+  the number of bytes written matches, then it should return the number
+  of bytes written.</p>
+</li>
+<li>
+<p>Only a <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> status of <code>200 OK</code> is considered <strong>successful</strong>.</p>
+</li>
+</ul>
+</div>
+<h3 id="task-2-testing_2">Task 2: Testing<a class="headerlink" href="#task-2-testing_2" title="Permanent link">&para;</a></h3>
+<p>Once you have implemented <code>curlit</code>, you can test it by running the
+<code>test-curlit</code> target:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ make test-curlit
+Testing curlit utility...
+ curlit                                                       ... Success
+ curlit -h                                                    ... Success
+ curlit -?                                                    ... Success
+ curlit http://fake.host                                      ... Success
+ curlit http://example.com                                    ... Success
+ curlit http://nd.edu                                         ... Success
+ curlit h4x0r.space                                           ... Success
+ curlit h4x0r.space:9898/mind.txt                             ... Success
+ curlit h4x0r.space:9898/txt/walden.txt                       ... Success
+ curlit h4x0r.space:9898/txt/gatsby.txt                       ... Success
+ curlit http://h4x0r.space:9898/txt/warandpeace.txt           ... Success
+ curlit http://h4x0r.space:9898/img/appa.png                  ... Success
+
+   Score <span style="color: #666666">6</span>.00 / <span style="color: #666666">6</span>.00
+  Status Success
+</code></pre></div>
+
+<h2 id="activity-4-quiz-2-points">Activity 4: Quiz (2 Points)<a class="headerlink" href="#activity-4-quiz-2-points" title="Permanent link">&para;</a></h2>
+<p>Once you have completed all the activities above, you are to complete the
+following <strong>reflection quiz</strong>:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+<script>
+loadQuiz('static/json/homework10.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<p>As with <a href="reading05.html">Reading 01</a>, you will need to store your answers in a
+<code>homework10/answers.json</code> file.  You can use the form above to generate the
+contents of this file, or you can write the <a href="https://json.org">JSON</a> by hand.</p>
+<p>To test your quiz, you can use the <code>check.py</code> script:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>$ ../.scripts/check.py
+Checking homework10 quiz ...
+    Q01 <span style="color: #666666">0</span>.80
+    Q02 <span style="color: #666666">0</span>.40
+    Q03 <span style="color: #666666">0</span>.40
+    Q04 <span style="color: #666666">0</span>.40
+  Score <span style="color: #666666">2</span>.00 / <span style="color: #666666">2</span>.00
+ Status Success
+</code></pre></div>
+
+<h2 id="guru-point-irc-bot-1-point">Guru Point: IRC Bot (1 Point)<a class="headerlink" href="#guru-point-irc-bot-1-point" title="Permanent link">&para;</a></h2>
+<p>For extra credit, you are to use <a href="https://www.python.org/">Python</a> and <a href="https://en.wikipedia.org/wiki/Network_socket">sockets</a> to implement your own
+version of <a href="https://github.com/pbui/bobbit/">bobbit</a>, an <a href="https://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a> chat bot.  Your bot should connect to the
+<a href="https://chat.ndlug.org">chat.ndlug.org</a> server and join the <code>#bots</code> channel.  It should be able to
+respond to at least one type of command or message.  The particular operation
+is up to you.</p>
+<p>To help you get started, here are some resources:</p>
+<ul>
+<li><a href="https://ircdocs.horse/specs/">Internet Relay Chat - Specifications</a></li>
+<li><a href="https://modern.ircdocs.horse/">Modern IRC Client Protocol</a></li>
+</ul>
+<div class="alert alert-warning">
+<h4 id="ndlug-irc"><i class="fa fa-linux"></i> NDLUG IRC<a class="headerlink" href="#ndlug-irc" title="Permanent link">&para;</a></h4>
+<p>To connect to the <a href="https://ndlug.org/">NDLUG</a> server yourself, you can use the following
+<strong>anonymous web client</strong>:</p>
+<blockquote>
+<p><a href="https://gamja.ndlug.org/?channels=#bots">https://gamja.ndlug.org/?channels=#bots</a></p>
+</blockquote>
+<p>Alternatively, if you wish to have access to more chat features such as
+history, you can register via <a href="https://regserv.ndlug.org/">regserv.ndlug.org</a>, which will setup a
+<a href="https://thelounge.chat/">Lounge</a> and <a href="https://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a> account for you.</p>
+<p>The <a href="https://thelounge.chat/">Lounge</a> is a web-based <a href="https://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a> client that you can use from any web
+browser, but you are free to connect to the <a href="https://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a> server from any <a href="https://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a>
+client such as <a href="https://weechat.org/">Weechat</a>, <a href="https://hexchat.github.io/">Hexchat</a>, or <a href="https://www.codeux.com/textual/">Textual</a> using <code>chat.ndlug.org</code> as
+the hostname and <code>6697</code> as the port.</p>
+</div>
+<p>A basic <a href="https://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a> client session looks like this:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code>USER ircle-pbui 0 * :pbui&#39;s bot
+NICK ircle-pbui
+JOIN #bots
+PRIVMSG #bots :I&#39;ve fallen and I can&#39;t get up!
+</code></pre></div>
+
+<ol>
+<li>
+<p>The <code>USER</code> command sets the users real name and registers the user.</p>
+</li>
+<li>
+<p>The <code>NICK</code> command sets the users nickname.</p>
+</li>
+<li>
+<p>The <code>JOIN</code> command allows the user to join in a channel (in this case <code>#bots</code>).</p>
+</li>
+<li>
+<p>The <code>PRIVMSG</code> command allows the user to send a message (in this case to
+the channel <code>#bots</code>).</p>
+</li>
+</ol>
+<p>Here is a basic skeleton, <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework10/ircle.py">ircle.py</a>, that you can start with:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">os</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">socket</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">ssl</span>
+
+<span style="color: #3D7B7B; font-style: italic"># Constants</span>
+
+HOST <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;chat.ndlug.org&#39;</span>
+PORT <span style="color: #666666">=</span> <span style="color: #666666">6697</span>
+NICK <span style="color: #666666">=</span> <span style="color: #BA2121">f&#39;ircle-</span><span style="color: #A45A77; font-weight: bold">{</span>os<span style="color: #666666">.</span>environ[<span style="color: #BA2121">&quot;USER&quot;</span>]<span style="color: #A45A77; font-weight: bold">}</span><span style="color: #BA2121">&#39;</span>
+
+<span style="color: #3D7B7B; font-style: italic"># Functions</span>
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">ircle</span>():
+    <span style="color: #3D7B7B; font-style: italic"># Connect to IRC server</span>
+    ssl_context <span style="color: #666666">=</span> ssl<span style="color: #666666">.</span>create_default_context()
+    tcp_socket  <span style="color: #666666">=</span> socket<span style="color: #666666">.</span>create_connection((HOST, PORT))
+    ssl_socket  <span style="color: #666666">=</span> ssl_context<span style="color: #666666">.</span>wrap_socket(tcp_socket, server_hostname<span style="color: #666666">=</span>HOST)
+    ssl_stream  <span style="color: #666666">=</span> ssl_socket<span style="color: #666666">.</span>makefile(<span style="color: #BA2121">&#39;rw&#39;</span>)
+
+    <span style="color: #3D7B7B; font-style: italic"># Identify ourselves</span>
+    ssl_stream<span style="color: #666666">.</span>write(<span style="color: #BA2121">f&#39;USER </span><span style="color: #A45A77; font-weight: bold">{</span>NICK<span style="color: #A45A77; font-weight: bold">}</span><span style="color: #BA2121"> 0 * :</span><span style="color: #A45A77; font-weight: bold">{</span>NICK<span style="color: #A45A77; font-weight: bold">}</span><span style="color: #AA5D1F; font-weight: bold">\r\n</span><span style="color: #BA2121">&#39;</span>)
+    ssl_stream<span style="color: #666666">.</span>write(<span style="color: #BA2121">f&#39;NICK </span><span style="color: #A45A77; font-weight: bold">{</span>NICK<span style="color: #A45A77; font-weight: bold">}</span><span style="color: #AA5D1F; font-weight: bold">\r\n</span><span style="color: #BA2121">&#39;</span>)
+    ssl_stream<span style="color: #666666">.</span>flush()
+
+    <span style="color: #3D7B7B; font-style: italic"># Join #bots channel</span>
+    ssl_stream<span style="color: #666666">.</span>write(<span style="color: #BA2121">f&#39;JOIN #bots</span><span style="color: #AA5D1F; font-weight: bold">\r\n</span><span style="color: #BA2121">&#39;</span>)
+    ssl_stream<span style="color: #666666">.</span>flush()
+
+    <span style="color: #3D7B7B; font-style: italic"># Write message to channel</span>
+    ssl_stream<span style="color: #666666">.</span>write(<span style="color: #BA2121">f&quot;PRIVMSG #bots :I&#39;ve fallen and I can&#39;t get up!</span><span style="color: #AA5D1F; font-weight: bold">\r\n</span><span style="color: #BA2121">&quot;</span>)
+    ssl_stream<span style="color: #666666">.</span>flush()
+
+    <span style="color: #3D7B7B; font-style: italic"># Read and display</span>
+    <span style="color: #008000; font-weight: bold">while</span> <span style="color: #008000; font-weight: bold">True</span>:
+        message <span style="color: #666666">=</span> ssl_stream<span style="color: #666666">.</span>readline()<span style="color: #666666">.</span>strip()
+        <span style="color: #008000">print</span>(message)
+
+<span style="color: #3D7B7B; font-style: italic"># Main Execution</span>
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">main</span>():
+    ircle()
+
+<span style="color: #008000; font-weight: bold">if</span> <span style="color: #19177C">__name__</span> <span style="color: #666666">==</span> <span style="color: #BA2121">&#39;__main__&#39;</span>:
+    main()
+</code></pre></div>
+
+<p>Alternatively, if you are interested in using the new <a href="https://docs.python.org/3/library/asyncio.html">asyncio</a> features of
+<a href="https://www.python.org/">Python</a> 3 to perform event-driven and concurrent programming, you can
+use the following skeleton <a href="https://www3.nd.edu/~pbui/teaching/cse.20289.sp24/static/txt/homework10/ircle-async.py">ircle-async.py</a>:</p>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">asyncio</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">os</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">sys</span>
+
+<span style="color: #3D7B7B; font-style: italic"># Constants</span>
+
+HOST <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;chat.ndlug.org&#39;</span>
+PORT <span style="color: #666666">=</span> <span style="color: #666666">6697</span>
+NICK <span style="color: #666666">=</span> <span style="color: #BA2121">f&#39;ircle-</span><span style="color: #A45A77; font-weight: bold">{</span>os<span style="color: #666666">.</span>environ[<span style="color: #BA2121">&quot;USER&quot;</span>]<span style="color: #A45A77; font-weight: bold">}</span><span style="color: #BA2121">&#39;</span>
+
+<span style="color: #3D7B7B; font-style: italic"># Functions</span>
+
+<span style="color: #008000; font-weight: bold">async</span> <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">ircle</span>():
+    <span style="color: #3D7B7B; font-style: italic"># Connect to IRC server</span>
+    reader, writer <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">await</span> asyncio<span style="color: #666666">.</span>open_connection(HOST, PORT, ssl<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">True</span>)
+
+    <span style="color: #3D7B7B; font-style: italic"># Identify ourselves</span>
+    writer<span style="color: #666666">.</span>write(<span style="color: #BA2121">f&#39;USER </span><span style="color: #A45A77; font-weight: bold">{</span>NICK<span style="color: #A45A77; font-weight: bold">}</span><span style="color: #BA2121"> 0 * :</span><span style="color: #A45A77; font-weight: bold">{</span>NICK<span style="color: #A45A77; font-weight: bold">}</span><span style="color: #AA5D1F; font-weight: bold">\r\n</span><span style="color: #BA2121">&#39;</span><span style="color: #666666">.</span>encode())
+    writer<span style="color: #666666">.</span>write(<span style="color: #BA2121">f&#39;NICK </span><span style="color: #A45A77; font-weight: bold">{</span>NICK<span style="color: #A45A77; font-weight: bold">}</span><span style="color: #AA5D1F; font-weight: bold">\r\n</span><span style="color: #BA2121">&#39;</span><span style="color: #666666">.</span>encode())
+    <span style="color: #008000; font-weight: bold">await</span> writer<span style="color: #666666">.</span>drain()
+
+    <span style="color: #3D7B7B; font-style: italic"># Join #bots channel</span>
+    writer<span style="color: #666666">.</span>write(<span style="color: #BA2121">f&#39;JOIN #bots</span><span style="color: #AA5D1F; font-weight: bold">\r\n</span><span style="color: #BA2121">&#39;</span><span style="color: #666666">.</span>encode())
+    <span style="color: #008000; font-weight: bold">await</span> writer<span style="color: #666666">.</span>drain()
+
+    <span style="color: #3D7B7B; font-style: italic"># Write message to channel</span>
+    writer<span style="color: #666666">.</span>write(<span style="color: #BA2121">f&quot;PRIVMSG #bots :I&#39;ve fallen and I can&#39;t get up!</span><span style="color: #AA5D1F; font-weight: bold">\r\n</span><span style="color: #BA2121">&quot;</span><span style="color: #666666">.</span>encode())
+    <span style="color: #008000; font-weight: bold">await</span> writer<span style="color: #666666">.</span>drain()
+
+    <span style="color: #3D7B7B; font-style: italic"># Read and display</span>
+    <span style="color: #008000; font-weight: bold">while</span> <span style="color: #008000; font-weight: bold">True</span>:
+        message <span style="color: #666666">=</span> (<span style="color: #008000; font-weight: bold">await</span> reader<span style="color: #666666">.</span>readline())<span style="color: #666666">.</span>decode()<span style="color: #666666">.</span>strip()
+        <span style="color: #008000">print</span>(message)
+
+<span style="color: #3D7B7B; font-style: italic"># Main execution</span>
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">main</span>():
+    asyncio<span style="color: #666666">.</span>run(ircle())
+
+<span style="color: #008000; font-weight: bold">if</span> <span style="color: #19177C">__name__</span> <span style="color: #666666">==</span> <span style="color: #BA2121">&#39;__main__&#39;</span>:
+    main()
+</code></pre></div>
+
+<div class="alert alert-info">
+<h4 id="verification"><i class="fa fa-check"></i> Verification<a class="headerlink" href="#verification" title="Permanent link">&para;</a></h4>
+<p>To get credit for this Guru Point, you must have your <a href="https://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a> bot join the
+<code>#bots</code> channel on the <a href="https://chat.ndlug.org">chat.ndlug.org</a> server and demonstrate its
+functionality yourself (by logging into the server with your own account) and
+showing the instructor (<code>pnutzh4x0r</code>).  You have up until <strong>Friday, May 3</strong>
+to verify your guru point.</p>
+</div>
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit your assignment, please commit your work to the <code>homework10</code> folder
+of your <code>homework10</code> branch in your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.
+Your <code>homework10</code> folder should <strong>only</strong> contain the following files:</p>
+<ul>
+<li><code>Makefile</code></li>
+<li><code>README.md</code></li>
+<li><code>answers.json</code></li>
+<li><code>curlit.c</code></li>
+<li><code>nmapit.c</code></li>
+<li><code>socket.c</code></li>
+<li><code>socket.h</code></li>
+<li><code>socket.unit.c</code></li>
+</ul>
+<div class="alert alert-warning">
+<p><strong>Note</strong>: You do not need to commit the test scripts because the <code>Makefile</code>
+automatically downloads them.</p>
+</div>
+<div class="codehilite" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><code><span style="color: #3D7B7B; font-style: italic">#-----------------------------------------------------------------------</span>
+<span style="color: #3D7B7B; font-style: italic"># Make sure you have already completed Activity 0: Preparation</span>
+<span style="color: #3D7B7B; font-style: italic">#-----------------------------------------------------------------------</span>
+...
+$ git add Makefile                        <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git add socket.c                        <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git commit -m <span style="color: #BA2121">&quot;homework10: Activity 1&quot;</span>  <span style="color: #3D7B7B; font-style: italic"># Record changes</span>
+...
+$ git add Makefile                        <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git add nmapit.c                        <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git commit -m <span style="color: #BA2121">&quot;homework10: Activity 2&quot;</span>  <span style="color: #3D7B7B; font-style: italic"># Record changes</span>
+...
+$ git add Makefile                        <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git add curlit.c                        <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git commit -m <span style="color: #BA2121">&quot;homework10: Activity 3&quot;</span>  <span style="color: #3D7B7B; font-style: italic"># Record changes</span>
+...
+$ git add answers.json                    <span style="color: #3D7B7B; font-style: italic"># Mark changes for commit</span>
+$ git commit -m <span style="color: #BA2121">&quot;homework10: Activity 4&quot;</span>  <span style="color: #3D7B7B; font-style: italic"># Record changes</span>
+...
+$ git push -u origin homework10           <span style="color: #3D7B7B; font-style: italic"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert alert-danger">
+<h4 id="pull-request"><i class="fa fa-github"></i> Pull Request<a class="headerlink" href="#pull-request" title="Permanent link">&para;</a></h4>
+<p>Remember to create a <strong>Pull Request</strong> and assign the appropriate TA from the
+<a href="reading13_tas.html">Reading 13 TA List</a>.</p>
+<p><strong>DO NOT MERGE</strong> your own <strong>Pull Request</strong>.  The TAs use open <strong>Pull Requests</strong>
+to keep track of which assignments to grade.  Closing them yourself will
+cause a delay in grading and confuse the TAs.</p>
+</div>
+
+
+	    <div class="row">
+		<hr/>
+
+		<footer class="text-center">
+		    <p class="text-muted">
+		    <small>
+		    Built using
+		    <a href="https://getbootstrap.com/">Bootstrap</a>,
+		    <a href="https://fontawesome.com/">Font Awesome</a>, and
+		    <a href="http://www.python.org/">Python</a>.
+		    <br/>
+		    &copy; 2024 <a href="http://www.nd.edu">University of Notre Dame</a>
+		    </small>
+		    </p>
+		</footer>
+	    </div>
+
+	</div> <!-- /container -->
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	
+    </body>
+</html>
+

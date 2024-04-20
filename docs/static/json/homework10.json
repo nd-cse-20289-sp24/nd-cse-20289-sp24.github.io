@@ -1,0 +1,45 @@
+{
+    "q01": {
+        "type": "order",
+        "question": "\n<p>Because <tt>curlit</tt> is a <b>client</b> application, it makes a\n<b>HTTP</b> request by performing the following <b>system calls</b>:\n<tt>getaddrinfo</tt>, <tt>socket</tt>, <tt>connect</tt>, <tt>write</tt>,\n<tt>read</tt>, <tt>close</tt>.</p>\n\n<p>Now consider something like <b>apache</b> or <b>nginx</b>which are\npopular <b>HTTP</b> servers.  What is order of the <b>system calls</b>\nthese programs must perform to handle a <b>HTTP</b> request and send back\nresponse?</p>\n",
+        "responses": {
+            "socket": "socket",
+            "close": "close",
+            "write": "write",
+            "bind": "bind",
+            "read": "read",
+            "getaddrinfo": "getaddrinfo",
+            "accept": "accept",
+            "listen": "listen"
+        }
+    },
+    "q02": {
+        "type": "multiple",
+        "question": "\n<p>Because <tt>connect</tt> is a <b>system call</b>, it can fail.  Which of\nthe following are reasons why it can fail (select all that apply)?</p>\n",
+        "responses": {
+            "listening": "The remote machine is not listening at specified address.",
+            "interrupt": "The system call was interrupted by a signal.",
+            "encryption": "The connection is insecure due to lack of encryption.",
+            "unreachable": "The network is unreachable.",
+            "busy": "The connection timed out because the server was too busy."
+        }
+    },
+    "q03": {
+        "type": "blank",
+        "question": "\n<p>On the <b>student machines</b>, use <tt>strace</tt> to monitor the\n<b>system calls</b> used by <tt>nmapit</tt> to scan ports <tt>20</tt>\nthrough <tt>30</tt> on <tt>h4x0r.space</tt>:</p>\n\n<pre>\n$ strace ./nmapit -p 20-30 h4x0r.space\n</pre>\n\n<p>Examine the output of <tt>strace</tt> and answer the following questions:</p>\n\n<ol>\n  <li>Which <b>system call</b> in <tt>socket_dial</tt> is active when the\n  <tt>alarm</tt> is triggered? ____</li>\n\n  <li>What is the value of <tt>errno</tt> for this <b>system call</b> after\n  the <tt>alarm</tt> is triggered? ____</li>\n\n  <li>What <b>signal</b> is sent to the process when the <tt>alarm</tt> is\n  triggered? ____</li>\n\n  <li>What <b>service</b> is running on <tt>h4x0r.space</tt> in the port\n  range <tt>20 - 30</tt>? ____</li>\n\n</ol>\n"
+    },
+    "q04": {
+        "type": "multiple",
+        "question": "\n<p>On the <b>student machines</b>, use <tt>strace</tt> to monitor the\n<b>system calls</b> used by <tt>curlit</tt> to fetch\n<tt>h4x0r.space:9898/tar/curl.tar.gz</tt>:</p>\n\n<pre>\n$ strace -c ./curlit h4x0r.space:9898/tar/curl.tar.gz > /dev/null\n</pre>\n\n<p>Run this multiple times, examine the output of <tt>strace</tt>, and\ndetermine which of the following statements are true (select all that\napply)?</p>\n",
+        "responses": {
+            "read_frequent": "<tt>read</tt> is the most frequent <b>system call</b>.",
+            "write_frequent": "<tt>write</tt> is the most frequent <b>system call</b>.",
+            "read_slowest": "<tt>read</tt> is the slowest <b>system call</b>.",
+            "write_slowest": "<tt>write</tt> is the slowest <b>system call</b>.",
+            "connect_once": "<tt>connect</tt> is called exactly once.",
+            "connect_multiple": "<tt>connect</tt> is called multiple times.",
+            "bandwidth_1mbps": "The <b>bandwidth</b> was around <tt>1 MB/s</tt>.",
+            "bandwidth_10mbps": "The <b>bandwidth</b> was around <tt>10 MB/s</tt>."
+        }
+    }
+}
