@@ -644,11 +644,11 @@ body:       |
   - Use [fread] and [fwrite] to read the response body since it may contain
     binary data.
 
-  - If the server provides a `Content-Length` and the number of bytes
-    written to `steam` does not match, then the function should return `-1`
-    to indicate an error.  Otherwise, if there is no `Content-Length` or
-    the number of bytes written matches, then it should return the number
-    of bytes written.
+  - If the server does not return a [HTTP] status of `200 OK`  or it provides a
+    `Content-Length` and the number of bytes written to `steam` does not match,
+    then the function should return `false` to indicate an error.  Otherwise,
+    if the [HTTP] status is `200 OK` and there is no `Content-Length` or the
+    number of bytes written matches, then it should return `true`.
 
   - Only a [HTTP] status of `200 OK` is considered **successful**.
 
@@ -886,6 +886,23 @@ body:       |
   functionality yourself (by logging into the server with your own account) and
   showing the instructor (`pnutzh4x0r`).  You have up until **Friday, May 3**
   to verify your guru point.
+
+  </div>
+
+  <div class="alert alert-success" markdown="1">
+  #### <i class="fa fa-calendar"></i> Self-Service Extension
+
+  <strike>Remember that you can always **forgo** these Guru Points for **two
+  extra days** to do the homework.  That is, if you need an extension, you can
+  simply skip the Guru Points and you will automatically have until Monday to
+  complete the assignment for full credit.</strike>
+
+  <strike>Just leave a note on your **Pull Request** of your
+  intensions.</strike>
+
+  **Note**: For this week, we will **waive** forgoing the Guru Points in order
+  to get **two extra days** to do the homework. This means, that you can take
+  the self-service extension and still do all of the Guru Points.
 
   </div>
 
