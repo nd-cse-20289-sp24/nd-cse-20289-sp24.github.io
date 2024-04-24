@@ -370,7 +370,7 @@
         topics:         Moveit, Timeit
         assignment:     Homework 09
 
-- name:     "Sockets"
+- name:     "Networking"
   days:
       - date:           Mon 04/22
         assignment:     Reading 13
@@ -386,9 +386,11 @@
         items:
           - name:       Slides 25
             link:       https://docs.google.com/presentation/d/1xUlZPRVmSbyxqqvcA9b3oFIrxnkquBcIAF7ji9L-Hno/edit?usp=sharing
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=726b3a71-063c-4204-8e80-b15c012dd244
 
       - date:           Fri 04/26
-        topics:         VPS / HTTP Server
+        topics:         VPS
         items:
           - name:       Slides 26
             link:       https://docs.google.com/presentation/d/10LZcyKM6PiDcUC9xSsb_mPwoP38CHY3S2FbWa-Ti_Nw/edit?usp=sharing
