@@ -721,7 +721,28 @@ body:       |
 
   [JSON]: https://json.org
 
-  ## Guru Point: IRC Bot (1 Point)
+  ## Guru Point: IRC Bot, VPS (2 Points)
+
+  For this week, there are two Guru Point opportunities.
+
+  <div class="alert alert-success" markdown="1">
+  #### <i class="fa fa-calendar"></i> Self-Service Extension
+
+  <strike>Remember that you can always **forgo** these Guru Points for **two
+  extra days** to do the homework.  That is, if you need an extension, you can
+  simply skip the Guru Points and you will automatically have until Monday to
+  complete the assignment for full credit.</strike>
+
+  <strike>Just leave a note on your **Pull Request** of your
+  intensions.</strike>
+
+  **Note**: For this week, we will **waive** forgoing the Guru Points in order
+  to get **two extra days** to do the homework. This means, that you can take
+  the self-service extension and still do all of the Guru Points.
+
+  </div>
+
+  ### IRC Bot (1 Point)
 
   For extra credit, you are to use [Python] and [sockets] to implement your own
   version of [bobbit], an [IRC] chat bot.  Your bot should connect to the
@@ -889,22 +910,42 @@ body:       |
 
   </div>
 
+  ### VPS (1 Point)
+
+  For extra extra credit, you are to sign up for [virtual private server] on a
+  service such as [Digital Ocean], [Linode], [Amazon Web Services], [Microsoft
+  Azure], [Google Cloud], or [Vultr] and run the [http_server.c] server
+  discussed in class from that [VPS].
+
   <div class="alert alert-success" markdown="1">
-  #### <i class="fa fa-calendar"></i> Self-Service Extension
+  #### <i class="fa fa-github"></i> GitHub Student Developer Pack
 
-  <strike>Remember that you can always **forgo** these Guru Points for **two
-  extra days** to do the homework.  That is, if you need an extension, you can
-  simply skip the Guru Points and you will automatically have until Monday to
-  complete the assignment for full credit.</strike>
-
-  <strike>Just leave a note on your **Pull Request** of your
-  intensions.</strike>
-
-  **Note**: For this week, we will **waive** forgoing the Guru Points in order
-  to get **two extra days** to do the homework. This means, that you can take
-  the self-service extension and still do all of the Guru Points.
+  As mentioned in class, you are eligible for the [GitHub Student Developer
+  Pack], which provides you with credits to [Digital Ocean] and [Microsoft
+  Azure] (among many other free goodies).
 
   </div>
+
+  <div class="alert alert-info" markdown="1">
+  #### <i class="fa fa-check"></i> Verification
+
+  To get credit for this Guru Point, you must show a TA a demonstration of
+  using `curlit` making a successful request to [http_server.c] running on your
+  [VPS] (or attach a video / screenshot to your **Pull Request**).  You have up
+  until **Friday, May 3** to verify your guru point.
+
+  </div>
+
+  [virtual private server]: https://en.wikipedia.org/wiki/Virtual_private_server
+  [VPS]: https://en.wikipedia.org/wiki/Virtual_private_server
+  [Digital Ocean]: https://www.digitalocean.com/
+  [Linode]: https://www.linode.com/
+  [Amazon Web Services]: https://aws.amazon.com/free/
+  [Microsoft Azure]: https://azure.microsoft.com/en-us/free
+  [Google Cloud]: https://cloud.google.com/
+  [Vultr]: https://vultr.com/
+  [GitHub Student Developer Pack]: https://education.github.com/pack
+  [http_server.c]: https://github.com/nd-cse-20289-sp24/cse-20289-sp24-examples/blob/master/lecture25/http_server.c
 
   ## Submission
 
