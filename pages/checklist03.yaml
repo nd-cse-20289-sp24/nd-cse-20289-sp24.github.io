@@ -14,11 +14,13 @@ body:       |
 
     A. **Scripting**
 
-      1. [Shell] Scripting (*multiple choice*).
+      1. **Commands** (*multiple choice*, *fill-in-the-blank*).
 
-      2. [Python] Scripting (*multiple choice*).
+      2. [Shell] Scripting (*multiple choice*, *fill-in-the-blank*).
 
-      3. [Unix Philosophy] (*multiple choice*).
+      3. [Python] Scripting (*multiple choice*).
+
+      4. [Unix Philosophy] (*multiple choice*).
 
     B. **C**
 
@@ -26,23 +28,25 @@ body:       |
 
       2. **Pointers, Arrays, Strings** (*multiple choice*, *fill-in-the-blank*).
 
-      3. **Memory Allocations** (*multiple choice*, *fill-in-the-blank*).
+      3. **Memory Allocation/Management** (*multiple choice*, *fill-in-the-blank*).
 
-      4. **Memory Management**: (*multiple choice*, *fill-in-the-blank*).
+      4. **Command-Line Arguments/Bitsets**: (*multiple choice*, *fill-in-the-blank*).
 
     C. **System Calls**
 
       1. **File System** (*multiple choice*, *fill-in-the-blank*).
 
-      2. **Networking** (*multiple choice*, *fill-in-the-blank*).
+      2. **I/O** (*multiple choice*, *fill-in-the-blank*).
 
       3. **Processes** (*multiple choice*, *fill-in-the-blank*).
 
+      4. **Networking** (*multiple choice*, *fill-in-the-blank*).
+
     D. **Programming**
 
-      1. Navigate the [unix] file system.
+      1. Write a [Shell] script that navigates [unix] file system.
 
-      2. Write a [Shell] or [Python] script.
+      2. Write a [Python] script that processes data.
 
       3. Write a [C] program that uses [system calls].
 
@@ -130,24 +134,23 @@ body:       |
 
         - What are [filters]?  What do they do and how are they related to the [Unix Philosophy]?
 
-    2. What are the principles of [functional programming]?
+        - What happens during [I/O redirection]?
 
-        - How does [functional programming] compare to [procedural programming]?
-
-        - How is [functional programming] related to the [Unix Philosophy]?
-
-    3. What is [concurrency] and what is [parallelism]?
+    2. What is [concurrency] and what is [parallelism]?
 
         - What makes [concurrency] challenging?
 
-        - What are the different forms of [parallelism]?
+        - What are some different types of [parallelism]?
 
-    [Unix]:                         https://en.wikipedia.org/wiki/Unix
-    [filters]:                      https://en.wikipedia.org/wiki/Filter_(software)
-    [functional programming]:       https://en.wikipedia.org/wiki/Functional_programming
-    [concurrency]:                  https://en.wikipedia.org/wiki/Concurrency_(computer_science)
-    [parallelism]:                  https://en.wikipedia.org/wiki/Parallel_computing
-    [procedural programming]:       https://en.wikipedia.org/wiki/Procedural_programming
+        - What are some common examples of these types of [parallelism]?
+
+    [Unix]: https://en.wikipedia.org/wiki/Unix
+    [filters]: https://en.wikipedia.org/wiki/Filter_(software)
+    [functional programming]: https://en.wikipedia.org/wiki/Functional_programming
+    [concurrency]: https://en.wikipedia.org/wiki/Concurrency_(computer_science)
+    [parallelism]: https://en.wikipedia.org/wiki/Parallel_computing
+    [procedural programming]: https://en.wikipedia.org/wiki/Procedural_programming
+    [i/o redirection]: https://en.wikipedia.org/wiki/Redirection_(computing)
 
     <hr>
 
@@ -458,6 +461,16 @@ body:       |
     [segmentation faults]:  https://en.wikipedia.org/wiki/Segmentation_fault
     [gdb]: https://man7.org/linux/man-pages/man1/gdb.1.html
     [valgrind]: https://man7.org/linux/man-pages/man1/valgrind.1.html
+
+    ### Command Line Arguments / Bitsets
+
+    1. How do you process **command line arguments** in [C] (using `while` or
+    `for` loop)?
+
+    2. How do you implement a [bitset] in [C] that support insertion, removal,
+    and searching?
+
+    [bitset]: https://en.wikipedia.org/wiki/Redirection_(computing)
 
     <hr>
 
