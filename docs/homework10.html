@@ -608,11 +608,11 @@ experienced during the <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer
   binary data.</p>
 </li>
 <li>
-<p>If the server provides a <code>Content-Length</code> and the number of bytes
-  written to <code>steam</code> does not match, then the function should return <code>-1</code>
-  to indicate an error.  Otherwise, if there is no <code>Content-Length</code> or
-  the number of bytes written matches, then it should return the number
-  of bytes written.</p>
+<p>If the server does not return a <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> status of <code>200 OK</code>  or it provides a
+  <code>Content-Length</code> and the number of bytes written to <code>steam</code> does not match,
+  then the function should return <code>false</code> to indicate an error.  Otherwise,
+  if the <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> status is <code>200 OK</code> and there is no <code>Content-Length</code> or the
+  number of bytes written matches, then it should return <code>true</code>.</p>
 </li>
 <li>
 <p>Only a <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> status of <code>200 OK</code> is considered <strong>successful</strong>.</p>
@@ -669,7 +669,21 @@ Checking homework10 quiz ...
  Status Success
 </code></pre></div>
 
-<h2 id="guru-point-irc-bot-1-point">Guru Point: IRC Bot (1 Point)<a class="headerlink" href="#guru-point-irc-bot-1-point" title="Permanent link">&para;</a></h2>
+<h2 id="guru-point-irc-bot-vps-2-points">Guru Point: IRC Bot, VPS (2 Points)<a class="headerlink" href="#guru-point-irc-bot-vps-2-points" title="Permanent link">&para;</a></h2>
+<p>For this week, there are two Guru Point opportunities.</p>
+<div class="alert alert-success">
+<h4 id="self-service-extension"><i class="fa fa-calendar"></i> Self-Service Extension<a class="headerlink" href="#self-service-extension" title="Permanent link">&para;</a></h4>
+<p><strike>Remember that you can always <strong>forgo</strong> these Guru Points for <strong>two
+extra days</strong> to do the homework.  That is, if you need an extension, you can
+simply skip the Guru Points and you will automatically have until Monday to
+complete the assignment for full credit.</strike></p>
+<p><strike>Just leave a note on your <strong>Pull Request</strong> of your
+intensions.</strike></p>
+<p><strong>Note</strong>: For this week, we will <strong>waive</strong> forgoing the Guru Points in order
+to get <strong>two extra days</strong> to do the homework. This means, that you can take
+the self-service extension and still do all of the Guru Points.</p>
+</div>
+<h3 id="irc-bot-1-point">IRC Bot (1 Point)<a class="headerlink" href="#irc-bot-1-point" title="Permanent link">&para;</a></h3>
 <p>For extra credit, you are to use <a href="https://www.python.org/">Python</a> and <a href="https://en.wikipedia.org/wiki/Network_socket">sockets</a> to implement your own
 version of <a href="https://github.com/pbui/bobbit/">bobbit</a>, an <a href="https://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a> chat bot.  Your bot should connect to the
 <a href="https://chat.ndlug.org">chat.ndlug.org</a> server and join the <code>#bots</code> channel.  It should be able to
@@ -817,6 +831,24 @@ NICK <span style="color: #666666">=</span> <span style="color: #BA2121">f&#39;ir
 functionality yourself (by logging into the server with your own account) and
 showing the instructor (<code>pnutzh4x0r</code>).  You have up until <strong>Friday, May 3</strong>
 to verify your guru point.</p>
+</div>
+<h3 id="vps-1-point">VPS (1 Point)<a class="headerlink" href="#vps-1-point" title="Permanent link">&para;</a></h3>
+<p>For extra extra credit, you are to sign up for <a href="https://en.wikipedia.org/wiki/Virtual_private_server">virtual private server</a> on a
+service such as <a href="https://www.digitalocean.com/">Digital Ocean</a>, <a href="https://www.linode.com/">Linode</a>, <a href="https://aws.amazon.com/free/">Amazon Web Services</a>, <a href="https://azure.microsoft.com/en-us/free">Microsoft
+Azure</a>, <a href="https://cloud.google.com/">Google Cloud</a>, or <a href="https://vultr.com/">Vultr</a> and run the <a href="https://github.com/nd-cse-20289-sp24/cse-20289-sp24-examples/blob/master/lecture25/http_server.c">http_server.c</a> server
+discussed in class from that <a href="https://en.wikipedia.org/wiki/Virtual_private_server">VPS</a>.</p>
+<div class="alert alert-success">
+<h4 id="github-student-developer-pack"><i class="fa fa-github"></i> GitHub Student Developer Pack<a class="headerlink" href="#github-student-developer-pack" title="Permanent link">&para;</a></h4>
+<p>As mentioned in class, you are eligible for the <a href="https://education.github.com/pack">GitHub Student Developer
+Pack</a>, which provides you with credits to <a href="https://www.digitalocean.com/">Digital Ocean</a> and <a href="https://azure.microsoft.com/en-us/free">Microsoft
+Azure</a> (among many other free goodies).</p>
+</div>
+<div class="alert alert-info">
+<h4 id="verification_1"><i class="fa fa-check"></i> Verification<a class="headerlink" href="#verification_1" title="Permanent link">&para;</a></h4>
+<p>To get credit for this Guru Point, you must show a TA a demonstration of
+using <code>curlit</code> making a successful request to <a href="https://github.com/nd-cse-20289-sp24/cse-20289-sp24-examples/blob/master/lecture25/http_server.c">http_server.c</a> running on your
+<a href="https://en.wikipedia.org/wiki/Virtual_private_server">VPS</a> (or attach a video / screenshot to your <strong>Pull Request</strong>).  You have up
+until <strong>Friday, May 3</strong> to verify your guru point.</p>
 </div>
 <h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
 <p>To submit your assignment, please commit your work to the <code>homework10</code> folder
