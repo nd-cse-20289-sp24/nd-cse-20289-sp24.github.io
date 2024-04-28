@@ -405,6 +405,8 @@
   days:
       - date:           Mon 04/29
         items:
+          - name:       Slides R03
+            link:       https://docs.google.com/presentation/d/1rdbBJH37gz09caiV4SMVWxL_0RB5s1IlvZr-z1Hf5Ck/edit?usp=sharing
           - name:       Checklist 03
             link:       checklist03.html
 
