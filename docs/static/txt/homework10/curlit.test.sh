@@ -56,8 +56,8 @@ def curl(url):
 
 bytes, elapsed_time = curl("$URL")
 bandwidth           = bytes / (1<<20) / elapsed_time
-print(f'ELAPSED_TIME_MIN={elapsed_time * 0.10}')
-print(f'ELAPSED_TIME_MAX={elapsed_time * 2.50}')
+print(f'ELAPSED_TIME_MIN={max(elapsed_time * 0.10, 0.05)}')
+print(f'ELAPSED_TIME_MAX={max(elapsed_time * 2.50, 0.25)}')
 print(f'BANDWIDTH_MIN={bandwidth * 0.10}')
 print(f'BANDWIDTH_MAX={bandwidth * 2.50}')
 EOF
@@ -88,6 +88,10 @@ else:
     print(f'Returned Bandwidth   : {bandwidth}')
     sys.exit(1)
 EOF
+}
+
+check_valgrind() {
+    [ $(awk '/ERROR SUMMARY:/ {print $4}' $WORKSPACE/stderr.curlit) -eq 0 ]
 }
 
 # Tests -----------------------------------------------------------------------
@@ -138,12 +142,15 @@ URL=http://fake.host
 eval $(compute_metrics)
 
 printf " %-60s ... " "$PROGRAM $URL"
-./$PROGRAM $URL > $WORKSPACE/stdout.curlit 2> $WORKSPACE/stderr.curlit
+valgrind --leak-check=full ./$PROGRAM $URL > $WORKSPACE/stdout.curlit 2> $WORKSPACE/stderr.curlit
 if [ $? -eq 0 ] ; then
     error "Failure (Exit Status)"
 elif ! check_contents; then
     error "Failure (Contents)"
     diff -y $WORKSPACE/stdout.curlit $WORKSPACE/stdout.curlpy
+elif ! check_valgrind; then
+    error "Failure (Valgrind)"
+    tail $WORKSPACE/stderr.curlit
 else
     echo "Success"
 fi
@@ -156,7 +163,7 @@ URL=http://example.com
 eval $(compute_metrics)
 
 printf " %-60s ... " "$PROGRAM $URL"
-./$PROGRAM $URL > $WORKSPACE/stdout.curlit 2> $WORKSPACE/stderr.curlit
+valgrind --leak-check=full ./$PROGRAM $URL > $WORKSPACE/stdout.curlit 2> $WORKSPACE/stderr.curlit
 if [ $? -ne 0 ] ; then
     error "Failure (Exit Status)"
 elif ! check_contents; then
@@ -164,6 +171,9 @@ elif ! check_contents; then
     diff -y $WORKSPACE/stdout.curlit $WORKSPACE/stdout.curlpy
 elif ! check_metrics; then
     error "Failure (Metrics)"
+elif ! check_valgrind; then
+    error "Failure (Valgrind)"
+    tail $WORKSPACE/stderr.curlit
 else
     echo "Success"
 fi
@@ -177,7 +187,7 @@ eval $(compute_metrics)
 BANDWIDTH_MIN=0
 
 printf " %-60s ... " "curlit $URL"
-./$PROGRAM $URL > $WORKSPACE/stdout.curlit 2> $WORKSPACE/stderr.curlit
+valgrind --leak-check=full ./$PROGRAM $URL > $WORKSPACE/stdout.curlit 2> $WORKSPACE/stderr.curlit
 if [ $? -eq 0 ] ; then
     error "Failure (Exit Status)"
 elif ! check_contents; then
@@ -185,6 +195,9 @@ elif ! check_contents; then
     diff -y $WORKSPACE/stdout.curlit $WORKSPACE/stdout.curlpy
 elif ! check_metrics; then
     error "Failure (Metrics)"
+elif ! check_valgrind; then
+    error "Failure (Valgrind)"
+    tail $WORKSPACE/stderr.curlit
 else
     echo "Success"
 fi
@@ -199,7 +212,7 @@ BANDWIDTH_MIN=0
 BANDWIDTH_MAX=0.1
 
 printf " %-60s ... " "curlit $URL"
-./$PROGRAM $URL > $WORKSPACE/stdout.curlit 2> $WORKSPACE/stderr.curlit
+valgrind --leak-check=full ./$PROGRAM $URL > $WORKSPACE/stdout.curlit 2> $WORKSPACE/stderr.curlit
 if [ $? -eq 0 ] ; then
     error "Failure (Exit Status)"
 elif ! check_contents; then
@@ -207,6 +220,9 @@ elif ! check_contents; then
     diff -y $WORKSPACE/stdout.curlit $WORKSPACE/stdout.curlpy
 elif ! check_metrics; then
     error "Failure (Metrics)"
+elif ! check_valgrind; then
+    error "Failure (Valgrind)"
+    tail $WORKSPACE/stderr.curlit
 else
     echo "Success"
 fi
@@ -220,7 +236,7 @@ eval $(compute_metrics)
 BANDWIDTH_MIN=0
 
 printf " %-60s ... " "curlit $URL"
-./$PROGRAM $URL > $WORKSPACE/stdout.curlit 2> $WORKSPACE/stderr.curlit
+valgrind --leak-check=full ./$PROGRAM $URL > $WORKSPACE/stdout.curlit 2> $WORKSPACE/stderr.curlit
 if [ $? -eq 0 ] ; then
     error "Failure (Exit Status)"
 elif ! check_contents; then
@@ -228,6 +244,9 @@ elif ! check_contents; then
     diff -y $WORKSPACE/stdout.curlit $WORKSPACE/stdout.curlpy
 elif ! check_metrics; then
     error "Failure (Metrics)"
+elif ! check_valgrind; then
+    error "Failure (Valgrind)"
+    tail $WORKSPACE/stderr.curlit
 else
     echo "Success"
 fi
@@ -240,7 +259,7 @@ URL=h4x0r.space:9898/txt/walden.txt
 eval $(compute_metrics)
 
 printf " %-60s ... " "curlit $URL"
-./$PROGRAM $URL > $WORKSPACE/stdout.curlit 2> $WORKSPACE/stderr.curlit
+valgrind --leak-check=full ./$PROGRAM $URL > $WORKSPACE/stdout.curlit 2> $WORKSPACE/stderr.curlit
 if [ $? -ne 0 ] ; then
     error "Failure (Exit Status)"
 elif ! check_contents; then
@@ -248,6 +267,9 @@ elif ! check_contents; then
     diff -y $WORKSPACE/stdout.curlit $WORKSPACE/stdout.curlpy
 elif ! check_metrics; then
     error "Failure (Metrics)"
+elif ! check_valgrind; then
+    error "Failure (Valgrind)"
+    tail $WORKSPACE/stderr.curlit
 else
     echo "Success"
 fi
@@ -261,7 +283,7 @@ HAMMERS=1
 eval $(compute_metrics)
 
 printf " %-60s ... " "curlit $URL"
-./$PROGRAM $URL > $WORKSPACE/stdout.curlit 2> $WORKSPACE/stderr.curlit
+valgrind --leak-check=full ./$PROGRAM $URL > $WORKSPACE/stdout.curlit 2> $WORKSPACE/stderr.curlit
 if [ $? -ne 0 ] ; then
     error "Failure (Exit Status)"
 elif ! check_contents; then
@@ -269,6 +291,9 @@ elif ! check_contents; then
     diff -y $WORKSPACE/stdout.curlit $WORKSPACE/stdout.curlpy
 elif ! check_metrics; then
     error "Failure (Metrics)"
+elif ! check_valgrind; then
+    error "Failure (Valgrind)"
+    tail $WORKSPACE/stderr.curlit
 else
     echo "Success"
 fi
@@ -281,7 +306,7 @@ URL=http://h4x0r.space:9898/txt/warandpeace.txt
 eval $(compute_metrics)
 
 printf " %-60s ... " "curlit $URL"
-./$PROGRAM $URL > $WORKSPACE/stdout.curlit 2> $WORKSPACE/stderr.curlit
+valgrind --leak-check=full ./$PROGRAM $URL > $WORKSPACE/stdout.curlit 2> $WORKSPACE/stderr.curlit
 if [ $? -ne 0 ] ; then
     error "Failure (Exit Status)"
 elif ! check_contents; then
@@ -289,6 +314,9 @@ elif ! check_contents; then
     diff -y $WORKSPACE/stdout.curlit $WORKSPACE/stdout.curlpy
 elif ! check_metrics; then
     error "Failure (Metrics)"
+elif ! check_valgrind; then
+    error "Failure (Valgrind)"
+    tail $WORKSPACE/stderr.curlit
 else
     echo "Success"
 fi
@@ -301,13 +329,16 @@ URL=http://h4x0r.space:9898/img/appa.png
 eval $(compute_metrics)
 
 printf " %-60s ... " "curlit $URL"
-./$PROGRAM $URL > $WORKSPACE/stdout.curlit 2> $WORKSPACE/stderr.curlit
+valgrind --leak-check=full ./$PROGRAM $URL > $WORKSPACE/stdout.curlit 2> $WORKSPACE/stderr.curlit
 if [ $? -ne 0 ] ; then
     error "Failure (Exit Status)"
 elif ! check_contents; then
     error "Failure (Contents)"
 elif ! check_metrics; then
     error "Failure (Metrics)"
+elif ! check_valgrind; then
+    error "Failure (Valgrind)"
+    tail $WORKSPACE/stderr.curlit
 else
     echo "Success"
 fi
