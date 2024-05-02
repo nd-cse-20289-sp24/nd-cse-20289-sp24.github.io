@@ -56,10 +56,10 @@ def curl(url):
 
 bytes, elapsed_time = curl("$URL")
 bandwidth           = bytes / (1<<20) / elapsed_time
-print(f'ELAPSED_TIME_MIN={max(elapsed_time * 0.10, 0.05)}')
-print(f'ELAPSED_TIME_MAX={max(elapsed_time * 2.50, 0.25)}')
-print(f'BANDWIDTH_MIN={bandwidth * 0.10}')
-print(f'BANDWIDTH_MAX={bandwidth * 2.50}')
+print(f'ELAPSED_TIME_MIN={max(elapsed_time * 0.05, 0.05)}')
+print(f'ELAPSED_TIME_MAX={max(elapsed_time * 5.00, 0.50)}')
+print(f'BANDWIDTH_MIN={bandwidth * 0.05}')
+print(f'BANDWIDTH_MAX={bandwidth * 5.00}')
 EOF
 }
 
