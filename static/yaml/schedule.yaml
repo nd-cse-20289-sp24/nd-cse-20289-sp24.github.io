@@ -412,8 +412,10 @@
           - name:       Panopto
             link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=03f9c7d5-4a7b-4de2-9be7-b16101283252
 
-      - date:           Wed 05/01
-        topics:         OSRS
+      - date:           Thu 05/02
+        items:
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=f85f08bd-3756-49ed-8ea3-b164010167cf
 
       - date:           Mon 05/06
         items:
